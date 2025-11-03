@@ -21,6 +21,13 @@ public class GameService {
                 .build();
     }
 
+    private String escapeJson(String text) {
+        return text.replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r");
+    }
+
     public Mono<AIResponse> askAI(String question) {
         String requestBody = """
             {
@@ -30,7 +37,7 @@ public class GameService {
                     {"role": "user", "content": "%s"}
                 ]
             }
-        """.formatted(question);
+        """.formatted(escapeJson(question));
 
         return webClient.post()
                 .body(BodyInserters.fromValue(requestBody))
