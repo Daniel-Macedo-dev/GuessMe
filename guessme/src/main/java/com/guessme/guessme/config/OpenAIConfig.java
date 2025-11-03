@@ -1,23 +1,22 @@
 package com.guessme.guessme.config;
 
-import okhttp3.OkHttpClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class OpenAIConfig {
 
-    @Bean
-    public OkHttpClient okHttpClient() {
-        return new OkHttpClient();
-    }
+    @Value("${OPENAI_API_KEY}")
+    private String openAiApiKey;
 
     @Bean
-    public String openAiKey() {
-        String key = System.getenv("OPENAI_API_KEY");
-        if (key == null || key.isEmpty()) {
-            throw new IllegalStateException("A variável de ambiente OPENAI_API_KEY não está definida!");
-        }
-        return key;
+    public WebClient openAiWebClient(WebClient.Builder builder) {
+        return builder
+                .baseUrl("https://api.openai.com/v1")
+                .defaultHeader("Authorization", "Bearer " + openAiApiKey)
+                .defaultHeader("Content-Type", "application/json")
+                .build();
     }
 }
