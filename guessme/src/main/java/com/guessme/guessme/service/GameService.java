@@ -1,5 +1,6 @@
 package com.guessme.guessme.service;
 
+import com.guessme.guessme.dto.AIResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -20,7 +21,7 @@ public class GameService {
                 .build();
     }
 
-    public Mono<String> askAI(String question) {
+    public Mono<AIResponse> askAI(String question) {
         String requestBody = """
             {
                 "model": "gpt-4o-mini",
@@ -35,11 +36,12 @@ public class GameService {
                 .body(BodyInserters.fromValue(requestBody))
                 .retrieve()
                 .bodyToMono(String.class)
+                .map(AIResponse::new) // encapsula a resposta no DTO
                 .onErrorResume(WebClientResponseException.class, ex ->
-                        Mono.just("Erro da API OpenAI: " + ex.getResponseBodyAsString())
+                        Mono.just(new AIResponse("Erro da API OpenAI: " + ex.getResponseBodyAsString()))
                 )
                 .onErrorResume(Exception.class, ex ->
-                        Mono.just("Erro inesperado: " + ex.getMessage())
+                        Mono.just(new AIResponse("Erro inesperado: " + ex.getMessage()))
                 );
     }
 }

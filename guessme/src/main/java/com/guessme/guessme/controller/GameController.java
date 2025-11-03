@@ -1,5 +1,6 @@
 package com.guessme.guessme.controller;
 
+import com.guessme.guessme.dto.AIResponse;
 import com.guessme.guessme.service.GameService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -7,7 +8,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api/game")
-@CrossOrigin(origins = "*") // libera requisições do React
+@CrossOrigin(origins = "*")
 public class GameController {
 
     private final GameService gameService;
@@ -17,7 +18,7 @@ public class GameController {
     }
 
     @GetMapping(value = "/start", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<String> startGame() {
+    public Mono<AIResponse> startGame() {
         String prompt = """
             Você é o sistema do jogo "Guess Me".
             Escolha um personagem famoso (real ou fictício), mas não diga quem é.
@@ -29,7 +30,7 @@ public class GameController {
     }
 
     @PostMapping(value = "/ask", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<String> askAI(@RequestBody String question) {
+    public Mono<AIResponse> askAI(@RequestBody String question) {
         return gameService.askAI(question);
     }
 }
