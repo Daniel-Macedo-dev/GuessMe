@@ -2,6 +2,7 @@ package com.guessme.guessme.service;
 
 import com.guessme.guessme.dto.AIResponse;
 import com.guessme.guessme.config.GeminiConfig;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -9,15 +10,11 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import reactor.core.publisher.Mono;
 
 @Service
+@RequiredArgsConstructor
 public class GameService {
 
     private final WebClient webClient;
     private final GeminiConfig geminiConfig;
-
-    public GameService(WebClient geminiWebClient, GeminiConfig geminiConfig) {
-        this.webClient = geminiWebClient;
-        this.geminiConfig = geminiConfig;
-    }
 
     public Mono<AIResponse> askAI(String question) {
         String requestBody = """

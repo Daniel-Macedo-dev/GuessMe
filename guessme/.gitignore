@@ -33,4 +33,4 @@ build/
 .vscode/
 
 # Arquivo local com chave da API Gemini
-src/main/resources/gemini.properties
+src/main/java/resources/gemini.properties

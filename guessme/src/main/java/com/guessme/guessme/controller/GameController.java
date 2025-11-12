@@ -2,6 +2,7 @@ package com.guessme.guessme.controller;
 
 import com.guessme.guessme.dto.AIResponse;
 import com.guessme.guessme.service.GameService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -9,13 +10,10 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/api/game")
 @CrossOrigin(origins = "*")
+@RequiredArgsConstructor
 public class GameController {
 
     private final GameService gameService;
-
-    public GameController(GameService gameService) {
-        this.gameService = gameService;
-    }
 
     @GetMapping(value = "/start", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<AIResponse> startGame() {
