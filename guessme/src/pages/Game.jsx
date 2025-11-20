@@ -1,60 +1,85 @@
 import { useState } from "react";
-import { askAI } from "../services/api";
+import { api } from "../services/api";
+import Navbar from "../components/Navbar";
 import LoadingSpinner from "../components/LoadingSpinner";
+import MessageBubble from "../components/MessageBubble";
+import PersonagemCard from "../components/PersonagemCard";
 
 export default function Game() {
   const [messages, setMessages] = useState([]);
+  const [question, setQuestion] = useState("");
+  const [gameStarted, setGameStarted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const enviarPergunta = async (pergunta) => {
+  async function startGame() {
     setLoading(true);
+    const response = await api.get("/start");
+    setLoading(false);
+    setMessages([{ sender: "AI", text: response.data.text }]);
+    setGameStarted(true);
+  }
 
-    const resposta = await askAI(pergunta);
+  async function sendQuestion() {
+    if (!question.trim()) return;
+
+    setMessages((prev) => [...prev, { sender: "Você", text: question }]);
+
+    setLoading(true);
+    const response = await api.post("/ask", question, {
+      headers: { "Content-Type": "text/plain" }
+    });
+    setLoading(false);
 
     setMessages((prev) => [
       ...prev,
-      { tipo: "user", conteudo: pergunta },
-      { tipo: "ai", conteudo: resposta.text },
+      { sender: "AI", text: response.data.text }
     ]);
 
-    setLoading(false);
-  };
+    setQuestion("");
+  }
 
   return (
-    <div className="container">
-      <h2 className="mb-4">Jogo</h2>
+    <>
+      <Navbar />
 
-      {messages.map((msg, i) => (
-        <div
-          key={i}
-          className={
-            msg.tipo === "user"
-              ? "alert alert-primary text-end"
-              : "alert alert-secondary"
-          }
-        >
-          {msg.conteudo}
-        </div>
-      ))}
+      <div className="container mt-4" style={{ maxWidth: "700px" }}>
+        {!gameStarted ? (
+          <>
+            <PersonagemCard />
 
-      {loading && <LoadingSpinner />}
+            <div className="text-center mt-3">
+              <button className="btn btn-success btn-lg" onClick={startGame}>
+                Iniciar Jogo
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div
+              className="card p-3 mb-3"
+              style={{ height: "400px", overflowY: "auto" }}
+            >
+              {messages.map((msg, i) => (
+                <MessageBubble key={i} sender={msg.sender} text={msg.text} />
+              ))}
 
-      <div className="mt-4 d-flex gap-2">
-        <button className="btn btn-success" onClick={() => enviarPergunta("sim")}>
-          Sim
-        </button>
+              {loading && <LoadingSpinner />}
+            </div>
 
-        <button className="btn btn-danger" onClick={() => enviarPergunta("não")}>
-          Não
-        </button>
-
-        <button
-          className="btn btn-warning"
-          onClick={() => enviarPergunta("perguntar")}
-        >
-          Fazer Pergunta
-        </button>
+            <div className="input-group">
+              <input
+                className="form-control"
+                placeholder="Faça sua pergunta..."
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+              />
+              <button className="btn btn-primary" onClick={sendQuestion}>
+                Enviar
+              </button>
+            </div>
+          </>
+        )}
       </div>
-    </div>
+    </>
   );
 }

@@ -1,15 +1,16 @@
-export default function PersonagemCard({ pergunta, onEnviar }) {
+export default function PersonagemCard() {
   return (
-    <div className="card p-4 shadow-sm">
-      <h4 className="mb-3">{pergunta}</h4>
-
-      <button className="btn btn-primary me-2" onClick={() => onEnviar("sim")}>
-        Sim
-      </button>
-
-      <button className="btn btn-danger" onClick={() => onEnviar("não")}>
-        Não
-      </button>
+    <div className="card p-3 text-center shadow">
+      <h3>Bem-vindo ao GuessMe!</h3>
+      <p className="text-muted">
+        A IA escolherá um personagem e você deve adivinhar fazendo perguntas.
+      </p>
+      <img
+        src="https://i.imgur.com/52xMt5W.png"
+        alt="Mascote"
+        className="img-fluid"
+        style={{ maxWidth: "200px", margin: "0 auto" }}
+      />
     </div>
   );
 }
