@@ -1,9 +1,10 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-
-export default function LoadingSpinner() {
+export default function LoadingSpinner({ small = false, text = "" }) {
   return (
-    <div className="d-flex justify-content-center p-3">
-      <div className="spinner-border text-primary"></div>
+    <div className={`typing ${small ? "typing-small" : ""}`}>
+      <div className="dot" />
+      <div className="dot" />
+      <div className="dot" />
+      {text && <div className="typing-text ms-2">{text}</div>}
     </div>
   );
 }

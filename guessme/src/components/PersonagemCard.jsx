@@ -1,17 +1,15 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-
 export default function PersonagemCard() {
   return (
-    <div className="card p-3 text-center shadow">
-      <h3>Bem-vindo ao GuessMe!</h3>
-      <p className="text-muted">
-        A IA escolherá um personagem e você deve adivinhar fazendo perguntas.
+    <div className="card dark-card p-3 text-center persona-card shadow-sm">
+      <h3 className="mb-1">Bem-vindo ao GuessMe!</h3>
+      <p className="text-muted small">
+        A IA escolherá um personagem — faça perguntas de sim/não até acertar.
       </p>
       <img
         src="https://i.imgur.com/52xMt5W.png"
         alt="Mascote"
         className="img-fluid"
-        style={{ maxWidth: "200px", margin: "0 auto" }}
+        style={{ maxWidth: 180, margin: "0 auto" }}
       />
     </div>
   );

@@ -1,18 +1,17 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-
 export default function MessageBubble({ sender, text }) {
   const isUser = sender === "Você";
+  const isSystem = sender === "System";
 
   return (
     <div
-      className={`p-2 mb-2 rounded shadow-sm ${
-        isUser
-          ? "bg-primary text-white ms-auto w-75 text-end"
-          : "bg-light w-75"
-      }`}
+      className={`message-row ${isUser ? "message-row-user" : isSystem ? "message-row-system" : "message-row-ai"}`}
     >
-      <strong>{sender}: </strong>
-      {text}
+      <div className={`message-bubble ${isUser ? "bubble-user" : isSystem ? "bubble-system" : "bubble-ai"}`}>
+        <div className="sender">
+          {isUser ? "🧑‍💻 Você" : isSystem ? "⚠️ System" : "🤖 IA"}
+        </div>
+        <div className="message-text">{text}</div>
+      </div>
     </div>
   );
 }
