@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api } from "../services/api";
+
 import Navbar from "../components/Navbar";
 import LoadingSpinner from "../components/LoadingSpinner";
 import MessageBubble from "../components/MessageBubble";
@@ -15,6 +16,7 @@ export default function Game() {
     setLoading(true);
     const response = await api.get("/start");
     setLoading(false);
+
     setMessages([{ sender: "AI", text: response.data.text }]);
     setGameStarted(true);
   }

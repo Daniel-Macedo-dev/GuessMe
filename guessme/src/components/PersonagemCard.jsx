@@ -1,3 +1,5 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+
 export default function PersonagemCard() {
   return (
     <div className="card p-3 text-center shadow">

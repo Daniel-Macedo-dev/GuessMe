@@ -1,3 +1,5 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+
 export default function MessageBubble({ sender, text }) {
   const isUser = sender === "Você";
 
