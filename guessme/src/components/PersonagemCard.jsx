@@ -1,6 +1,6 @@
 export default function PersonagemCard() {
   return (
-    <div className="card dark-card p-3 text-center persona-card shadow-sm">
+    <div className="card persona-card shadow-sm p-3 text-center">
       <h3 className="mb-1">Bem-vindo ao GuessMe!</h3>
       <p className="text-muted small">
         A IA escolherá um personagem — faça perguntas de sim/não até acertar.

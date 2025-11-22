@@ -15,19 +15,18 @@ export default function Game() {
       return [];
     }
   });
-
   const [question, setQuestion] = useState("");
-  const [gameStarted, setGameStarted] = useState(() =>
+  const [gameStarted, setGameStarted] = useState(
     localStorage.getItem("guessme_started_v2") === "true"
   );
   const [loading, setLoading] = useState(false);
   const [typing, setTyping] = useState(false);
-  const [gameOver, setGameOver] = useState(() =>
+  const [gameOver, setGameOver] = useState(
     localStorage.getItem("guessme_over_v2") === "true"
   );
+  const [winner, setWinner] = useState(null); // { name, image, series }
 
-  const chatRef = useRef(null);
-  const endRef = useRef(null);
+  const chatEndRef = useRef(null);
 
   const WIN_KEYWORDS = [
     "acert", "parabéns", "você descobriu", "você acertou",
@@ -47,35 +46,40 @@ export default function Game() {
   }, [gameOver]);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, typing]);
 
-  function pushMessage(sender, text) {
+  const pushMessage = (sender, text) => {
     setMessages(prev => [...prev, { sender, text }]);
-  }
+  };
 
-  function checkWin(text) {
+  const checkWin = (text, characterData) => {
     const lower = text.toLowerCase();
-    return WIN_KEYWORDS.some(k => lower.includes(k));
-  }
+    const isWin = WIN_KEYWORDS.some(k => lower.includes(k));
+    if (isWin && characterData) {
+      setWinner(characterData); // salva nome, imagem e série
+    }
+    return isWin;
+  };
 
-  async function startGame() {
+  const startGame = async () => {
     setLoading(true);
     try {
       const response = await api.get("/start");
-      const text = response.data?.text ?? "Ok! Já escolhi um personagem. Pode fazer sua primeira pergunta!";
+      const text = response.data?.text ?? "Ok! Já escolhi um personagem. Faça sua primeira pergunta!";
       setMessages([{ sender: "AI", text }]);
       setGameStarted(true);
       setGameOver(false);
+      setWinner(null);
     } catch (err) {
       console.error(err);
       pushMessage("System", "Erro ao iniciar o jogo. Verifique o backend.");
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  async function sendQuestion() {
+  const sendQuestion = async () => {
     if (!question.trim() || loading || !gameStarted || gameOver) return;
 
     pushMessage("Você", question);
@@ -92,10 +96,14 @@ export default function Game() {
 
       const [response] = await Promise.all([responsePromise, minTyping]);
       const aiText = response.data?.text ?? "A IA não retornou texto.";
+
+      // Verifica se o backend enviou dados do personagem vencedor
+      const characterData = response.data?.character ?? null; // { name, image, series }
+
       setTyping(false);
       pushMessage("AI", aiText);
 
-      if (checkWin(aiText)) setGameOver(true);
+      if (checkWin(aiText, characterData)) setGameOver(true);
     } catch (err) {
       console.error(err);
       setTyping(false);
@@ -103,23 +111,24 @@ export default function Game() {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  function resetGameClientOnly() {
+  const resetGameClientOnly = () => {
     setMessages([]);
     setQuestion("");
     setGameStarted(false);
     setGameOver(false);
     setTyping(false);
+    setWinner(null);
     localStorage.removeItem("guessme_messages_v2");
     localStorage.removeItem("guessme_started_v2");
     localStorage.removeItem("guessme_over_v2");
-  }
+  };
 
-  async function restartGame() {
+  const restartGame = async () => {
     resetGameClientOnly();
     await startGame();
-  }
+  };
 
   return (
     <>
@@ -139,7 +148,7 @@ export default function Game() {
           </div>
         ) : (
           <div className="d-flex flex-column chat-wrapper">
-            <div className="chat-messages flex-grow-1 p-3" ref={chatRef}>
+            <div className="chat-messages flex-grow-1 p-3">
               {messages.length === 0 && (
                 <div className="text-muted text-center mt-4">Sem mensagens ainda.</div>
               )}
@@ -147,7 +156,7 @@ export default function Game() {
                 <MessageBubble key={i} sender={msg.sender} text={msg.text} />
               ))}
               {typing && <LoadingSpinner small text="IA está digitando..." />}
-              <div ref={endRef}></div>
+              <div ref={chatEndRef}></div>
             </div>
 
             <div className="chat-input-area p-3 d-flex gap-2">
@@ -176,10 +185,11 @@ export default function Game() {
         show={gameOver}
         onClose={() => setGameOver(false)}
         onPlayAgain={restartGame}
+        winner={winner} // Passa dados do personagem vencedor
       />
 
-      <footer className="text-center text-muted mt-4 mb-2">
-        Feito por <a href="https://github.com/Daniel-Macedo-dev" target="_blank" rel="noreferrer">Daniel-Macedo-dev</a>
+      <footer className="text-center mt-4 mb-2" style={{ backgroundColor: "#ffdd00", padding: "0.6rem" }}>
+        Feito por <a href="https://github.com/Daniel-Macedo-dev" target="_blank" rel="noreferrer" style={{ color: "#111" }}>Daniel-Macedo-dev</a>
       </footer>
     </>
   );
