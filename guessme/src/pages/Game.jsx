@@ -5,6 +5,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import MessageBubble from "../components/MessageBubble";
 import PersonagemCard from "../components/PersonagemCard";
 import VictoryModal from "../components/VictoryModal";
+import Footer from "../components/Footer";
 
 export default function Game() {
   const [messages, setMessages] = useState(() => {
@@ -24,7 +25,7 @@ export default function Game() {
   const [gameOver, setGameOver] = useState(
     localStorage.getItem("guessme_over_v2") === "true"
   );
-  const [winner, setWinner] = useState(null); // { name, image, series }
+  const [winner, setWinner] = useState(null);
 
   const chatEndRef = useRef(null);
 
@@ -56,9 +57,7 @@ export default function Game() {
   const checkWin = (text, characterData) => {
     const lower = text.toLowerCase();
     const isWin = WIN_KEYWORDS.some(k => lower.includes(k));
-    if (isWin && characterData) {
-      setWinner(characterData); // salva nome, imagem e série
-    }
+    if (isWin && characterData) setWinner(characterData);
     return isWin;
   };
 
@@ -96,9 +95,7 @@ export default function Game() {
 
       const [response] = await Promise.all([responsePromise, minTyping]);
       const aiText = response.data?.text ?? "A IA não retornou texto.";
-
-      // Verifica se o backend enviou dados do personagem vencedor
-      const characterData = response.data?.character ?? null; // { name, image, series }
+      const characterData = response.data?.character ?? null;
 
       setTyping(false);
       pushMessage("AI", aiText);
@@ -185,12 +182,10 @@ export default function Game() {
         show={gameOver}
         onClose={() => setGameOver(false)}
         onPlayAgain={restartGame}
-        winner={winner} // Passa dados do personagem vencedor
+        winner={winner}
       />
 
-      <footer className="text-center mt-4 mb-2" style={{ backgroundColor: "#ffdd00", padding: "0.6rem" }}>
-        Feito por <a href="https://github.com/Daniel-Macedo-dev" target="_blank" rel="noreferrer" style={{ color: "#111" }}>Daniel-Macedo-dev</a>
-      </footer>
+      <Footer /> {}
     </>
   );
 }
