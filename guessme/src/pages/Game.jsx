@@ -17,14 +17,14 @@ export default function Game() {
   });
 
   const [question, setQuestion] = useState("");
-  const [gameStarted, setGameStarted] = useState(() => {
-    return localStorage.getItem("guessme_started_v2") === "true";
-  });
+  const [gameStarted, setGameStarted] = useState(() =>
+    localStorage.getItem("guessme_started_v2") === "true"
+  );
   const [loading, setLoading] = useState(false);
   const [typing, setTyping] = useState(false);
-  const [gameOver, setGameOver] = useState(() => {
-    return localStorage.getItem("guessme_over_v2") === "true";
-  });
+  const [gameOver, setGameOver] = useState(() =>
+    localStorage.getItem("guessme_over_v2") === "true"
+  );
 
   const chatRef = useRef(null);
   const endRef = useRef(null);
@@ -72,12 +72,11 @@ export default function Game() {
       const response = await api.get("/start");
       const text = response.data?.text ?? 
         "Ok! Já escolhi um personagem. Pode fazer sua primeira pergunta!";
-
       setMessages([{ sender: "AI", text }]);
       setGameStarted(true);
       setGameOver(false);
     } catch (err) {
-      console.error("Erro ao iniciar o jogo:", err);
+      console.error(err);
       pushMessage("System", "Erro ao iniciar o jogo. Verifique o backend.");
     } finally {
       setLoading(false);
@@ -100,16 +99,13 @@ export default function Game() {
       });
 
       const [response] = await Promise.all([responsePromise, minTyping]);
-
       const aiText = response.data?.text ?? "A IA não retornou texto.";
       setTyping(false);
       pushMessage("AI", aiText);
 
-      if (checkWin(aiText)) {
-        setGameOver(true);
-      }
+      if (checkWin(aiText)) setGameOver(true);
     } catch (err) {
-      console.error("Erro ao enviar pergunta:", err);
+      console.error(err);
       setTyping(false);
       pushMessage("System", "Erro ao contatar a IA.");
     } finally {
@@ -139,9 +135,9 @@ export default function Game() {
 
       <div className="container mt-4" style={{ maxWidth: 900 }}>
         {!gameStarted ? (
-          <div className="d-flex justify-content-center">
+          <div className="d-flex justify-content-center flex-wrap">
             <PersonagemCard />
-            <div className="ms-4 align-self-center">
+            <div className="ms-4 align-self-center mt-3">
               <button
                 className="btn btn-primary btn-lg"
                 onClick={startGame}
@@ -153,59 +149,37 @@ export default function Game() {
           </div>
         ) : (
           <>
-            <div
-              ref={chatRef}
-              className="card dark-card p-3 mb-3 chat-card"
-              style={{ height: 520, overflowY: "auto" }}
-            >
-              {messages.length === 0 && (
-                <div className="text-muted text-center mt-4">
-                  Sem mensagens ainda.
-                </div>
-              )}
+            <div className="chat-container">
+              <div className="chat-messages" ref={chatRef}>
+                {messages.length === 0 && (
+                  <div className="text-muted text-center mt-4">
+                    Sem mensagens ainda.
+                  </div>
+                )}
+                {messages.map((msg, i) => (
+                  <MessageBubble key={i} sender={msg.sender} text={msg.text} />
+                ))}
+                {typing && <LoadingSpinner small={true} text="IA está digitando..." />}
+                <div ref={endRef}></div>
+              </div>
 
-              {messages.map((msg, i) => (
-                <MessageBubble key={i} sender={msg.sender} text={msg.text} />
-              ))}
-
-              {typing && (
-                <LoadingSpinner small={true} text="IA está digitando..." />
-              )}
-
-              <div ref={endRef} />
-            </div>
-
-            <div className="d-flex gap-2 mb-5">
-              <input
-                className="form-control"
-                placeholder={
-                  gameOver
-                    ? "Jogo finalizado — clique em Reiniciar"
-                    : "Faça sua pergunta..."
-                }
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") sendQuestion();
-                }}
-                disabled={loading || gameOver}
-              />
-
-              <button
-                className="btn btn-success"
-                onClick={sendQuestion}
-                disabled={loading || gameOver}
-              >
-                {loading ? "Enviando..." : "Enviar"}
-              </button>
-
-              <button
-                className="btn btn-outline-light"
-                onClick={restartGame}
-                disabled={loading}
-              >
-                Reiniciar
-              </button>
+              <div className="chat-input-area">
+                <input
+                  className="form-control"
+                  placeholder={gameOver ? "Jogo finalizado" : "Faça sua pergunta..."}
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") sendQuestion(); }}
+                  disabled={loading || gameOver}
+                />
+                <button
+                  className="btn btn-success"
+                  onClick={sendQuestion}
+                  disabled={loading || gameOver}
+                >
+                  {loading ? "Enviando..." : "Enviar"}
+                </button>
+              </div>
             </div>
           </>
         )}
@@ -216,6 +190,10 @@ export default function Game() {
         onClose={() => setGameOver(false)}
         onPlayAgain={restartGame}
       />
+
+      <footer className="mt-4 mb-2 text-muted">
+        Feito por <a href="https://github.com/seu-usuario" target="_blank" rel="noreferrer">Seu GitHub</a>
+      </footer>
     </>
   );
 }
