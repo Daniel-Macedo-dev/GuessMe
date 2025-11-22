@@ -11,7 +11,6 @@ export default function VictoryModal({ show, onClose, onPlayAgain }) {
         <p className="modal-text">
           Parabéns! Você descobriu o personagem da IA.
         </p>
-
         <div className="modal-buttons">
           <button className="btn btn-success" onClick={onPlayAgain}>
             Jogar novamente

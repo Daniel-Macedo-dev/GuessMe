@@ -95,8 +95,8 @@ export default function Game() {
     const minTyping = new Promise(resolve => setTimeout(resolve, 500));
 
     try {
-      const responsePromise = api.post("/ask", question, {
-        headers: { "Content-Type": "text/plain" }
+      const responsePromise = api.post("/ask", { question }, {
+        headers: { "Content-Type": "application/json" }
       });
 
       const [response] = await Promise.all([responsePromise, minTyping]);
