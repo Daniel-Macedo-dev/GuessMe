@@ -15,6 +15,7 @@ export default function VictoryModal({ show, onClose, onPlayAgain }) {
         <div className="modal-buttons">
           <button className="btn btn-success" onClick={onPlayAgain}>
             Jogar novamente
+            
           </button>
           <button className="btn btn-outline-light" onClick={onClose}>
             Fechar
