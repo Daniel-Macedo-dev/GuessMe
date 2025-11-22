@@ -30,15 +30,8 @@ export default function Game() {
   const endRef = useRef(null);
 
   const WIN_KEYWORDS = [
-    "acert",
-    "parabéns",
-    "você descobriu",
-    "você acertou",
-    "isso mesmo",
-    "exatamente",
-    "correto",
-    "venceu",
-    "congrat"
+    "acert", "parabéns", "você descobriu", "você acertou",
+    "isso mesmo", "exatamente", "correto", "venceu", "congrat"
   ];
 
   useEffect(() => {
@@ -70,8 +63,7 @@ export default function Game() {
     setLoading(true);
     try {
       const response = await api.get("/start");
-      const text = response.data?.text ?? 
-        "Ok! Já escolhi um personagem. Pode fazer sua primeira pergunta!";
+      const text = response.data?.text ?? "Ok! Já escolhi um personagem. Pode fazer sua primeira pergunta!";
       setMessages([{ sender: "AI", text }]);
       setGameStarted(true);
       setGameOver(false);
@@ -133,55 +125,50 @@ export default function Game() {
     <>
       <Navbar onRestart={restartGame} disabled={loading} />
 
-      <div className="container mt-4" style={{ maxWidth: 900 }}>
+      <div className="container mt-4">
         {!gameStarted ? (
-          <div className="d-flex justify-content-center flex-wrap">
+          <div className="d-flex justify-content-center flex-wrap align-items-center">
             <PersonagemCard />
-            <div className="ms-4 align-self-center mt-3">
+            <button
+              className="btn btn-primary btn-lg ms-3 mt-3"
+              onClick={startGame}
+              disabled={loading}
+            >
+              {loading ? "Iniciando..." : "Iniciar Jogo"}
+            </button>
+          </div>
+        ) : (
+          <div className="d-flex flex-column chat-wrapper">
+            <div className="chat-messages flex-grow-1 p-3" ref={chatRef}>
+              {messages.length === 0 && (
+                <div className="text-muted text-center mt-4">Sem mensagens ainda.</div>
+              )}
+              {messages.map((msg, i) => (
+                <MessageBubble key={i} sender={msg.sender} text={msg.text} />
+              ))}
+              {typing && <LoadingSpinner small text="IA está digitando..." />}
+              <div ref={endRef}></div>
+            </div>
+
+            <div className="chat-input-area p-3 d-flex gap-2">
+              <input
+                type="text"
+                className="form-control"
+                placeholder={gameOver ? "Jogo finalizado" : "Faça sua pergunta..."}
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") sendQuestion(); }}
+                disabled={loading || gameOver}
+              />
               <button
-                className="btn btn-primary btn-lg"
-                onClick={startGame}
-                disabled={loading}
+                className="btn btn-success"
+                onClick={sendQuestion}
+                disabled={loading || gameOver}
               >
-                {loading ? "Iniciando..." : "Iniciar Jogo"}
+                {loading ? "Enviando..." : "Enviar"}
               </button>
             </div>
           </div>
-        ) : (
-          <>
-            <div className="chat-container">
-              <div className="chat-messages" ref={chatRef}>
-                {messages.length === 0 && (
-                  <div className="text-muted text-center mt-4">
-                    Sem mensagens ainda.
-                  </div>
-                )}
-                {messages.map((msg, i) => (
-                  <MessageBubble key={i} sender={msg.sender} text={msg.text} />
-                ))}
-                {typing && <LoadingSpinner small={true} text="IA está digitando..." />}
-                <div ref={endRef}></div>
-              </div>
-
-              <div className="chat-input-area">
-                <input
-                  className="form-control"
-                  placeholder={gameOver ? "Jogo finalizado" : "Faça sua pergunta..."}
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter") sendQuestion(); }}
-                  disabled={loading || gameOver}
-                />
-                <button
-                  className="btn btn-success"
-                  onClick={sendQuestion}
-                  disabled={loading || gameOver}
-                >
-                  {loading ? "Enviando..." : "Enviar"}
-                </button>
-              </div>
-            </div>
-          </>
         )}
       </div>
 
@@ -191,8 +178,8 @@ export default function Game() {
         onPlayAgain={restartGame}
       />
 
-      <footer className="mt-4 mb-2 text-muted">
-        Feito por <a href="https://github.com/seu-usuario" target="_blank" rel="noreferrer">Seu GitHub</a>
+      <footer className="text-center text-muted mt-4 mb-2">
+        Feito por <a href="https://github.com/Daniel-Macedo-dev" target="_blank" rel="noreferrer">Daniel-Macedo-dev</a>
       </footer>
     </>
   );
