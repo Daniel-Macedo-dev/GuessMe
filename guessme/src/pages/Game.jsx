@@ -47,14 +47,17 @@ export default function Game() {
   }, [messages, typing]);
 
   const pushMessage = (sender, text) => {
-    setMessages(prev => [...prev, { sender, text }]);
+    setMessages((prev) => [...prev, { sender, text }]);
   };
 
   const startGame = async () => {
     setLoading(true);
     try {
       const response = await api.get("/start");
-      const text = response.data?.text ?? "Ok! Já escolhi um personagem. Faça sua primeira pergunta!";
+      const text =
+        response.data?.text ??
+        "Ok! Já escolhi um personagem. Faça sua primeira pergunta!";
+
       setMessages([{ sender: "AI", text }]);
       setGameStarted(true);
       setGameOver(false);
@@ -75,26 +78,28 @@ export default function Game() {
     setTyping(true);
     setLoading(true);
 
-    const minTyping = new Promise(resolve => setTimeout(resolve, 500));
+    const minTyping = new Promise((resolve) => setTimeout(resolve, 500));
 
     try {
-      const responsePromise = api.post("/ask", { question }, {
-        headers: { "Content-Type": "application/json" }
-      });
+      const responsePromise = api.post(
+        "/ask",
+        { question },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
       const [response] = await Promise.all([responsePromise, minTyping]);
+
       const aiText = response.data?.text ?? "A IA não retornou texto.";
       const venceu = response.data?.vitoria === true;
       const characterData = response.data?.character ?? null;
 
       setTyping(false);
-      pushMessage("AI", aiText);
 
+      pushMessage("AI", aiText);
       if (venceu) {
         setWinner(characterData);
         setGameOver(true);
       }
-
     } catch (err) {
       console.error(err);
       setTyping(false);
@@ -141,14 +146,18 @@ export default function Game() {
           <div className="d-flex flex-column chat-wrapper">
             <div className="chat-messages flex-grow-1 p-3">
               {messages.length === 0 && (
-                <div className="text-muted text-center mt-4">Sem mensagens ainda.</div>
+                <div className="text-muted text-center mt-4">
+                  Sem mensagens ainda.
+                </div>
               )}
 
               {messages.map((msg, i) => (
                 <MessageBubble key={i} sender={msg.sender} text={msg.text} />
               ))}
 
-              {typing && <LoadingSpinner small text="IA está digitando..." />}
+              {typing && (
+                <LoadingSpinner small text="IA está digitando..." />
+              )}
 
               <div ref={chatEndRef}></div>
             </div>
@@ -157,10 +166,14 @@ export default function Game() {
               <input
                 type="text"
                 className="form-control"
-                placeholder={gameOver ? "Jogo finalizado" : "Faça sua pergunta..."}
+                placeholder={
+                  gameOver ? "Jogo finalizado" : "Faça sua pergunta..."
+                }
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter") sendQuestion(); }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") sendQuestion();
+                }}
                 disabled={loading || gameOver}
               />
 

@@ -17,9 +17,9 @@ export default function VictoryModal({ show, onClose, onPlayAgain, winner }) {
           🎉 Você Venceu!
         </h2>
 
-        <h3 className="fw-semibold mb-3">{winner?.name}</h3>
+        <h3 className="fw-semibold mb-3">{winner.nome}</h3>
 
-        {winner?.image && (
+        {winner.imagem && (
           <div
             style={{
               width: "100%",
@@ -28,12 +28,11 @@ export default function VictoryModal({ show, onClose, onPlayAgain, winner }) {
               overflow: "hidden",
               marginBottom: "15px",
               border: "2px solid #30363d",
-              background: "#000",
             }}
           >
             <img
-              src={winner.image}
-              alt={winner.name}
+              src={winner.imagem}
+              alt={winner.nome}
               style={{
                 width: "100%",
                 height: "100%",
@@ -44,7 +43,7 @@ export default function VictoryModal({ show, onClose, onPlayAgain, winner }) {
         )}
 
         <p className="mb-4" style={{ fontSize: "1.2rem", opacity: 0.9 }}>
-          Obra: <span className="fw-bold">{winner?.origin}</span>
+          Obra: <span className="fw-bold">{winner.obra}</span>
         </p>
 
         <div className="d-flex justify-content-center gap-3">
