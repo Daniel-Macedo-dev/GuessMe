@@ -16,6 +16,7 @@ export default function Game() {
       return [];
     }
   });
+
   const [question, setQuestion] = useState("");
   const [gameStarted, setGameStarted] = useState(
     localStorage.getItem("guessme_started_v2") === "true"
@@ -28,11 +29,6 @@ export default function Game() {
   const [winner, setWinner] = useState(null);
 
   const chatEndRef = useRef(null);
-
-  const WIN_KEYWORDS = [
-    "acert", "parabéns", "você descobriu", "você acertou",
-    "isso mesmo", "exatamente", "correto", "venceu", "congrat"
-  ];
 
   useEffect(() => {
     localStorage.setItem("guessme_messages_v2", JSON.stringify(messages));
@@ -52,13 +48,6 @@ export default function Game() {
 
   const pushMessage = (sender, text) => {
     setMessages(prev => [...prev, { sender, text }]);
-  };
-
-  const checkWin = (text, characterData) => {
-    const lower = text.toLowerCase();
-    const isWin = WIN_KEYWORDS.some(k => lower.includes(k));
-    if (isWin && characterData) setWinner(characterData);
-    return isWin;
   };
 
   const startGame = async () => {
@@ -95,12 +84,17 @@ export default function Game() {
 
       const [response] = await Promise.all([responsePromise, minTyping]);
       const aiText = response.data?.text ?? "A IA não retornou texto.";
+      const venceu = response.data?.vitoria === true;
       const characterData = response.data?.character ?? null;
 
       setTyping(false);
       pushMessage("AI", aiText);
 
-      if (checkWin(aiText, characterData)) setGameOver(true);
+      if (venceu) {
+        setWinner(characterData);
+        setGameOver(true);
+      }
+
     } catch (err) {
       console.error(err);
       setTyping(false);
@@ -149,10 +143,13 @@ export default function Game() {
               {messages.length === 0 && (
                 <div className="text-muted text-center mt-4">Sem mensagens ainda.</div>
               )}
+
               {messages.map((msg, i) => (
                 <MessageBubble key={i} sender={msg.sender} text={msg.text} />
               ))}
+
               {typing && <LoadingSpinner small text="IA está digitando..." />}
+
               <div ref={chatEndRef}></div>
             </div>
 
@@ -166,6 +163,7 @@ export default function Game() {
                 onKeyDown={(e) => { if (e.key === "Enter") sendQuestion(); }}
                 disabled={loading || gameOver}
               />
+
               <button
                 className="btn btn-success"
                 onClick={sendQuestion}
@@ -185,7 +183,7 @@ export default function Game() {
         winner={winner}
       />
 
-      <Footer /> {}
+      <Footer />
     </>
   );
 }
