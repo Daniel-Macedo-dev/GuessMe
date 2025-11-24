@@ -1,44 +1,60 @@
-import React from "react";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
+import { Modal, Button } from "react-bootstrap";
 
 export default function VictoryModal({ show, onClose, onPlayAgain, winner }) {
   if (!winner) return null;
 
   return (
-    <Modal show={show} centered backdrop="static" keyboard={false}>
-      <Modal.Body className="p-4">
-        <div className="card shadow-sm p-3 text-center">
-          <h2 className="mb-3">🎉 Você Venceu!</h2>
+    <Modal show={show} onHide={onClose} centered backdrop="static">
+      <div
+        className="p-4 text-center"
+        style={{
+          background: "#0d1117",
+          color: "white",
+          borderRadius: "12px",
+        }}
+      >
+        <h2 className="fw-bold mb-3" style={{ fontSize: "2rem", color: "#58a6ff" }}>
+          🎉 Você Venceu!
+        </h2>
 
-          {winner.imagem && (
+        <h3 className="fw-semibold mb-3">{winner?.name}</h3>
+
+        {winner?.image && (
+          <div
+            style={{
+              width: "100%",
+              height: "320px",
+              borderRadius: "12px",
+              overflow: "hidden",
+              marginBottom: "15px",
+              border: "2px solid #30363d",
+            }}
+          >
             <img
-              src={winner.imagem}
-              alt={winner.nome}
-              className="img-fluid rounded shadow-sm"
-              style={{ maxHeight: "260px", objectFit: "cover", marginBottom: "15px" }}
+              src={winner.image}
+              alt={winner.name}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
             />
-          )}
-
-          <h4 className="fw-bold">{winner.nome}</h4>
-
-          {winner.obra && (
-            <p className="text-muted mt-1">
-              <strong>Obra:</strong> {winner.obra}
-            </p>
-          )}
-
-          <div className="d-flex justify-content-center gap-3 mt-4">
-            <Button variant="secondary" onClick={onClose}>
-              Fechar
-            </Button>
-
-            <Button variant="success" onClick={onPlayAgain}>
-              Jogar Novamente
-            </Button>
           </div>
+        )}
+
+        <p className="mb-4" style={{ fontSize: "1.2rem", opacity: 0.9 }}>
+          Obra: <span className="fw-bold">{winner?.origin}</span>
+        </p>
+
+        <div className="d-flex justify-content-center gap-3">
+          <Button variant="secondary" onClick={onClose}>
+            Fechar
+          </Button>
+          <Button variant="success" onClick={onPlayAgain}>
+            Jogar Novamente
+          </Button>
         </div>
-      </Modal.Body>
+      </div>
     </Modal>
   );
 }
