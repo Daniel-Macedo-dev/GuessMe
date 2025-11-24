@@ -23,11 +23,12 @@ export default function VictoryModal({ show, onClose, onPlayAgain, winner }) {
           <div
             style={{
               width: "100%",
-              height: "320px",
+              aspectRatio: "3 / 4",
               borderRadius: "12px",
               overflow: "hidden",
               marginBottom: "15px",
               border: "2px solid #30363d",
+              background: "#000",
             }}
           >
             <img
