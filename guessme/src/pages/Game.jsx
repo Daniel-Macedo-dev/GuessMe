@@ -54,7 +54,10 @@ export default function Game() {
     setLoading(true);
     try {
       const response = await api.get("/start");
-      const text = response.data?.text ?? "Ok! Já escolhi um personagem. Faça sua primeira pergunta!";
+      
+      const text = response.data?.answer ?? 
+        "Ok! Já escolhi um personagem. Faça sua primeira pergunta!";
+
       setMessages([{ sender: "AI", text }]);
       setGameStarted(true);
       setGameOver(false);
@@ -78,23 +81,26 @@ export default function Game() {
     const minTyping = new Promise(resolve => setTimeout(resolve, 500));
 
     try {
-      const responsePromise = api.post("/ask", { question }, {
-        headers: { "Content-Type": "application/json" }
-      });
+      const responsePromise = api.post(
+        "/ask",
+        { question },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
       const [response] = await Promise.all([responsePromise, minTyping]);
-      const aiText = response.data?.text ?? "A IA não retornou texto.";
-      const venceu = response.data?.vitoria === true;
-      const characterData = response.data?.character ?? null;
+
+      const aiText = response.data?.answer ?? "A IA não retornou resposta.";
+      const success = response.data?.success === true;
+      const character = response.data?.character ?? null;
 
       setTyping(false);
       pushMessage("AI", aiText);
 
-      if (venceu && characterData) {
+      if (success && character) {
         setWinner({
-          nome: characterData.name ?? "",
-          obra: characterData.origin ?? "",
-          imagem: characterData.image ?? ""
+          nome: character.name ?? "",
+          obra: character.work ?? "",
+          imagem: character.image ?? ""
         });
         setGameOver(true);
       }
@@ -102,7 +108,7 @@ export default function Game() {
     } catch (err) {
       console.error(err);
       setTyping(false);
-      pushMessage("System", "Erro ao contatar a IA.");
+      pushMessage("System", "Erro ao comunicar com a IA.");
     } finally {
       setLoading(false);
     }
@@ -144,10 +150,6 @@ export default function Game() {
         ) : (
           <div className="d-flex flex-column chat-wrapper">
             <div className="chat-messages flex-grow-1 p-3">
-              {messages.length === 0 && (
-                <div className="text-muted text-center mt-4">Sem mensagens ainda.</div>
-              )}
-
               {messages.map((msg, i) => (
                 <MessageBubble key={i} sender={msg.sender} text={msg.text} />
               ))}
@@ -161,7 +163,9 @@ export default function Game() {
               <input
                 type="text"
                 className="form-control"
-                placeholder={gameOver ? "Jogo finalizado" : "Faça sua pergunta..."}
+                placeholder={
+                  gameOver ? "Jogo finalizado" : "Faça sua pergunta..."
+                }
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter") sendQuestion(); }}
