@@ -27,7 +27,6 @@ export default function Game() {
     localStorage.getItem("guessme_over_v2") === "true"
   );
   const [winner, setWinner] = useState(null);
-  
 
   const chatEndRef = useRef(null);
 
