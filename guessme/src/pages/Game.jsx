@@ -32,7 +32,6 @@ export default function Game() {
 
   useEffect(() => {
     localStorage.setItem("guessme_messages_v2", JSON.stringify(messages));
-    
   }, [messages]);
 
   useEffect(() => {
