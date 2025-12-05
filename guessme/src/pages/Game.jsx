@@ -38,7 +38,6 @@ export default function Game() {
     localStorage.setItem("guessme_started_v2", gameStarted ? "true" : "false");
   }, [gameStarted]);
   
-
   useEffect(() => {
     localStorage.setItem("guessme_over_v2", gameOver ? "true" : "false");
   }, [gameOver]);
