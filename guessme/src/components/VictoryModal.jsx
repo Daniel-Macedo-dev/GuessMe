@@ -4,10 +4,11 @@ export default function VictoryModal({ show, onClose, onPlayAgain, winner }) {
   if (!winner) return null;
 
   return (
-    
+
     <Modal show={show} onHide={onClose} centered backdrop="static">
       <div
         className="p-4 text-center"
+        
         style={{
           background: "#0d1117",
           color: "white",
