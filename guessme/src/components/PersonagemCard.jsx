@@ -5,6 +5,7 @@ export default function PersonagemCard() {
       <p className="text-muted small">
         A IA escolherá um personagem — faça perguntas de sim/não até acertar.
       </p>
+
       <img
         src="https://i.imgur.com/52xMt5W.png"
         alt="Mascote"
