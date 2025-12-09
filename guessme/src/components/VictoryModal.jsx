@@ -1,10 +1,9 @@
 import { Modal, Button } from "react-bootstrap";
 
 export default function VictoryModal({ show, onClose, onPlayAgain, winner }) {
-  if (!winner) return null;
+  if (!show || !winner) return null;
 
   return (
-
     <Modal show={show} onHide={onClose} centered backdrop="static">
       <div
         className="p-4 text-center"
@@ -51,6 +50,7 @@ export default function VictoryModal({ show, onClose, onPlayAgain, winner }) {
           <Button variant="secondary" onClick={onClose}>
             Fechar
           </Button>
+
           <Button variant="success" onClick={onPlayAgain}>
             Jogar Novamente
           </Button>
