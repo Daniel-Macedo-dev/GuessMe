@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { api } from "../services/api";
+
 import Navbar from "../components/Navbar";
 import LoadingSpinner from "../components/LoadingSpinner";
 import MessageBubble from "../components/MessageBubble";
@@ -28,6 +29,8 @@ export default function Game() {
   );
   const [winner, setWinner] = useState(null);
 
+  const [isRestarting, setIsRestarting] = useState(false);
+
   const chatEndRef = useRef(null);
 
   useEffect(() => {
@@ -37,7 +40,7 @@ export default function Game() {
   useEffect(() => {
     localStorage.setItem("guessme_started_v2", gameStarted ? "true" : "false");
   }, [gameStarted]);
-  
+
   useEffect(() => {
     localStorage.setItem("guessme_over_v2", gameOver ? "true" : "false");
   }, [gameOver]);
@@ -47,15 +50,16 @@ export default function Game() {
   }, [messages, typing]);
 
   const pushMessage = (sender, text) => {
-    setMessages(prev => [...prev, { sender, text }]);
+    setMessages((prev) => [...prev, { sender, text }]);
   };
 
   const startGame = async () => {
     setLoading(true);
     try {
       const response = await api.get("/start");
-      
-      const text = response.data?.answer ?? 
+
+      const text =
+        response.data?.answer ||
         "Ok! Já escolhi um personagem. Faça sua primeira pergunta!";
 
       setMessages([{ sender: "AI", text }]);
@@ -78,7 +82,7 @@ export default function Game() {
     setTyping(true);
     setLoading(true);
 
-    const minTyping = new Promise(resolve => setTimeout(resolve, 500));
+    const minTyping = new Promise((resolve) => setTimeout(resolve, 500));
 
     try {
       const responsePromise = api.post(
@@ -89,22 +93,22 @@ export default function Game() {
 
       const [response] = await Promise.all([responsePromise, minTyping]);
 
-      const aiText = response.data?.answer ?? "A IA não retornou resposta.";
+      const aiText = response.data?.answer || "A IA não retornou resposta.";
       const success = response.data?.success === true;
-      const character = response.data?.character ?? null;
+      const character = response.data?.character;
 
       setTyping(false);
       pushMessage("AI", aiText);
 
       if (success && character) {
         setWinner({
-          nome: character.name ?? "",
-          obra: character.work ?? "",
-          imagem: character.image ?? ""
+          nome: character.nome ?? "",
+          obra: character.obra ?? "",
+          imagem: character.imagem ?? "",
         });
+
         setGameOver(true);
       }
-
     } catch (err) {
       console.error(err);
       setTyping(false);
@@ -121,14 +125,17 @@ export default function Game() {
     setGameOver(false);
     setTyping(false);
     setWinner(null);
+
     localStorage.removeItem("guessme_messages_v2");
     localStorage.removeItem("guessme_started_v2");
     localStorage.removeItem("guessme_over_v2");
   };
 
   const restartGame = async () => {
+    setIsRestarting(true); 
     resetGameClientOnly();
     await startGame();
+    setIsRestarting(false);
   };
 
   return (
@@ -136,7 +143,7 @@ export default function Game() {
       <Navbar onRestart={restartGame} disabled={loading} />
 
       <div className="container mt-4">
-        {!gameStarted ? (
+        {!gameStarted && !isRestarting ? (
           <div className="d-flex justify-content-center flex-wrap align-items-center">
             <PersonagemCard />
             <button
@@ -168,7 +175,9 @@ export default function Game() {
                 }
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter") sendQuestion(); }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") sendQuestion();
+                }}
                 disabled={loading || gameOver}
               />
 
