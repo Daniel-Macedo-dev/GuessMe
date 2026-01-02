@@ -1,6 +1,14 @@
 import { Modal, Button } from "react-bootstrap";
+import type { CharacterData } from "../types/guessme";
 
-export default function VictoryModal({ show, onClose, onPlayAgain, winner }) {
+type Props = {
+  show: boolean;
+  onClose: () => void;
+  onPlayAgain: () => void;
+  winner: CharacterData | null;
+};
+
+export default function VictoryModal({ show, onClose, onPlayAgain, winner }: Props) {
   if (!show || !winner) return null;
 
   return (
@@ -33,11 +41,7 @@ export default function VictoryModal({ show, onClose, onPlayAgain, winner }) {
             <img
               src={winner.imagem}
               alt={winner.nome}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }}
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           </div>
         )}
@@ -50,7 +54,6 @@ export default function VictoryModal({ show, onClose, onPlayAgain, winner }) {
           <Button variant="secondary" onClick={onClose}>
             Fechar
           </Button>
-
           <Button variant="success" onClick={onPlayAgain}>
             Jogar Novamente
           </Button>
