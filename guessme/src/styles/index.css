@@ -146,3 +146,305 @@ footer a:hover { text-decoration: underline; }
   .chat-input-area { flex-direction:column; gap:0.3rem; }
   .persona-card, .hero-card { width:100%; }
 }
+
+/* ====== NEW LAYOUT PACK (ADD AT THE END) ====== */
+
+.game-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .game-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: var(--card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.panel-body {
+  padding: 16px;
+}
+
+.sidebar-panel .panel-body {
+  padding: 16px;
+}
+
+.chat-panel .panel-body {
+  padding: 0;
+}
+
+/* Stats bar */
+.stats-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.stat-pill {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #dbe7f5;
+  font-size: 0.9rem;
+}
+
+.muted-chip {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.hint-box {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #dbe7f5;
+  min-height: 42px;
+  white-space: pre-wrap;
+}
+
+/* Victory Modal */
+.victory-modal {
+  background: #0d1117;
+  color: white;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.victory-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #58a6ff;
+  margin-bottom: 10px;
+}
+
+.victory-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.victory-work {
+  opacity: 0.9;
+  margin-bottom: 12px;
+}
+
+.victory-media {
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.victory-img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid #30363d;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+}
+
+.victory-img-fallback {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 12px;
+  border: 2px dashed rgba(255,255,255,0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  padding: 18px;
+  color: rgba(255,255,255,0.8);
+}
+
+.fallback-title {
+  font-weight: 700;
+}
+
+.fallback-link {
+  color: #58a6ff;
+  text-decoration: none;
+}
+
+.fallback-link:hover {
+  text-decoration: underline;
+}
+
+/* Small wrap for initial screen */
+.persona-card-wrap {
+  width: 420px;
+  max-width: 92vw;
+}
+
+/* ===== GuessMe UI Pack (append at end) ===== */
+
+.game-layout {
+  display: grid;
+  grid-template-columns: 330px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .game-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: var(--card-bg, rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.55);
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.panel-body {
+  padding: 16px;
+}
+
+.sidebar-panel .panel-body {
+  padding: 16px;
+}
+
+.chat-panel .panel-body {
+  padding: 0;
+}
+
+/* start screen */
+.start-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.start-panel {
+  width: 560px;
+  max-width: 95vw;
+}
+
+/* header */
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.game-title {
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #dbe7f5;
+}
+
+.game-sub {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.game-header-right {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.meta-pill {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #dbe7f5;
+  font-size: 0.88rem;
+}
+
+/* sidebar sections */
+.section-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #dbe7f5;
+}
+
+.tips-list {
+  margin: 0;
+  padding-left: 16px;
+  color: rgba(255,255,255,0.72);
+  font-size: 0.9rem;
+}
+
+.muted-chip {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.75);
+}
+
+/* hint */
+.hint-box {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #dbe7f5;
+  min-height: 42px;
+  white-space: pre-wrap;
+}
+
+/* chips */
+.chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chips-empty {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.9rem;
+}
+
+.chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.06);
+  color: #dbe7f5;
+}
+
+.chip-yes { }
+.chip-no { }
+.chip-maybe { }
+
+/* optional: keep existing chat styles */

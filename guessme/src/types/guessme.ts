@@ -11,7 +11,7 @@ export type AIResponse = {
 };
 
 export type WinnerData = {
-  nome: string;
-  obra: string;
-  imagem: string;
+  name: string;
+  work: string;
+  image: string;
 };

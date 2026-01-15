@@ -1,56 +1,54 @@
 import { Modal, Button } from "react-bootstrap";
-import type { CharacterData } from "../types/guessme";
+import type { WinnerData } from "../types/guessme";
 
 type Props = {
   show: boolean;
   onClose: () => void;
   onPlayAgain: () => void;
-  winner: CharacterData | null;
+  winner: WinnerData | null;
 };
 
 export default function VictoryModal({ show, onClose, onPlayAgain, winner }: Props) {
   if (!show || !winner) return null;
 
+  const searchUrl =
+    "https://www.google.com/search?tbm=isch&q=" +
+    encodeURIComponent(`${winner.name} ${winner.work} character official portrait`);
+
+  const hasImage = !!winner.image && winner.image.trim().length > 0;
+
   return (
     <Modal show={show} onHide={onClose} centered backdrop="static">
-      <div
-        className="p-4 text-center"
-        style={{
-          background: "#0d1117",
-          color: "white",
-          borderRadius: "12px",
-        }}
-      >
-        <h2 className="fw-bold mb-3" style={{ fontSize: "2rem", color: "#58a6ff" }}>
+      <div className="victory-modal p-4 text-center">
+        <h2 className="victory-title">
           🎉 Você Venceu!
         </h2>
 
-        <h3 className="fw-semibold mb-3">{winner.nome}</h3>
+        <h3 className="victory-name">{winner.name}</h3>
 
-        {winner.imagem && (
-          <div
-            style={{
-              width: "100%",
-              aspectRatio: "3 / 4",
-              borderRadius: "12px",
-              overflow: "hidden",
-              marginBottom: "15px",
-              border: "2px solid #30363d",
-            }}
-          >
-            <img
-              src={winner.imagem}
-              alt={winner.nome}
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-          </div>
-        )}
-
-        <p className="mb-4" style={{ fontSize: "1.2rem", opacity: 0.9 }}>
-          Obra: <span className="fw-bold">{winner.obra}</span>
+        <p className="victory-work">
+          Obra: <span className="fw-bold">{winner.work}</span>
         </p>
 
-        <div className="d-flex justify-content-center gap-3">
+        <div className="victory-media">
+          {hasImage ? (
+            <img
+              src={winner.image}
+              alt={winner.name}
+              className="victory-img"
+              loading="lazy"
+            />
+          ) : (
+            <div className="victory-img-fallback">
+              <div className="fallback-title">Sem imagem encontrada</div>
+              <a className="fallback-link" href={searchUrl} target="_blank" rel="noreferrer">
+                Buscar no Google Imagens
+              </a>
+            </div>
+          )}
+        </div>
+
+        <div className="d-flex justify-content-center gap-3 mt-3">
           <Button variant="secondary" onClick={onClose}>
             Fechar
           </Button>
