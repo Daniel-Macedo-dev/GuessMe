@@ -7,7 +7,7 @@ import VictoryModal from "../components/VictoryModal";
 import Footer from "../components/Footer";
 
 import { askQuestion, startGame as startGameApi } from "../services/guessme";
-import type { CharacterData } from "../types/guessme";
+import type { WinnerData } from "../types/guessme";
 
 type ChatMessage = { sender: string; text: string };
 
@@ -30,11 +30,10 @@ export default function Game() {
   const [gameOver, setGameOver] = useState<boolean>(
     localStorage.getItem("guessme_over_v2") === "true"
   );
-  const [winner, setWinner] = useState<CharacterData | null>(null);
+  const [winner, setWinner] = useState<WinnerData | null>(null);
   const [isRestarting, setIsRestarting] = useState<boolean>(false);
-
   const chatEndRef = useRef<HTMLDivElement | null>(null);
-
+  
   useEffect(() => {
     localStorage.setItem("guessme_messages_v2", JSON.stringify(messages));
   }, [messages]);
@@ -59,7 +58,8 @@ export default function Game() {
     setLoading(true);
     try {
       const data = await startGameApi();
-      const text = data?.answer || "Ok! Já escolhi um personagem. Faça sua primeira pergunta!";
+      const text =
+        data?.answer || "Ok! Já escolhi um personagem. Faça sua primeira pergunta!";
 
       setMessages([{ sender: "AI", text }]);
       setGameStarted(true);
@@ -97,12 +97,13 @@ export default function Game() {
 
       if (success && character) {
         setWinner({
-          nome: character.nome ?? "",
-          obra: character.obra ?? "",
-          imagem: character.imagem ?? "",
+          nome: character.name ?? "",
+          obra: character.work ?? "",
+          imagem: character.image ?? "",
         });
         setGameOver(true);
       }
+      
     } catch (err) {
       console.error(err);
       setTyping(false);
@@ -173,7 +174,11 @@ export default function Game() {
                 disabled={loading || gameOver}
               />
 
-              <button className="btn btn-success" onClick={sendQuestion} disabled={loading || gameOver}>
+              <button
+                className="btn btn-success"
+                onClick={sendQuestion}
+                disabled={loading || gameOver}
+              >
                 {loading ? "Enviando..." : "Enviar"}
               </button>
             </div>
