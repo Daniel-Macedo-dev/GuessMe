@@ -1,4 +1,4 @@
-import { Modal, Button } from "react-bootstrap";
+import { useEffect, useMemo, useState } from "react";
 import type { WinnerData } from "../types/guessme";
 
 type Props = {
@@ -8,55 +8,97 @@ type Props = {
   winner: WinnerData | null;
 };
 
+type ConfettiPiece = {
+  left: number;
+  delay: number;
+  duration: number;
+  size: number;
+  rotate: number;
+};
+
 export default function VictoryModal({ show, onClose, onPlayAgain, winner }: Props) {
+  const [burstKey, setBurstKey] = useState(0);
+
+  useEffect(() => {
+    if (show) setBurstKey((k) => k + 1);
+  }, [show]);
+
+  const confetti = useMemo<ConfettiPiece[]>(() => {
+    const pieces: ConfettiPiece[] = [];
+    for (let i = 0; i < 46; i++) {
+      pieces.push({
+        left: Math.random() * 100,
+        delay: Math.random() * 0.35,
+        duration: 1.6 + Math.random() * 1.0,
+        size: 6 + Math.random() * 8,
+        rotate: Math.random() * 360,
+      });
+    }
+    return pieces;
+  }, [burstKey]);
+
   if (!show || !winner) return null;
+
+  const hasImage = !!winner.image && winner.image.trim().length > 0;
 
   const searchUrl =
     "https://www.google.com/search?tbm=isch&q=" +
     encodeURIComponent(`${winner.name} ${winner.work} character official portrait`);
 
-  const hasImage = !!winner.image && winner.image.trim().length > 0;
-
   return (
-    <Modal show={show} onHide={onClose} centered backdrop="static">
-      <div className="victory-modal p-4 text-center">
-        <h2 className="victory-title">
-          🎉 Você Venceu!
-        </h2>
+    <div className="modalOverlay" role="dialog" aria-modal="true">
+      {/* Confetti */}
+      <div className="confettiLayer" aria-hidden="true">
+        {confetti.map((p, i) => (
+          <span
+            key={i}
+            className="confettiPiece"
+            style={{
+              left: `${p.left}%`,
+              animationDelay: `${p.delay}s`,
+              animationDuration: `${p.duration}s`,
+              width: `${p.size}px`,
+              height: `${p.size * 0.55}px`,
+              transform: `rotate(${p.rotate}deg)`,
+            }}
+          />
+        ))}
+      </div>
 
-        <h3 className="victory-name">{winner.name}</h3>
-
-        <p className="victory-work">
-          Obra: <span className="fw-bold">{winner.work}</span>
-        </p>
-
-        <div className="victory-media">
-          {hasImage ? (
-            <img
-              src={winner.image}
-              alt={winner.name}
-              className="victory-img"
-              loading="lazy"
-            />
-          ) : (
-            <div className="victory-img-fallback">
-              <div className="fallback-title">Sem imagem encontrada</div>
-              <a className="fallback-link" href={searchUrl} target="_blank" rel="noreferrer">
-                Buscar no Google Imagens
-              </a>
-            </div>
-          )}
+      <div className="modal">
+        <div className="modalHead">
+          <div style={{ fontWeight: 1000 }}>🎉 Você venceu!</div>
+          <button className="btn" onClick={onClose}>
+            Fechar
+          </button>
         </div>
 
-        <div className="d-flex justify-content-center gap-3 mt-3">
-          <Button variant="secondary" onClick={onClose}>
-            Fechar
-          </Button>
-          <Button variant="success" onClick={onPlayAgain}>
-            Jogar Novamente
-          </Button>
+        <div className="modalBody" style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 24, fontWeight: 1000 }}>{winner.name}</div>
+          <div className="muted" style={{ marginTop: 6 }}>
+            Obra: <b style={{ color: "rgba(255,255,255,0.90)" }}>{winner.work}</b>
+          </div>
+
+          <div style={{ marginTop: 14, display: "grid", placeItems: "center" }}>
+            {hasImage ? (
+              <img className="heroImg" src={winner.image} alt={winner.name} loading="lazy" />
+            ) : (
+              <div className="sideCard" style={{ maxWidth: 360 }}>
+                <div style={{ fontWeight: 950, marginBottom: 6 }}>Sem imagem encontrada</div>
+                <a href={searchUrl} target="_blank" rel="noreferrer" className="muted">
+                  Buscar no Google Imagens
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="modalActions">
+          <button className="btn btn-primary" onClick={onPlayAgain}>
+            Jogar novamente
+          </button>
         </div>
       </div>
-    </Modal>
+    </div>
   );
 }

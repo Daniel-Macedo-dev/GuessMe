@@ -1,11 +1,11 @@
 import Navbar from "../components/Navbar";
-import LoadingSpinner from "../components/LoadingSpinner";
-import MessageBubble from "../components/MessageBubble";
-import VictoryModal from "../components/VictoryModal";
-import Footer from "../components/Footer";
-import QuestionInput from "../components/QuestionInput";
 import SidebarTips from "../components/SidebarTips";
 import GameHeader from "../components/GameHeader";
+import MessageBubble from "../components/MessageBubble";
+import LoadingSpinner from "../components/LoadingSpinner";
+import QuestionInput from "../components/QuestionInput";
+import VictoryModal from "../components/VictoryModal";
+import Footer from "../components/Footer";
 
 import { useGame } from "../hooks/useGame";
 
@@ -13,8 +13,10 @@ export default function Game() {
   const {
     messages,
     question,
+    setQuestion,
     gameStarted,
     gameOver,
+    setGameOver,
     loading,
     typing,
     winner,
@@ -23,42 +25,37 @@ export default function Game() {
     lastAiMessage,
     aiAnswerChips,
     chatEndRef,
-
-    setQuestion,
     startGame,
     sendQuestion,
     restartGame,
-    setGameOver,
   } = useGame();
 
   return (
-    <>
+    <div className="shell">
       <Navbar onRestart={restartGame} disabled={loading} />
 
-      <div className="container mt-4">
+      <main className="main">
         {!gameStarted ? (
-          <div className="start-wrap">
-            <div className="panel start-panel">
-              <div className="panel-body">
-                <h3 className="mb-1">Bem-vindo ao GuessMe!</h3>
-                <p className="text-muted small mb-0">
-                  A IA escolherá um personagem — faça perguntas de sim/não/talvez até acertar.
-                </p>
+          <div className="panel" style={{ maxWidth: 660, margin: "0 auto" }}>
+            <div className="panelHeader">
+              <div style={{ fontWeight: 1000 }}>Bem-vindo ao GuessMe</div>
+              <span className="pill">Modo: Sim/Não/Talvez</span>
+            </div>
+            <div className="panelBody">
+              <div className="muted" style={{ lineHeight: 1.6 }}>
+                A IA escolhe um personagem. Você faz perguntas que só podem ser respondidas com
+                <b> Sim</b>, <b>Não</b> ou <b>Talvez</b> até acertar.
+              </div>
 
-                <div className="mt-3">
-                  <button
-                    className="btn btn-primary btn-lg"
-                    onClick={startGame}
-                    disabled={loading}
-                  >
-                    {loading ? "Iniciando..." : "Iniciar Jogo"}
-                  </button>
-                </div>
+              <div style={{ marginTop: 14 }}>
+                <button className="btn btn-primary" onClick={startGame} disabled={loading}>
+                  {loading ? "Iniciando..." : "Iniciar jogo"}
+                </button>
               </div>
             </div>
           </div>
         ) : (
-          <div className="game-layout">
+          <div className="gameLayout">
             <SidebarTips
               lastHint={lastAiMessage}
               questionsAsked={questionsAsked}
@@ -66,8 +63,8 @@ export default function Game() {
               chips={aiAnswerChips}
             />
 
-            <section className="panel chat-panel">
-              <div className="panel-header">
+            <section className="panel">
+              <div className="panelHeader">
                 <GameHeader
                   status={gameOver ? "Finalizado" : "Jogando"}
                   questionsAsked={questionsAsked}
@@ -75,14 +72,13 @@ export default function Game() {
                 />
               </div>
 
-              <div className="panel-body p-0">
-                <div className="chat-messages flex-grow-1 p-3">
-                  {messages.map((msg, i) => (
-                    <MessageBubble key={i} sender={msg.sender} text={msg.text} />
+              <div className="chatBody">
+                <div className="chatScroll">
+                  {messages.map((m, i) => (
+                    <MessageBubble key={i} sender={m.sender} text={m.text} />
                   ))}
 
-                  {typing && <LoadingSpinner small text="IA está digitando..." />}
-
+                  {typing && <LoadingSpinner text="IA está digitando..." />}
                   <div ref={chatEndRef} />
                 </div>
 
@@ -98,7 +94,7 @@ export default function Game() {
             </section>
           </div>
         )}
-      </div>
+      </main>
 
       <VictoryModal
         show={gameOver}
@@ -108,6 +104,6 @@ export default function Game() {
       />
 
       <Footer />
-    </>
+    </div>
   );
 }

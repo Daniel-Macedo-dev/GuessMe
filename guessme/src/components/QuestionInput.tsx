@@ -7,29 +7,22 @@ type Props = {
   sending: boolean;
 };
 
-export default function QuestionInput({
-  value,
-  disabled,
-  placeholder,
-  onChange,
-  onSend,
-  sending,
-}: Props) {
+export default function QuestionInput({ value, disabled, placeholder, onChange, onSend, sending }: Props) {
+  const canSend = !disabled && !sending && value.trim().length > 0;
+
   return (
-    <div className="chat-input-area p-3 d-flex gap-2">
+    <div className="inputRow">
       <input
-        type="text"
-        className="form-control"
-        placeholder={placeholder}
+        className="input"
         value={value}
+        placeholder={placeholder}
+        disabled={disabled}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={(e) => {
-          if (e.key === "Enter") onSend();
+          if (e.key === "Enter" && canSend) onSend();
         }}
-        disabled={disabled}
       />
-
-      <button className="btn btn-success" onClick={onSend} disabled={disabled}>
+      <button className="btn btn-primary" disabled={!canSend} onClick={onSend}>
         {sending ? "Enviando..." : "Enviar"}
       </button>
     </div>

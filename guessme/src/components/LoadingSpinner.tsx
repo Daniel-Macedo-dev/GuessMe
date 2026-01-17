@@ -1,15 +1,12 @@
-type Props = {
-  small?: boolean;
-  text?: string;
-};
+type Props = { small?: boolean; text?: string };
 
-export default function LoadingSpinner({ small = false, text }: Props) {
+export default function LoadingSpinner({ text = "Carregando..." }: Props) {
   return (
-    <div className={`typing ${small ? "typing-small" : ""}`}>
+    <div className="typing">
       <span className="dot" />
       <span className="dot" />
       <span className="dot" />
-      {text && <span className="typing-text">{text}</span>}
+      <span style={{ marginLeft: 6, color: "rgba(255,255,255,0.65)" }}>{text}</span>
     </div>
   );
 }

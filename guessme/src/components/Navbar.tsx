@@ -1,21 +1,17 @@
-import "bootstrap/dist/css/bootstrap.min.css";
+type Props = { onRestart: () => void; disabled?: boolean };
 
-type NavbarProps = {
-  onRestart: () => void;
-  disabled?: boolean;
-};
-
-export default function Navbar({ onRestart, disabled = false }: NavbarProps) {
+export default function Navbar({ onRestart, disabled = false }: Props) {
   return (
-    <nav className="navbar navbar-dark bg-dark shadow-sm px-4">
-      <span className="navbar-brand mb-0 h1">🎮 GuessMe</span>
-      <button
-        className="btn btn-outline-light btn-sm"
-        onClick={onRestart}
-        disabled={disabled}
-      >
+    <header className="topbar">
+      <div className="brand">
+        <span style={{ fontSize: 18 }}>🎮</span>
+        <span>GuessMe</span>
+        <span className="by">by Daniel Macedo</span>
+      </div>
+
+      <button className="btn" onClick={onRestart} disabled={disabled}>
         Reiniciar
       </button>
-    </nav>
+    </header>
   );
 }

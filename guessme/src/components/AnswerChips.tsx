@@ -1,22 +1,15 @@
-type Props = {
-  chips: string[];
-};
+type Props = { chips: string[] };
 
 export default function AnswerChips({ chips }: Props) {
-  if (!chips.length) return <div className="chips-empty">Sem respostas ainda.</div>;
+  if (!chips.length) return <div className="muted">Sem respostas ainda.</div>;
 
   return (
-    <div className="chips-row">
-      {chips.map((c, idx) => (
-        <span
-          key={`${c}-${idx}`}
-          className={
-            c === "Sim" ? "chip chip-yes" : c === "Não" ? "chip chip-no" : "chip chip-maybe"
-          }
-        >
-          {c}
-        </span>
-      ))}
+    <div className="chipsRow">
+      {chips.map((c, i) => {
+        if (c === "yes") return <span key={i} className="chip chipYes">Sim</span>;
+        if (c === "no") return <span key={i} className="chip chipNo">Não</span>;
+        return <span key={i} className="chip chipMaybe">Talvez</span>;
+      })}
     </div>
   );
 }
