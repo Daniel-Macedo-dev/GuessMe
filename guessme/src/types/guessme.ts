@@ -15,3 +15,10 @@ export type WinnerData = {
   work: string;
   image: string;
 };
+
+export type Message = {
+  id: string;
+  sender: "Você" | "AI";
+  text: string;
+  ts: number;
+};
