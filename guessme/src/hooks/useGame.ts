@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Message, WinnerData } from "../types/guessme";
-import { askGuessMe, startGame } from "../services/guessme";
+import { askGuessMe, getCategories, requestHint, startGame } from "../services/guessme";
 
-const STORAGE_KEY = "guessme:state:v4";
+const STORAGE_KEY = "guessme:state:v5";
 
 type Stored = {
   messages: Message[];
   questionsCount: number;
   winner: WinnerData | null;
+  category: string;
 };
 
 function uid() {
@@ -20,6 +21,7 @@ function safeLoad(): Stored | null {
     if (!raw) return null;
     const data = JSON.parse(raw) as Stored;
     if (!Array.isArray(data.messages)) return null;
+    if (typeof data.category !== "string") data.category = "Geral";
     return data;
   } catch {
     return null;
@@ -39,35 +41,36 @@ export function useGame() {
   const [questionsCount, setQuestionsCount] = useState(0);
   const [winner, setWinner] = useState<WinnerData | null>(null);
 
+  const [categories, setCategories] = useState<string[]>(["Geral"]);
+  const [category, setCategory] = useState<string>("Geral");
+
   const [loading, setLoading] = useState(false);
+  const [hintLoading, setHintLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Para evitar double start no StrictMode e evitar chamadas repetidas
   const startedRef = useRef(false);
-
-  // Para cancelar requests quando desmonta / reinicia
   const inFlightRef = useRef<AbortController | null>(null);
 
-  // Para scroll
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
-  // ========== LOAD FROM STORAGE ==========
+  // ===== load storage =====
   useEffect(() => {
     const stored = safeLoad();
     if (stored) {
       setMessages(stored.messages);
       setQuestionsCount(stored.questionsCount || 0);
       setWinner(stored.winner || null);
-      startedRef.current = true; // já tem estado, não precisa start automático
+      setCategory(stored.category || "Geral");
+      startedRef.current = stored.messages.length > 0;
     }
   }, []);
 
-  // ========== PERSIST ==========
+  // ===== persist =====
   useEffect(() => {
-    safeSave({ messages, questionsCount, winner });
-  }, [messages, questionsCount, winner]);
+    safeSave({ messages, questionsCount, winner, category });
+  }, [messages, questionsCount, winner, category]);
 
-  // ========== SCROLL ==========
+  // ===== scroll =====
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages.length]);
@@ -81,8 +84,24 @@ export function useGame() {
     }
   }
 
-  // ========== START GAME ==========
-  async function boot() {
+  // ===== load categories (uma vez) =====
+  useEffect(() => {
+    let alive = true;
+    getCategories()
+      .then((list) => {
+        if (!alive) return;
+        if (Array.isArray(list) && list.length > 0) setCategories(list);
+      })
+      .catch(() => {
+        // se falhar, deixa só "Geral"
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  // ===== start game =====
+  async function boot(cat?: string) {
     if (startedRef.current) return;
     startedRef.current = true;
 
@@ -94,18 +113,14 @@ export function useGame() {
     inFlightRef.current = controller;
 
     try {
-      // startGame usa apiFetch; para suportar abort, você pode adaptar apiFetch
-      // mas mesmo sem isso, manteremos o controle de "stale" aqui.
-      const res = await startGame();
+      const chosen = (cat ?? category) || "Geral";
+      const res = await startGame(chosen);
 
-      // se reiniciou no meio, ignora
       if (inFlightRef.current !== controller) return;
 
       setWinner(null);
       setQuestionsCount(0);
-      setMessages([
-        { id: uid(), sender: "AI", text: res.answer, ts: Date.now() },
-      ]);
+      setMessages([{ id: uid(), sender: "AI", text: res.answer, ts: Date.now() }]);
     } catch (e: any) {
       if (inFlightRef.current !== controller) return;
       setError(e?.message || "Erro ao iniciar o jogo.");
@@ -113,25 +128,23 @@ export function useGame() {
         {
           id: uid(),
           sender: "AI",
-          text: "Não consegui iniciar o jogo. Verifique se a API está rodando.",
+          text: "Não consegui iniciar o jogo agora. Verifique se a API está rodando.",
           ts: Date.now(),
         },
       ]);
     } finally {
-      if (inFlightRef.current === controller) {
-        inFlightRef.current = null;
-      }
+      if (inFlightRef.current === controller) inFlightRef.current = null;
       setLoading(false);
     }
   }
 
-  // auto-boot se não tem mensagens
+  // inicia automaticamente se não tem mensagens
   useEffect(() => {
-    if (messages.length === 0) boot();
+    if (messages.length === 0) boot(category);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages.length]);
 
-  // ========== SEND QUESTION ==========
+  // ===== send question =====
   async function sendQuestion(question: string) {
     const q = question.trim();
     if (!q || !canAsk) return;
@@ -140,11 +153,7 @@ export function useGame() {
     setLoading(true);
     cancelInFlight();
 
-    // adiciona mensagem do usuário
-    setMessages((prev) => [
-      ...prev,
-      { id: uid(), sender: "Você", text: q, ts: Date.now() },
-    ]);
+    setMessages((prev) => [...prev, { id: uid(), sender: "Você", text: q, ts: Date.now() }]);
     setQuestionsCount((n) => n + 1);
 
     const controller = new AbortController();
@@ -155,10 +164,7 @@ export function useGame() {
 
       if (inFlightRef.current !== controller) return;
 
-      setMessages((prev) => [
-        ...prev,
-        { id: uid(), sender: "AI", text: res.answer, ts: Date.now() },
-      ]);
+      setMessages((prev) => [...prev, { id: uid(), sender: "AI", text: res.answer, ts: Date.now() }]);
 
       if (res.success && res.character) {
         setWinner({
@@ -169,37 +175,64 @@ export function useGame() {
       }
     } catch (e: any) {
       if (inFlightRef.current !== controller) return;
-
       setError(e?.message || "Erro ao chamar a API.");
       setMessages((prev) => [
         ...prev,
-        {
-          id: uid(),
-          sender: "AI",
-          text: "Deu erro ao buscar resposta. Tenta novamente.",
-          ts: Date.now(),
-        },
+        { id: uid(), sender: "AI", text: "Deu erro ao buscar resposta. Tenta novamente.", ts: Date.now() },
       ]);
     } finally {
-      if (inFlightRef.current === controller) {
-        inFlightRef.current = null;
-      }
+      if (inFlightRef.current === controller) inFlightRef.current = null;
       setLoading(false);
     }
   }
 
-  // ========== RESTART ==========
-  async function restart() {
-    // reiniciar = limpar tudo + chamar /start novamente
+  // ===== hint =====
+  async function hint() {
+    if (loading || winner || hintLoading) return;
+
+    setHintLoading(true);
+    setError(null);
+
+    try {
+      const res = await requestHint();
+      const text = res?.answer?.trim() ? `Dica: ${res.answer.trim()}` : "Dica: (vazia)";
+      setMessages((prev) => [...prev, { id: uid(), sender: "AI", text, ts: Date.now() }]);
+    } catch (e: any) {
+      setError(e?.message || "Erro ao pedir dica.");
+      setMessages((prev) => [
+        ...prev,
+        { id: uid(), sender: "AI", text: "Não consegui gerar uma dica agora.", ts: Date.now() },
+      ]);
+    } finally {
+      setHintLoading(false);
+    }
+  }
+
+  // ===== change category =====
+  async function changeCategory(newCategory: string) {
+    const next = newCategory?.trim() || "Geral";
+    setCategory(next);
+
+    // reinicia jogo com a nova categoria
     cancelInFlight();
     setWinner(null);
     setQuestionsCount(0);
     setMessages([]);
     startedRef.current = false;
-    await boot();
+
+    await boot(next);
   }
 
-  // ========== CLEANUP ==========
+  // ===== restart =====
+  async function restart() {
+    cancelInFlight();
+    setWinner(null);
+    setQuestionsCount(0);
+    setMessages([]);
+    startedRef.current = false;
+    await boot(category);
+  }
+
   useEffect(() => {
     return () => cancelInFlight();
   }, []);
@@ -212,7 +245,14 @@ export function useGame() {
     error,
     canAsk,
     bottomRef,
+
+    categories,
+    category,
+    changeCategory,
+
     sendQuestion,
+    hint,
+    hintLoading,
     restart,
   };
 }

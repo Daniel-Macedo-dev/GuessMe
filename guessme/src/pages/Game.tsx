@@ -18,7 +18,14 @@ export default function Game() {
     error,
     canAsk,
     bottomRef,
+
+    categories,
+    category,
+    changeCategory,
+
     sendQuestion,
+    hint,
+    hintLoading,
     restart,
   } = useGame();
 
@@ -27,7 +34,14 @@ export default function Game() {
       <Navbar />
 
       <main className="main">
-        <GameHeader onRestart={restart} />
+        <GameHeader
+          onRestart={restart}
+          onHint={hint}
+          hintLoading={hintLoading}
+          categories={categories}
+          category={category}
+          onChangeCategory={changeCategory}
+        />
 
         <section className="panel chatPanelWide">
           <GameStatsBar questionsCount={questionsCount} />
