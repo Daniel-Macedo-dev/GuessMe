@@ -175,7 +175,6 @@ a:hover{ text-decoration:underline; }
   white-space: pre-wrap;
 }
 
-/* ====== Chips ====== */
 .chipsRow{ display:flex; flex-wrap:wrap; gap:8px; }
 .chip{
   padding: 6px 10px;
@@ -229,7 +228,6 @@ a:hover{ text-decoration:underline; }
   box-shadow: 0 0 0 0.18rem rgba(255,255,255,0.06);
 }
 
-/* ====== Footer ====== */
 .footer{
   margin-top: 18px;
   padding: 16px 0 18px;
@@ -239,7 +237,6 @@ a:hover{ text-decoration:underline; }
   background: rgba(255,255,255,0.02);
 }
 
-/* ====== Modal (custom, sem bootstrap) ====== */
 .modalOverlay{
   position:fixed;
   inset:0;
@@ -321,4 +318,32 @@ a:hover{ text-decoration:underline; }
   0%{ transform: translateY(-10px) rotate(0deg); opacity: 0; }
   10%{ opacity: 1; }
   100%{ transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+.btn{
+  transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+}
+.btn:active{
+  transform: translateY(1px);
+}
+
+.btn:focus-visible,
+.input:focus-visible,
+a:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 0.22rem rgba(16,185,129,0.20);
+  border-color: rgba(16,185,129,0.35);
+}
+
+.text{ line-height: 1.45; }
+.input{ height: 46px; }
+
+.modalOverlay{ animation: fadeIn 140ms ease-out; }
+.modal{ animation: popIn 160ms ease-out; }
+
+@keyframes fadeIn{ from{opacity:0} to{opacity:1} }
+@keyframes popIn{ from{transform:scale(.98);opacity:0} to{transform:scale(1);opacity:1} }
+
+@media (prefers-reduced-motion: reduce){
+  *{ transition-duration:0.01ms !important; animation-duration:0.01ms !important; }
 }
