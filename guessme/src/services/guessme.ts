@@ -1,12 +1,13 @@
-import { api } from "./api";
+import { apiFetch } from "./api";
 import type { AIResponse } from "../types/guessme";
 
-export async function startGame(): Promise<AIResponse> {
-  const { data } = await api.get<AIResponse>("/start");
-  return data;
+export async function askGuessMe(question: string): Promise<AIResponse> {
+  return apiFetch<AIResponse>("/guessme/ask", {
+    method: "POST",
+    body: JSON.stringify({ question }),
+  });
 }
 
-export async function askQuestion(question: string): Promise<AIResponse> {
-  const { data } = await api.post<AIResponse>("/ask", { question });
-  return data;
+export async function resetGuessMe(): Promise<void> {
+  await apiFetch<void>("/guessme/reset", { method: "POST" });
 }

@@ -1,6 +1,36 @@
-import axios from "axios";
+const BASE_URL =
+  (import.meta as any).env?.VITE_API_URL?.toString() || "http://localhost:8080";
 
-export const api = axios.create({
-  baseURL: "http://localhost:8080/api/game",
-  timeout: 20000,
-});
+type FetchOptions = RequestInit & { timeoutMs?: number };
+
+export async function apiFetch<T>(path: string, options: FetchOptions = {}) {
+  const { timeoutMs = 20000, ...rest } = options;
+
+  const controller = new AbortController();
+  const t = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(`${BASE_URL}${path}`, {
+      ...rest,
+      headers: {
+        "Content-Type": "application/json",
+        ...(rest.headers || {}),
+      },
+      signal: controller.signal,
+    });
+
+    const text = await res.text();
+    const data = text ? JSON.parse(text) : null;
+
+    if (!res.ok) {
+      const msg =
+        (data && (data.message || data.error)) ||
+        `Erro HTTP ${res.status}: ${res.statusText}`;
+      throw new Error(msg);
+    }
+
+    return data as T;
+  } finally {
+    clearTimeout(t);
+  }
+}
