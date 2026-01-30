@@ -1,29 +1,46 @@
+import { useEffect, useRef, useState } from "react";
+
 type Props = {
-  value: string;
-  disabled: boolean;
-  placeholder: string;
-  onChange: (v: string) => void;
-  onSend: () => void;
-  sending: boolean;
+  disabled?: boolean;
+  loading?: boolean;
+  onSend: (question: string) => void;
 };
 
-export default function QuestionInput({ value, disabled, placeholder, onChange, onSend, sending }: Props) {
-  const canSend = !disabled && !sending && value.trim().length > 0;
+export default function QuestionInput({ disabled, loading, onSend }: Props) {
+  const [value, setValue] = useState("");
+  const ref = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (!disabled) ref.current?.focus();
+  }, [disabled]);
+
+  function submit() {
+    const v = value.trim();
+    if (!v) return;
+    onSend(v);
+    setValue("");
+  }
 
   return (
     <div className="inputRow">
       <input
+        ref={ref}
         className="input"
         value={value}
-        placeholder={placeholder}
-        disabled={disabled}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder="Faça uma pergunta (ex: É humano?)"
+        disabled={disabled || loading}
         onKeyDown={(e) => {
-          if (e.key === "Enter" && canSend) onSend();
+          if (e.key === "Enter") submit();
         }}
       />
-      <button className="btn btn-primary" disabled={!canSend} onClick={onSend}>
-        {sending ? "Enviando..." : "Enviar"}
+
+      <button
+        className="btn btn-primary"
+        onClick={submit}
+        disabled={disabled || loading}
+      >
+        Enviar
       </button>
     </div>
   );

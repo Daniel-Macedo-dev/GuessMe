@@ -1,15 +1,31 @@
-type Props = { chips: string[] };
+type Props = {
+  disabled?: boolean;
+  onPick: (text: string) => void;
+};
 
-export default function AnswerChips({ chips }: Props) {
-  if (!chips.length) return <div className="muted">Sem respostas ainda.</div>;
+const CHIPS = [
+  "É humano?",
+  "É de anime?",
+  "É de jogo?",
+  "É herói?",
+  "É vilão?",
+  "Tem poderes?",
+];
 
+export default function AnswerChips({ disabled, onPick }: Props) {
   return (
-    <div className="chipsRow">
-      {chips.map((c, i) => {
-        if (c === "yes") return <span key={i} className="chip chipYes">Sim</span>;
-        if (c === "no") return <span key={i} className="chip chipNo">Não</span>;
-        return <span key={i} className="chip chipMaybe">Talvez</span>;
-      })}
+    <div className="chips">
+      {CHIPS.map((c) => (
+        <button
+          key={c}
+          className="chip"
+          disabled={disabled}
+          onClick={() => onPick(c)}
+          title={disabled ? "Aguarde / jogo finalizado" : "Enviar pergunta"}
+        >
+          {c}
+        </button>
+      ))}
     </div>
   );
 }

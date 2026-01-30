@@ -1,12 +1,8 @@
-type Props = { small?: boolean; text?: string };
-
-export default function LoadingSpinner({ text = "Carregando..." }: Props) {
+export default function LoadingSpinner() {
   return (
-    <div className="typing">
-      <span className="dot" />
-      <span className="dot" />
-      <span className="dot" />
-      <span style={{ marginLeft: 6, color: "rgba(255,255,255,0.65)" }}>{text}</span>
+    <div className="loadingRow" aria-live="polite">
+      <span className="spinner" />
+      <span className="muted">Carregando…</span>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-const BASE_URL =
+const BASE_URL: string =
   (import.meta as any).env?.VITE_API_URL?.toString() || "http://localhost:8080";
 
 type FetchOptions = RequestInit & { timeoutMs?: number };
@@ -7,7 +7,7 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}) {
   const { timeoutMs = 20000, ...rest } = options;
 
   const controller = new AbortController();
-  const t = setTimeout(() => controller.abort(), timeoutMs);
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     const res = await fetch(`${BASE_URL}${path}`, {
@@ -23,14 +23,14 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}) {
     const data = text ? JSON.parse(text) : null;
 
     if (!res.ok) {
-      const msg =
+      const message =
         (data && (data.message || data.error)) ||
         `Erro HTTP ${res.status}: ${res.statusText}`;
-      throw new Error(msg);
+      throw new Error(message);
     }
 
     return data as T;
   } finally {
-    clearTimeout(t);
+    clearTimeout(timer);
   }
 }

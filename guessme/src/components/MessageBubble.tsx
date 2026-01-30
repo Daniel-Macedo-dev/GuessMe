@@ -1,13 +1,14 @@
-type Props = { sender: string; text: string };
+type Props = {
+  sender: "Você" | "AI";
+  text: string;
+};
 
 export default function MessageBubble({ sender, text }: Props) {
   const isUser = sender === "Você";
-  const isAI = sender === "AI";
-  const isSystem = !isUser && !isAI;
 
   return (
-    <div className={`msgRow ${isUser ? "msgUser" : isAI ? "msgAI" : "msgSystem"}`}>
-      <div className={`bubble ${isUser ? "bubbleUser" : isAI ? "bubbleAI" : "bubbleSystem"}`}>
+    <div className={`msgRow ${isUser ? "user" : "ai"}`}>
+      <div className="bubble">
         <div className="sender">{sender}</div>
         <div className="text">{text}</div>
       </div>

@@ -1,11 +1,17 @@
-export default function PersonagemCard() {
+import type { WinnerData } from "../types/guessme";
+
+type Props = { winner: WinnerData };
+
+export default function PersonagemCard({ winner }: Props) {
   return (
-    <div className="panel">
-      <div className="panel-body" style={{ textAlign: "center" }}>
-        <div style={{ fontWeight: 1000, fontSize: 18 }}>GuessMe</div>
-        <div style={{ marginTop: 6, color: "rgba(255,255,255,0.66)", fontSize: 13 }}>
-          A imagem do personagem aparece no card de vitória.
-        </div>
+    <div className="characterCard">
+      <div className="characterImgWrap">
+        <img className="characterImg" src={winner.image} alt={winner.name} />
+      </div>
+
+      <div className="characterInfo">
+        <div className="characterName">{winner.name}</div>
+        <div className="muted">{winner.work}</div>
       </div>
     </div>
   );
