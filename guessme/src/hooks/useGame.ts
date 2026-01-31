@@ -93,7 +93,7 @@ export function useGame() {
         if (Array.isArray(list) && list.length > 0) setCategories(list);
       })
       .catch(() => {
-        // se falhar, deixa só "Geral"
+        // se falhar, fica só "Geral"
       });
     return () => {
       alive = false;
@@ -195,7 +195,9 @@ export function useGame() {
 
     try {
       const res = await requestHint();
-      const text = res?.answer?.trim() ? `Dica: ${res.answer.trim()}` : "Dica: (vazia)";
+      const txt = (res?.answer || "").trim();
+      const text = txt ? `Dica: ${txt}` : "Dica: (vazia)";
+
       setMessages((prev) => [...prev, { id: uid(), sender: "AI", text, ts: Date.now() }]);
     } catch (e: any) {
       setError(e?.message || "Erro ao pedir dica.");
@@ -213,7 +215,7 @@ export function useGame() {
     const next = newCategory?.trim() || "Geral";
     setCategory(next);
 
-    // reinicia jogo com a nova categoria
+    // reinicia jogo com a nova categoria (de verdade)
     cancelInFlight();
     setWinner(null);
     setQuestionsCount(0);

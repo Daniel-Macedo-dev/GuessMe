@@ -496,4 +496,173 @@ a:focus-visible{
   box-shadow: 0 0 0 0.22rem rgba(16,185,129,0.20);
   border-color: rgba(16,185,129,0.35);
 }
+.madeByLink{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  font-weight: 900;
+  letter-spacing: .2px;
+}
+
+.madeByLink:hover{
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.16);
+}
+/* ===== Game header spacing ===== */
+.gameSubtitle{
+  margin: 10px 0 0; /* antes tava muito colado */
+  line-height: 1.6;
+}
+
+/* ===== Select dark (sem dropdown branco gigante) ===== */
+.inputSelect{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,255,255,0.12);
+
+  padding-right: 42px; /* espaço pro "caret" */
+  cursor: pointer;
+}
+
+/* seta do select (caret) */
+.inputSelect{
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)),
+    radial-gradient(circle at 50% 45%, rgba(255,255,255,0.0) 0 8px, rgba(255,255,255,0.0) 9px),
+    linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.75) 50%),
+    linear-gradient(135deg, rgba(255,255,255,0.75) 50%, transparent 50%);
+  background-repeat: no-repeat;
+  background-position:
+    0 0,
+    100% 50%,
+    calc(100% - 18px) 55%,
+    calc(100% - 12px) 55%;
+  background-size:
+    100% 100%,
+    1px 1px,
+    6px 6px,
+    6px 6px;
+}
+
+/* opções do dropdown: mantém dark */
+.inputSelect option{
+  background: #0b0f14;
+  color: rgba(255,255,255,0.92);
+}
+
+/* ===== Footer link (clicável mas não "botão") ===== */
+.footerLink{
+  color: rgba(255,255,255,0.78);
+  text-decoration: none;
+  font-weight: 900;
+  letter-spacing: .2px;
+  padding: 6px 10px;
+}
+
+.footerLink:hover{
+  color: rgba(255,255,255,0.92);
+  text-decoration: underline;
+}
+/* ===== CategorySelect (dropdown custom) ===== */
+.catSelect{
+  position: relative;
+  width: 220px;
+}
+
+.catSelect.isDisabled{
+  opacity: .7;
+  pointer-events: none;
+}
+
+.catSelectBtn{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  padding: 10px 12px;
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.12);
+
+  color: rgba(255,255,255,0.92);
+  cursor: pointer;
+}
+
+.catSelectBtn:hover{
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.16);
+}
+
+.catSelectValue{
+  font-weight: 800;
+  letter-spacing: .2px;
+}
+
+/* chevron */
+.catSelectChevron{
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 7px solid rgba(255,255,255,0.72);
+  transition: transform .15s ease;
+}
+
+.catSelectChevron.open{
+  transform: rotate(180deg);
+}
+
+/* menu */
+.catSelectMenu{
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: 260px;
+
+  padding: 8px;
+  border-radius: 14px;
+
+  background: rgba(10,14,20,0.96);
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.55);
+
+  z-index: 50;
+}
+
+/* items */
+.catSelectItem{
+  width: 100%;
+  text-align: left;
+  padding: 10px 10px;
+  border-radius: 10px;
+
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+
+  color: rgba(255,255,255,0.88);
+  font-weight: 700;
+}
+
+.catSelectItem:hover{
+  background: rgba(255,255,255,0.06);
+}
+
+.catSelectItem.active{
+  background: rgba(16,185,129,0.12);
+  border: 1px solid rgba(16,185,129,0.25);
+  color: rgba(255,255,255,0.95);
+}
+
 

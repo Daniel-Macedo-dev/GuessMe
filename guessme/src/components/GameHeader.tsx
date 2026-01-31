@@ -1,3 +1,5 @@
+import CategorySelect from "./CategorySelect";
+
 type Props = {
   onRestart: () => void;
   onHint: () => void;
@@ -17,34 +19,47 @@ export default function GameHeader({
   onChangeCategory,
 }: Props) {
   return (
-    <div className="gameHeader">
-      <div>
-        <h2 className="h2">Partida</h2>
-        <p className="muted">Pergunte com sim/não e tente adivinhar.</p>
+    <div
+      className="gameHeader"
+      style={{
+        display: "flex",
+        alignItems: "flex-end",
+        justifyContent: "space-between",
+        gap: 12,
+        flexWrap: "wrap",
+      }}
+    >
+      <div className="gameHeaderLeft">
+        <h2 className="h2" style={{ margin: 0 }}>
+          Partida
+        </h2>
+        <p className="muted gameSubtitle">
+          Faça perguntas de sim/não. Quando tiver certeza, chute o nome.
+        </p>
       </div>
 
-      <div className="headerActions">
-        <div className="selectWrap">
-          <select
-            className="select"
-            value={category}
-            onChange={(e) => onChangeCategory(e.target.value)}
-            aria-label="Categoria"
-            title="Categoria"
-          >
-            {categories.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-        </div>
+      <div
+        className="gameHeaderActions"
+        style={{
+          display: "flex",
+          gap: 10,
+          alignItems: "center",
+          flexWrap: "wrap",
+          justifyContent: "flex-end",
+        }}
+      >
+        <CategorySelect
+          value={category}
+          options={categories}
+          onChange={onChangeCategory}
+          disabled={hintLoading}
+        />
 
         <button className="btn" onClick={onHint} disabled={!!hintLoading}>
           {hintLoading ? "Dica..." : "Pedir dica"}
         </button>
 
-        <button className="btn" onClick={onRestart}>
+        <button className="btn btn-primary" onClick={onRestart}>
           Reiniciar
         </button>
       </div>

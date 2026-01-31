@@ -6,7 +6,6 @@ import MessageBubble from "../components/MessageBubble";
 import QuestionInput from "../components/QuestionInput";
 import VictoryModal from "../components/VictoryModal";
 import LoadingSpinner from "../components/LoadingSpinner";
-import AnswerChips from "../components/AnswerChips";
 import { useGame } from "../hooks/useGame";
 
 export default function Game() {
@@ -31,7 +30,7 @@ export default function Game() {
 
   return (
     <div className="shell">
-      <Navbar />
+      <Navbar onRestart={restart} disabled={loading || hintLoading} />
 
       <main className="main">
         <GameHeader
@@ -46,8 +45,6 @@ export default function Game() {
         <section className="panel chatPanelWide">
           <GameStatsBar questionsCount={questionsCount} />
 
-          <AnswerChips disabled={!canAsk} onPick={sendQuestion} />
-
           <div className="chatScroll" aria-live="polite">
             {messages.map((m) => (
               <MessageBubble key={m.id} sender={m.sender} text={m.text} />
@@ -58,11 +55,7 @@ export default function Game() {
 
           {error ? <div className="errorBox">{error}</div> : null}
 
-          <QuestionInput
-            disabled={!canAsk}
-            loading={loading}
-            onSend={sendQuestion}
-          />
+          <QuestionInput disabled={!canAsk} loading={loading} onSend={sendQuestion} />
         </section>
 
         <VictoryModal winner={winner} onRestart={restart} />

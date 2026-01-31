@@ -17,8 +17,9 @@ export default function HowItWorks() {
           <div className="divider" />
 
           <ul className="list">
-            <li>Perguntas curtas.</li>
+            <li>Perguntas curtas funcionam melhor.</li>
             <li>Comece amplo e depois refine.</li>
+            <li>Se travar, use o botão “Pedir dica”.</li>
             <li>Quando achar que sabe, pergunte direto: “É o ___?”</li>
           </ul>
 

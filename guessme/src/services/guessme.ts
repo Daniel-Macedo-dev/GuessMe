@@ -1,15 +1,17 @@
-import { apiFetch } from "./api";
 import type { AIResponse } from "../types/guessme";
+import { apiFetch } from "./api";
 
 export async function getCategories(): Promise<string[]> {
   return apiFetch<string[]>("/api/game/categories", { method: "GET" });
 }
 
 export async function startGame(category?: string): Promise<AIResponse> {
+  const c = (category || "").trim();
   const q =
-    category && category.trim() && category !== "Geral"
-      ? `?category=${encodeURIComponent(category.trim())}`
+    c && c.toLowerCase() !== "geral"
+      ? `?category=${encodeURIComponent(c)}`
       : "";
+
   return apiFetch<AIResponse>(`/api/game/start${q}`, { method: "GET" });
 }
 
@@ -21,5 +23,8 @@ export async function askGuessMe(question: string): Promise<AIResponse> {
 }
 
 export async function requestHint(): Promise<AIResponse> {
-  return apiFetch<AIResponse>("/api/game/hint", { method: "POST" });
+  return apiFetch<AIResponse>("/api/game/hint", {
+    method: "POST",
+    body: JSON.stringify({}),
+  });
 }

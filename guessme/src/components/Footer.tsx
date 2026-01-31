@@ -2,7 +2,7 @@ export default function Footer() {
   return (
     <footer className="footerBar">
       <a
-        className="footerBarLink"
+        className="footerLink"
         href="https://github.com/Daniel-Macedo-dev"
         target="_blank"
         rel="noreferrer"
