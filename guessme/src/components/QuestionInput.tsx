@@ -3,10 +3,11 @@ import { useEffect, useRef, useState } from "react";
 type Props = {
   disabled?: boolean;
   loading?: boolean;
+  placeholder?: string;
   onSend: (question: string) => void;
 };
 
-export default function QuestionInput({ disabled, loading, onSend }: Props) {
+export default function QuestionInput({ disabled, loading, placeholder, onSend }: Props) {
   const [value, setValue] = useState("");
   const ref = useRef<HTMLInputElement | null>(null);
 
@@ -21,6 +22,9 @@ export default function QuestionInput({ disabled, loading, onSend }: Props) {
     setValue("");
   }
 
+  const resolvedPlaceholder =
+    placeholder ?? "Faça uma pergunta (ex: É humano?)";
+
   return (
     <div className="inputRow">
       <input
@@ -28,7 +32,7 @@ export default function QuestionInput({ disabled, loading, onSend }: Props) {
         className="input"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Faça uma pergunta (ex: É humano?)"
+        placeholder={resolvedPlaceholder}
         disabled={disabled || loading}
         onKeyDown={(e) => {
           if (e.key === "Enter") submit();
@@ -40,7 +44,7 @@ export default function QuestionInput({ disabled, loading, onSend }: Props) {
         onClick={submit}
         disabled={disabled || loading}
       >
-        Enviar
+        {loading ? "Aguardando…" : "Enviar"}
       </button>
     </div>
   );
