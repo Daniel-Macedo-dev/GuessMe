@@ -16,6 +16,7 @@ export default function Game() {
     loading,
     error,
     canAsk,
+    sessionExpired,
     bottomRef,
 
     categories,
@@ -36,7 +37,7 @@ export default function Game() {
         <GameHeader
           onRestart={restart}
           onHint={hint}
-          hintLoading={hintLoading}
+          hintLoading={hintLoading || sessionExpired}
           categories={categories}
           category={category}
           onChangeCategory={changeCategory}
