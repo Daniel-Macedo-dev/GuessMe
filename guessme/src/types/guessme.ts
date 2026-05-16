@@ -8,6 +8,7 @@ export type AIResponse = {
   answer: string;
   success: boolean;
   character: ApiCharacterData | null;
+  sessionId: string | null;
 };
 
 export type WinnerData = {
