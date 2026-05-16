@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { Message, WinnerData } from "../types/guessme";
+import type { Message, MessageKind, WinnerData } from "../types/guessme";
 import { askGuessMe, getCategories, requestHint, startGame } from "../services/guessme";
 
 const STORAGE_KEY = "guessme:state:v5";
@@ -30,6 +30,10 @@ type Stored = {
 
 function uid() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function msg(sender: Message["sender"], text: string, kind: MessageKind): Message {
+  return { id: uid(), sender, text, ts: Date.now(), kind };
 }
 
 function safeLoad(): Stored | null {
@@ -154,18 +158,11 @@ export function useGame() {
       setWinner(null);
       setQuestionsCount(0);
       setSessionId(res.sessionId ?? null);
-      setMessages([{ id: uid(), sender: "AI", text: res.answer, ts: Date.now() }]);
+      setMessages([msg("AI", res.answer, "ai")]);
     } catch (e: any) {
       if (inFlightRef.current !== controller) return;
       setError(e?.message || "Erro ao iniciar o jogo.");
-      setMessages([
-        {
-          id: uid(),
-          sender: "AI",
-          text: "Não consegui iniciar o jogo agora. Verifique se a API está rodando.",
-          ts: Date.now(),
-        },
-      ]);
+      setMessages([msg("AI", "Não consegui iniciar o jogo agora. Verifique se a API está rodando.", "error")]);
     } finally {
       if (inFlightRef.current === controller) inFlightRef.current = null;
       setLoading(false);
@@ -187,7 +184,7 @@ export function useGame() {
     setLoading(true);
     cancelInFlight();
 
-    setMessages((prev) => [...prev, { id: uid(), sender: "Você", text: q, ts: Date.now() }]);
+    setMessages((prev) => [...prev, msg("Você", q, "user")]);
     setQuestionsCount((n) => n + 1);
 
     const controller = new AbortController();
@@ -208,7 +205,7 @@ export function useGame() {
       } else if (kind === "system-error") {
         setError(res.answer);
       } else {
-        setMessages((prev) => [...prev, { id: uid(), sender: "AI", text: res.answer, ts: Date.now() }]);
+        setMessages((prev) => [...prev, msg("AI", res.answer, "ai")]);
         if (res.success && res.character) {
           setWinner({
             name: res.character.name,
@@ -246,8 +243,8 @@ export function useGame() {
         setError(res.answer);
       } else {
         const txt = (res?.answer || "").trim();
-        const text = txt ? `Dica: ${txt}` : "Dica: (vazia)";
-        setMessages((prev) => [...prev, { id: uid(), sender: "AI", text, ts: Date.now() }]);
+        const text = txt || "(vazia)";
+        setMessages((prev) => [...prev, msg("AI", text, "hint")]);
       }
     } catch (e: any) {
       setError(e?.message || "Erro ao pedir dica. Verifique se o servidor está rodando.");
