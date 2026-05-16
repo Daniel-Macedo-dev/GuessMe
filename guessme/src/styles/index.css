@@ -155,6 +155,7 @@ a:focus-visible{
   justify-content:space-between;
   align-items:flex-end;
   gap:12px;
+  flex-wrap:wrap;
   margin-bottom: 14px;
 }
 
@@ -236,6 +237,7 @@ a:focus-visible{
   background: rgba(255,255,255,0.03);
   color: var(--text);
 }
+.input::placeholder{ color: var(--muted); }
 
 .errorBox{
   margin-top: 10px;
@@ -243,6 +245,11 @@ a:focus-visible{
   border-radius: var(--radius-sm);
   border: 1px solid rgba(239,68,68,0.35);
   background: rgba(239,68,68,0.10);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 /* Loading */
@@ -663,6 +670,47 @@ a:focus-visible{
   background: rgba(16,185,129,0.12);
   border: 1px solid rgba(16,185,129,0.25);
   color: rgba(255,255,255,0.95);
+}
+
+/* ===== GameHeader actions ===== */
+.gameHeaderLeft{ flex: 1 1 auto; min-width: 0; }
+
+.gameHeaderActions{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* ===== Message bubble variants ===== */
+.bubbleHint{
+  border-color: rgba(16,185,129,0.30);
+  background: rgba(16,185,129,0.07);
+}
+
+.bubbleError{
+  border-color: rgba(234,179,8,0.35);
+  background: rgba(234,179,8,0.07);
+}
+
+/* ===== Victory avatar fallback ===== */
+.victoryAvatarFallback{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 40px;
+  font-weight: 900;
+  color: var(--muted);
+}
+
+/* ===== Error box restart shortcut ===== */
+.errorRestartBtn{
+  flex-shrink: 0;
+  padding: 6px 14px;
+  font-size: 13px;
 }
 
 
