@@ -4,6 +4,22 @@ import { askGuessMe, getCategories, requestHint, startGame } from "../services/g
 
 const STORAGE_KEY = "guessme:state:v5";
 
+type AnswerKind = "stale-session" | "system-error" | "game";
+
+function classifyAnswer(answer: string): AnswerKind {
+  if (answer.startsWith("Sessão não encontrada")) return "stale-session";
+  if (
+    answer.startsWith("Config inválida") ||
+    answer.startsWith("Erro da API Gemini") ||
+    answer.startsWith("Erro inesperado") ||
+    answer.startsWith("Resposta vazia") ||
+    answer.startsWith("Resposta inválida") ||
+    answer.startsWith("Pergunta inválida")
+  )
+    return "system-error";
+  return "game";
+}
+
 type Stored = {
   messages: Message[];
   questionsCount: number;
@@ -23,7 +39,10 @@ function safeLoad(): Stored | null {
     const data = JSON.parse(raw) as Stored;
     if (!Array.isArray(data.messages)) return null;
     if (typeof data.category !== "string") data.category = "Geral";
-    if (!data.sessionId) data.sessionId = null;
+    // Reject stored game progress without a sessionId — pre-integration data would route
+    // to the backend's shared default session, which is wrong.
+    if (data.messages.length > 0 && !data.sessionId) return null;
+    data.sessionId = data.sessionId ?? null;
     return data;
   } catch {
     return null;
@@ -44,6 +63,7 @@ export function useGame() {
   const [winner, setWinner] = useState<WinnerData | null>(null);
 
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [sessionExpired, setSessionExpired] = useState(false);
 
   const [categories, setCategories] = useState<string[]>(["Geral"]);
   const [category, setCategory] = useState<string>("Geral");
@@ -80,7 +100,14 @@ export function useGame() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages.length]);
 
-  const canAsk = useMemo(() => !loading && !winner, [loading, winner]);
+  const canAsk = useMemo(
+    () =>
+      !loading &&
+      !winner &&
+      !sessionExpired &&
+      (sessionId !== null || messages.length === 0),
+    [loading, winner, sessionExpired, sessionId, messages.length]
+  );
 
   function cancelInFlight() {
     if (inFlightRef.current) {
@@ -110,6 +137,7 @@ export function useGame() {
     if (startedRef.current) return;
     startedRef.current = true;
 
+    setSessionExpired(false);
     setError(null);
     setLoading(true);
     cancelInFlight();
@@ -170,22 +198,28 @@ export function useGame() {
 
       if (inFlightRef.current !== controller) return;
 
-      setMessages((prev) => [...prev, { id: uid(), sender: "AI", text: res.answer, ts: Date.now() }]);
+      const kind = classifyAnswer(res.answer);
 
-      if (res.success && res.character) {
-        setWinner({
-          name: res.character.name,
-          work: res.character.work,
-          image: res.character.image,
-        });
+      if (kind === "stale-session") {
+        setSessionId(null);
+        setSessionExpired(true);
+        setQuestionsCount((n) => n - 1);
+        setError("Sessão expirada. Clique em 'Reiniciar' para iniciar um novo jogo.");
+      } else if (kind === "system-error") {
+        setError(res.answer);
+      } else {
+        setMessages((prev) => [...prev, { id: uid(), sender: "AI", text: res.answer, ts: Date.now() }]);
+        if (res.success && res.character) {
+          setWinner({
+            name: res.character.name,
+            work: res.character.work,
+            image: res.character.image,
+          });
+        }
       }
     } catch (e: any) {
       if (inFlightRef.current !== controller) return;
-      setError(e?.message || "Erro ao chamar a API.");
-      setMessages((prev) => [
-        ...prev,
-        { id: uid(), sender: "AI", text: "Deu erro ao buscar resposta. Tenta novamente.", ts: Date.now() },
-      ]);
+      setError(e?.message || "Erro ao chamar a API. Verifique se o servidor está rodando.");
     } finally {
       if (inFlightRef.current === controller) inFlightRef.current = null;
       setLoading(false);
@@ -194,23 +228,29 @@ export function useGame() {
 
   // ===== hint =====
   async function hint() {
-    if (loading || winner || hintLoading) return;
+    if (loading || winner || hintLoading || sessionExpired) return;
 
     setHintLoading(true);
     setError(null);
 
     try {
       const res = await requestHint(sessionId);
-      const txt = (res?.answer || "").trim();
-      const text = txt ? `Dica: ${txt}` : "Dica: (vazia)";
 
-      setMessages((prev) => [...prev, { id: uid(), sender: "AI", text, ts: Date.now() }]);
+      const kind = classifyAnswer(res.answer);
+
+      if (kind === "stale-session") {
+        setSessionId(null);
+        setSessionExpired(true);
+        setError("Sessão expirada. Clique em 'Reiniciar' para iniciar um novo jogo.");
+      } else if (kind === "system-error") {
+        setError(res.answer);
+      } else {
+        const txt = (res?.answer || "").trim();
+        const text = txt ? `Dica: ${txt}` : "Dica: (vazia)";
+        setMessages((prev) => [...prev, { id: uid(), sender: "AI", text, ts: Date.now() }]);
+      }
     } catch (e: any) {
-      setError(e?.message || "Erro ao pedir dica.");
-      setMessages((prev) => [
-        ...prev,
-        { id: uid(), sender: "AI", text: "Não consegui gerar uma dica agora.", ts: Date.now() },
-      ]);
+      setError(e?.message || "Erro ao pedir dica. Verifique se o servidor está rodando.");
     } finally {
       setHintLoading(false);
     }
@@ -225,6 +265,8 @@ export function useGame() {
     setWinner(null);
     setQuestionsCount(0);
     setSessionId(null);
+    setSessionExpired(false);
+    setError(null);
     setMessages([]);
     startedRef.current = false;
 
@@ -237,6 +279,8 @@ export function useGame() {
     setWinner(null);
     setQuestionsCount(0);
     setSessionId(null);
+    setSessionExpired(false);
+    setError(null);
     setMessages([]);
     startedRef.current = false;
     await boot(category);
@@ -253,6 +297,7 @@ export function useGame() {
     loading,
     error,
     canAsk,
+    sessionExpired,
     bottomRef,
 
     categories,
