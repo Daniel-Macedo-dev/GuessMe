@@ -19,35 +19,15 @@ export default function GameHeader({
   onChangeCategory,
 }: Props) {
   return (
-    <div
-      className="gameHeader"
-      style={{
-        display: "flex",
-        alignItems: "flex-end",
-        justifyContent: "space-between",
-        gap: 12,
-        flexWrap: "wrap",
-      }}
-    >
+    <div className="gameHeader">
       <div className="gameHeaderLeft">
-        <h2 className="h2" style={{ margin: 0 }}>
-          Partida
-        </h2>
+        <h2 className="h2">Partida</h2>
         <p className="muted gameSubtitle">
           Faça perguntas de sim/não. Quando tiver certeza, chute o nome.
         </p>
       </div>
 
-      <div
-        className="gameHeaderActions"
-        style={{
-          display: "flex",
-          gap: 10,
-          alignItems: "center",
-          flexWrap: "wrap",
-          justifyContent: "flex-end",
-        }}
-      >
+      <div className="gameHeaderActions">
         <CategorySelect
           value={category}
           options={categories}
