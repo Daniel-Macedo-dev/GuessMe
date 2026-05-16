@@ -7,24 +7,25 @@ export async function getCategories(): Promise<string[]> {
 
 export async function startGame(category?: string): Promise<AIResponse> {
   const c = (category || "").trim();
-  const q =
-    c && c.toLowerCase() !== "geral"
-      ? `?category=${encodeURIComponent(c)}`
-      : "";
+  const body: Record<string, string> = {};
+  if (c && c.toLowerCase() !== "geral") body.category = c;
 
-  return apiFetch<AIResponse>(`/api/game/start${q}`, { method: "GET" });
-}
-
-export async function askGuessMe(question: string): Promise<AIResponse> {
-  return apiFetch<AIResponse>("/api/game/ask", {
+  return apiFetch<AIResponse>("/api/game/start", {
     method: "POST",
-    body: JSON.stringify({ question }),
+    body: JSON.stringify(body),
   });
 }
 
-export async function requestHint(): Promise<AIResponse> {
+export async function askGuessMe(question: string, sessionId: string | null): Promise<AIResponse> {
+  return apiFetch<AIResponse>("/api/game/ask", {
+    method: "POST",
+    body: JSON.stringify({ question, sessionId }),
+  });
+}
+
+export async function requestHint(sessionId: string | null): Promise<AIResponse> {
   return apiFetch<AIResponse>("/api/game/hint", {
     method: "POST",
-    body: JSON.stringify({}),
+    body: JSON.stringify({ sessionId }),
   });
 }
