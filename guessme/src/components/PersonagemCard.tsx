@@ -9,7 +9,7 @@ export default function PersonagemCard({ winner }: Props) {
         {winner.image ? (
           <img className="victoryAvatar" src={winner.image} alt={winner.name} />
         ) : (
-          <div className="victoryAvatar victoryAvatarFallback" aria-hidden="true">?</div>
+          <div className="victoryAvatarFallback" aria-hidden="true">?</div>
         )}
       </div>
 
