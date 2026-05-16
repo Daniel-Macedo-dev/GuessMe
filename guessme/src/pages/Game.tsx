@@ -3,6 +3,7 @@ import Footer from "../components/Footer";
 import GameHeader from "../components/GameHeader";
 import GameStatsBar from "../components/GameStatsBar";
 import MessageBubble from "../components/MessageBubble";
+import AnswerChips from "../components/AnswerChips";
 import QuestionInput from "../components/QuestionInput";
 import VictoryModal from "../components/VictoryModal";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -29,6 +30,16 @@ export default function Game() {
     restart,
   } = useGame();
 
+  const inputPlaceholder = !canAsk
+    ? sessionExpired
+      ? "Sessão expirada — clique em Reiniciar"
+      : winner
+      ? "Você venceu! Reinicie para jogar novamente."
+      : loading
+      ? "Aguardando resposta…"
+      : "Inicie um jogo primeiro"
+    : "Faça uma pergunta (ex: É humano?)";
+
   return (
     <div className="shell">
       <Navbar onRestart={restart} disabled={loading || hintLoading} />
@@ -48,15 +59,33 @@ export default function Game() {
 
           <div className="chatScroll" aria-live="polite">
             {messages.map((m) => (
-              <MessageBubble key={m.id} sender={m.sender} text={m.text} />
+              <MessageBubble key={m.id} sender={m.sender} text={m.text} kind={m.kind} />
             ))}
             <div ref={bottomRef} />
             {loading ? <LoadingSpinner /> : null}
           </div>
 
-          {error ? <div className="errorBox">{error}</div> : null}
+          {error ? (
+            <div className="errorBox">
+              <span>{error}</span>
+              {sessionExpired && (
+                <button className="btn btn-primary errorRestartBtn" onClick={restart}>
+                  Novo Jogo
+                </button>
+              )}
+            </div>
+          ) : null}
 
-          <QuestionInput disabled={!canAsk} loading={loading} onSend={sendQuestion} />
+          {!winner ? (
+            <AnswerChips disabled={!canAsk} onPick={sendQuestion} />
+          ) : null}
+
+          <QuestionInput
+            disabled={!canAsk}
+            loading={loading}
+            placeholder={inputPlaceholder}
+            onSend={sendQuestion}
+          />
         </section>
 
         <VictoryModal winner={winner} onRestart={restart} />
