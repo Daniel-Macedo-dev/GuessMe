@@ -9,6 +9,7 @@ type Stored = {
   questionsCount: number;
   winner: WinnerData | null;
   category: string;
+  sessionId: string | null;
 };
 
 function uid() {
@@ -22,6 +23,7 @@ function safeLoad(): Stored | null {
     const data = JSON.parse(raw) as Stored;
     if (!Array.isArray(data.messages)) return null;
     if (typeof data.category !== "string") data.category = "Geral";
+    if (!data.sessionId) data.sessionId = null;
     return data;
   } catch {
     return null;
@@ -32,7 +34,7 @@ function safeSave(state: Stored) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch {
-    // ignore
+    //
   }
 }
 
@@ -40,6 +42,8 @@ export function useGame() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [questionsCount, setQuestionsCount] = useState(0);
   const [winner, setWinner] = useState<WinnerData | null>(null);
+
+  const [sessionId, setSessionId] = useState<string | null>(null);
 
   const [categories, setCategories] = useState<string[]>(["Geral"]);
   const [category, setCategory] = useState<string>("Geral");
@@ -61,14 +65,15 @@ export function useGame() {
       setQuestionsCount(stored.questionsCount || 0);
       setWinner(stored.winner || null);
       setCategory(stored.category || "Geral");
+      setSessionId(stored.sessionId || null);
       startedRef.current = stored.messages.length > 0;
     }
   }, []);
 
   // ===== persist =====
   useEffect(() => {
-    safeSave({ messages, questionsCount, winner, category });
-  }, [messages, questionsCount, winner, category]);
+    safeSave({ messages, questionsCount, winner, category, sessionId });
+  }, [messages, questionsCount, winner, category, sessionId]);
 
   // ===== scroll =====
   useEffect(() => {
@@ -120,6 +125,7 @@ export function useGame() {
 
       setWinner(null);
       setQuestionsCount(0);
+      setSessionId(res.sessionId ?? null);
       setMessages([{ id: uid(), sender: "AI", text: res.answer, ts: Date.now() }]);
     } catch (e: any) {
       if (inFlightRef.current !== controller) return;
@@ -160,7 +166,7 @@ export function useGame() {
     inFlightRef.current = controller;
 
     try {
-      const res = await askGuessMe(q);
+      const res = await askGuessMe(q, sessionId);
 
       if (inFlightRef.current !== controller) return;
 
@@ -194,7 +200,7 @@ export function useGame() {
     setError(null);
 
     try {
-      const res = await requestHint();
+      const res = await requestHint(sessionId);
       const txt = (res?.answer || "").trim();
       const text = txt ? `Dica: ${txt}` : "Dica: (vazia)";
 
@@ -215,10 +221,10 @@ export function useGame() {
     const next = newCategory?.trim() || "Geral";
     setCategory(next);
 
-    // reinicia jogo com a nova categoria (de verdade)
     cancelInFlight();
     setWinner(null);
     setQuestionsCount(0);
+    setSessionId(null);
     setMessages([]);
     startedRef.current = false;
 
@@ -230,6 +236,7 @@ export function useGame() {
     cancelInFlight();
     setWinner(null);
     setQuestionsCount(0);
+    setSessionId(null);
     setMessages([]);
     startedRef.current = false;
     await boot(category);
