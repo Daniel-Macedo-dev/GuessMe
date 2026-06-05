@@ -75,9 +75,11 @@ export function useGame() {
   const [loading, setLoading] = useState(false);
   const [hintLoading, setHintLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [bootError, setBootError] = useState(false);
 
   const startedRef = useRef(false);
   const inFlightRef = useRef<AbortController | null>(null);
+  const hintInFlightRef = useRef(false);
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
@@ -142,6 +144,7 @@ export function useGame() {
     startedRef.current = true;
 
     setSessionExpired(false);
+    setBootError(false);
     setError(null);
     setLoading(true);
     cancelInFlight();
@@ -161,6 +164,7 @@ export function useGame() {
       setMessages([msg("AI", res.answer, "ai")]);
     } catch (e: any) {
       if (inFlightRef.current !== controller) return;
+      setBootError(true);
       setError(e?.message || "Erro ao iniciar o jogo.");
       setMessages([msg("AI", "Não consegui iniciar o jogo agora. Verifique se a API está rodando.", "error")]);
     } finally {
@@ -225,8 +229,9 @@ export function useGame() {
 
   // ===== hint =====
   async function hint() {
-    if (loading || winner || hintLoading || sessionExpired) return;
+    if (loading || winner || hintInFlightRef.current || sessionExpired) return;
 
+    hintInFlightRef.current = true;
     setHintLoading(true);
     setError(null);
 
@@ -249,6 +254,7 @@ export function useGame() {
     } catch (e: any) {
       setError(e?.message || "Erro ao pedir dica. Verifique se o servidor está rodando.");
     } finally {
+      hintInFlightRef.current = false;
       setHintLoading(false);
     }
   }
@@ -293,6 +299,7 @@ export function useGame() {
     winner,
     loading,
     error,
+    bootError,
     canAsk,
     sessionExpired,
     bottomRef,
