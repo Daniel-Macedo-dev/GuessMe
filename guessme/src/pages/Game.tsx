@@ -16,6 +16,7 @@ export default function Game() {
     winner,
     loading,
     error,
+    bootError,
     canAsk,
     sessionExpired,
     bottomRef,
@@ -71,6 +72,11 @@ export default function Game() {
               {sessionExpired && (
                 <button className="btn btn-primary errorRestartBtn" onClick={restart}>
                   Novo Jogo
+                </button>
+              )}
+              {bootError && !sessionExpired && (
+                <button className="btn btn-primary errorRestartBtn" onClick={restart}>
+                  Tentar novamente
                 </button>
               )}
             </div>
