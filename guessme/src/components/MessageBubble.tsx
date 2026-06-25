@@ -7,7 +7,7 @@ type Props = {
 };
 
 const SENDER_LABELS: Record<string, string> = {
-  hint: "Dica",
+  hint: "Nova pista",
   error: "Sistema",
 };
 
