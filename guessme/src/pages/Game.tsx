@@ -50,6 +50,7 @@ export default function Game() {
           onRestart={restart}
           onHint={hint}
           hintLoading={hintLoading || sessionExpired}
+          solved={Boolean(winner)}
           categories={categories}
           category={category}
           onChangeCategory={changeCategory}

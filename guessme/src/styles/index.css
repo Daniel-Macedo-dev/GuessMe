@@ -696,6 +696,22 @@ a:focus-visible{
   background: rgba(234,179,8,0.07);
 }
 
+/* Answer-state variants: evidence confirmed / refuted / inconclusive */
+.bubbleSim{
+  border-color: rgba(16,185,129,0.35);
+  background: rgba(16,185,129,0.08);
+}
+
+.bubbleNao{
+  border-color: rgba(239,68,68,0.28);
+  background: rgba(239,68,68,0.07);
+}
+
+.bubbleTalvez{
+  border-color: rgba(245,158,11,0.28);
+  background: rgba(245,158,11,0.06);
+}
+
 /* ===== Victory avatar fallback ===== */
 .victoryAvatarFallback{
   display: flex;
@@ -743,6 +759,16 @@ a:focus-visible{
 
 .caseStatusBadge::before{
   content: "● ";
+}
+
+/* Solved state: muted dot and border, case is no longer open */
+.caseStatusBadgeSolved{
+  color: var(--muted);
+  border-color: rgba(255,255,255,0.18);
+}
+
+.caseStatusBadgeSolved::before{
+  content: "◼ ";
 }
 
 /* "CASO ENCERRADO" stamp on victory modal */

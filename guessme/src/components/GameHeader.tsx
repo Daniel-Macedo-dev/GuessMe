@@ -4,6 +4,7 @@ type Props = {
   onRestart: () => void;
   onHint: () => void;
   hintLoading?: boolean;
+  solved?: boolean;
 
   categories: string[];
   category: string;
@@ -14,6 +15,7 @@ export default function GameHeader({
   onRestart,
   onHint,
   hintLoading,
+  solved = false,
   categories,
   category,
   onChangeCategory,
@@ -22,8 +24,10 @@ export default function GameHeader({
     <div className="gameHeader">
       <div className="gameHeaderLeft">
         <h2 className="h2">
-          Investigação Ativa
-          <span className="caseStatusBadge">Caso Aberto</span>
+          {solved ? "Investigação Concluída" : "Investigação Ativa"}
+          <span className={`caseStatusBadge${solved ? " caseStatusBadgeSolved" : ""}`}>
+            {solved ? "Caso Encerrado" : "Caso Aberto"}
+          </span>
         </h2>
         <p className="muted gameSubtitle">
           Interrogue a IA com perguntas fechadas. Colete pistas. Quando souber a resposta, revele o suspeito.
@@ -35,10 +39,10 @@ export default function GameHeader({
           value={category}
           options={categories}
           onChange={onChangeCategory}
-          disabled={hintLoading}
+          disabled={!!hintLoading || solved}
         />
 
-        <button className="btn" onClick={onHint} disabled={!!hintLoading}>
+        <button className="btn" onClick={onHint} disabled={!!hintLoading || solved}>
           {hintLoading ? "Buscando pista…" : "Solicitar pista"}
         </button>
 
