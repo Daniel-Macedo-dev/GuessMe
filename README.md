@@ -89,7 +89,21 @@ cd GuessMe/guessme
 npm install
 ```
 
-### 4. Execute em ambiente de desenvolvimento
+### 4. Configure as variáveis de ambiente (opcional)
+
+Copie o arquivo de exemplo e ajuste se necessário:
+
+```bash
+cp .env.example .env
+```
+
+| Variável            | Padrão                    | Descrição                        |
+|---------------------|---------------------------|----------------------------------|
+| `VITE_API_BASE_URL` | `http://localhost:8080`   | URL base da GuessMe API          |
+
+> Se `VITE_API_BASE_URL` não estiver definida, o frontend usa `http://localhost:8080` automaticamente — configuração correta para rodar o backend localmente com as configurações padrão.
+
+### 5. Execute em ambiente de desenvolvimento
 
 ```bash
 npm run dev

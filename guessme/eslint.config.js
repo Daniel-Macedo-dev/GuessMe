@@ -46,10 +46,6 @@ export default defineConfig([
       // in TypeScript callback type signatures (e.g. onPick: (text: string) => void).
       // Use @typescript-eslint/no-unused-vars if stricter TS-aware checking is needed later.
       'no-unused-vars': 'off',
-
-      // VictoryModal calls setConfettiOn(true) synchronously inside useEffect — this is
-      // a pre-existing pattern. Demoted to warn so lint passes; fix in a future task.
-      'react-hooks/set-state-in-effect': 'warn',
     },
   },
 ])

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import type { WinnerData } from "../types/guessme";
 import PersonagemCard from "./PersonagemCard";
 
@@ -21,14 +21,10 @@ function ConfettiBurst({ active }: { active: boolean }) {
 
 export default function VictoryModal({ winner, onRestart }: Props) {
   const open = !!winner;
-  const [confettiOn, setConfettiOn] = useState(false);
   const restartBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!open) return;
-
-    const tStart = window.setTimeout(() => setConfettiOn(true), 0);
-    const tStop = window.setTimeout(() => setConfettiOn(false), 1400);
 
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -36,8 +32,6 @@ export default function VictoryModal({ winner, onRestart }: Props) {
     restartBtnRef.current?.focus();
 
     return () => {
-      window.clearTimeout(tStart);
-      window.clearTimeout(tStop);
       document.body.style.overflow = prev;
     };
   }, [open]);
@@ -52,7 +46,7 @@ export default function VictoryModal({ winner, onRestart }: Props) {
       aria-labelledby="victory-dialog-title"
       onKeyDown={(e) => { if (e.key === "Escape") onRestart(); }}
     >
-      <ConfettiBurst active={confettiOn} />
+      <ConfettiBurst active={open} />
 
       <div className="modal victoryModal">
         <div className="victoryHeader">
