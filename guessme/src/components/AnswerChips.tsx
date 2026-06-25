@@ -8,7 +8,7 @@ const CHIPS = [
   "É de anime?",
   "É de jogo?",
   "É herói?",
-  "É vilão?",
+  "Opera nas sombras?",
   "Tem poderes?",
 ];
 
