@@ -29,7 +29,7 @@ export default function Navbar({ onRestart, disabled = false }: Props) {
 
         {onRestart ? (
           <button className="btn" onClick={onRestart} disabled={disabled}>
-            Reiniciar
+            Novo caso
           </button>
         ) : (
           <span />
