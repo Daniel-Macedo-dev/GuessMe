@@ -10,39 +10,39 @@ export default function Home() {
         <section className="panel hero">
           <div className="heroBadge">GuessMe</div>
 
-          <h1 className="heroTitle">Adivinhe o personagem</h1>
+          <h1 className="heroTitle">Desvende a identidade</h1>
 
           <p className="heroText">
-            Faça perguntas de <b>sim/não</b>, receba respostas da IA e tente
-            descobrir quem é o personagem secreto.
+            Um personagem oculto. Um dossiê em branco. Use perguntas
+            cirúrgicas para confirmar a identidade e fechar o caso.
           </p>
 
           <div className="heroActions">
             <Link className="btn btn-primary" to="/game">
-              Jogar agora
+              Abrir caso
             </Link>
             <Link className="btn" to="/how-it-works">
-              Como funciona
+              Manual do agente
             </Link>
           </div>
 
           <div className="heroGrid">
             <div className="card">
-              <div className="cardTitle">Perguntas rápidas</div>
+              <h3 className="cardTitle">Interrogação</h3>
               <div className="cardText">
-                Comece amplo e vá afunilando até ter certeza.
+                Perguntas fechadas revelam padrões. Comece amplo e feche o cerco.
               </div>
             </div>
             <div className="card">
-              <div className="cardTitle">Respostas naturais</div>
+              <h3 className="cardTitle">Análise</h3>
               <div className="cardText">
-                A IA ajuda sem entregar spoiler direto.
+                A IA responde sem revelar. Interprete cada resposta como evidência.
               </div>
             </div>
             <div className="card">
-              <div className="cardTitle">Vitória com card</div>
+              <h3 className="cardTitle">Caso encerrado</h3>
               <div className="cardText">
-                Ao acertar, você vê personagem, obra e imagem.
+                Ao confirmar o suspeito, o dossiê é revelado com nome e obra.
               </div>
             </div>
           </div>
