@@ -21,9 +21,12 @@ export default function GameHeader({
   return (
     <div className="gameHeader">
       <div className="gameHeaderLeft">
-        <h2 className="h2">Partida</h2>
+        <h2 className="h2">
+          Investigação Ativa
+          <span className="caseStatusBadge">Caso Aberto</span>
+        </h2>
         <p className="muted gameSubtitle">
-          Faça perguntas de sim/não. Quando tiver certeza, chute o nome.
+          Interrogue a IA com perguntas fechadas. Colete pistas. Quando souber a resposta, revele o suspeito.
         </p>
       </div>
 
@@ -36,11 +39,11 @@ export default function GameHeader({
         />
 
         <button className="btn" onClick={onHint} disabled={!!hintLoading}>
-          {hintLoading ? "Dica..." : "Pedir dica"}
+          {hintLoading ? "Buscando pista…" : "Solicitar pista"}
         </button>
 
         <button className="btn btn-primary" onClick={onRestart}>
-          Reiniciar
+          Novo caso
         </button>
       </div>
     </div>
