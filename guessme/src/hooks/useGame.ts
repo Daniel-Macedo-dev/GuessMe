@@ -81,7 +81,7 @@ export function useGame() {
   const inFlightRef = useRef<AbortController | null>(null);
   const hintInFlightRef = useRef(false);
 
-  const bottomRef = useRef<HTMLDivElement | null>(null);
+  const chatScrollRef = useRef<HTMLDivElement | null>(null);
 
   // ===== load storage =====
   useEffect(() => {
@@ -103,7 +103,8 @@ export function useGame() {
 
   // ===== scroll =====
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const el = chatScrollRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
   }, [messages.length]);
 
   const canAsk = useMemo(
@@ -166,7 +167,7 @@ export function useGame() {
       if (inFlightRef.current !== controller) return;
       setBootError(true);
       setError(e?.message || "Erro ao iniciar o jogo.");
-      setMessages([msg("AI", "Não consegui iniciar o jogo agora. Verifique se a API está rodando.", "error")]);
+      setMessages([msg("AI", "Não foi possível abrir o caso agora. Verifique se a API está rodando.", "error")]);
     } finally {
       if (inFlightRef.current === controller) inFlightRef.current = null;
       setLoading(false);
@@ -205,7 +206,7 @@ export function useGame() {
         setSessionId(null);
         setSessionExpired(true);
         setQuestionsCount((n) => n - 1);
-        setError("Sessão expirada. Clique em 'Reiniciar' para iniciar um novo jogo.");
+        setError("Sessão expirada. Clique em 'Novo caso' para iniciar uma nova investigação.");
       } else if (kind === "system-error") {
         setError(res.answer);
       } else {
@@ -243,7 +244,7 @@ export function useGame() {
       if (kind === "stale-session") {
         setSessionId(null);
         setSessionExpired(true);
-        setError("Sessão expirada. Clique em 'Reiniciar' para iniciar um novo jogo.");
+        setError("Sessão expirada. Clique em 'Novo caso' para iniciar uma nova investigação.");
       } else if (kind === "system-error") {
         setError(res.answer);
       } else {
@@ -302,7 +303,7 @@ export function useGame() {
     bootError,
     canAsk,
     sessionExpired,
-    bottomRef,
+    chatScrollRef,
 
     categories,
     category,
