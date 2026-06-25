@@ -9,10 +9,12 @@
   --muted: rgba(255,255,255,0.62);
 
   --accent: #10b981;
+  --accent-evidence: #d97706;
   --shadow: 0 10px 30px rgba(0,0,0,0.35);
 
   --radius: 18px;
   --radius-sm: 12px;
+  --font-mono: 'Courier New', ui-monospace, monospace;
 }
 
 *{ box-sizing: border-box; }
@@ -182,8 +184,8 @@ a:focus-visible{
   margin-bottom: 12px;
 }
 .stat{ display:flex; flex-direction:column; }
-.statLabel{ font-size: 12px; color: var(--muted); }
-.statValue{ font-size: 18px; font-weight: 900; }
+.statLabel{ font-size: 11px; color: var(--muted); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.10em; }
+.statValue{ font-size: 18px; font-weight: 900; font-family: var(--font-mono); }
 .statHint{ font-size: 13px; }
 
 .chips{ display:flex; flex-wrap:wrap; gap: 8px; margin-bottom: 12px; }
@@ -204,8 +206,8 @@ a:focus-visible{
   overflow:auto;
   padding: 10px;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: rgba(0,0,0,0.22);
+  border: 1px solid rgba(16,185,129,0.15);
+  background: rgba(0,6,3,0.32);
 }
 
 .msgRow{ display:flex; margin: 10px 0; }
@@ -363,7 +365,7 @@ a:focus-visible{
 }
 
 .victorySubtitle{
-  margin: 0;
+  margin: 8px 0 0;
 }
 
 .victoryCard{
@@ -685,8 +687,8 @@ a:focus-visible{
 
 /* ===== Message bubble variants ===== */
 .bubbleHint{
-  border-color: rgba(16,185,129,0.30);
-  background: rgba(16,185,129,0.07);
+  border-color: rgba(217,119,6,0.35);
+  background: rgba(217,119,6,0.07);
 }
 
 .bubbleError{
@@ -711,6 +713,59 @@ a:focus-visible{
   flex-shrink: 0;
   padding: 6px 14px;
   font-size: 13px;
+}
+
+/* ===== Investigation identity system ===== */
+
+/* Monospace label used for case status, evidence labels */
+.caseLabel{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* "● CASO ABERTO" badge in game header */
+.caseStatusBadge{
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid rgba(16,185,129,0.35);
+  border-radius: 4px;
+  padding: 2px 8px;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+.caseStatusBadge::before{
+  content: "● ";
+}
+
+/* "CASO ENCERRADO" stamp on victory modal */
+.caseSolvedStamp{
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 2px solid rgba(16,185,129,0.5);
+  border-radius: 4px;
+  padding: 5px 14px;
+}
+
+/* Sender label for hint bubbles (amber) */
+.bubbleHint .sender{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-evidence);
 }
 
 
