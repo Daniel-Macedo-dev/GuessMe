@@ -24,10 +24,8 @@ Com este frontend, o usuário pode:
 - **React 19**
 - **Vite 7**
 - **TypeScript**
-- **Axios**
 - **React Router DOM**
-- **Bootstrap 5**
-- **React Bootstrap**
+- **Bootstrap 5** (CSS only)
 - **ESLint**
 
 ---
@@ -151,6 +149,42 @@ Este projeto foi desenvolvido com foco em:
 * construção de experiência interativa para jogo web
 * organização de interface para consumo de API
 * composição de portfólio com projeto integrado
+
+---
+
+## 🚀 Deploy em Produção
+
+### Checklist antes de publicar
+
+- [ ] Backend GuessMe API está rodando e acessível publicamente
+- [ ] `VITE_API_BASE_URL` aponta para a URL real do backend (ex: `https://sua-api.com`)
+- [ ] CORS no backend configurado para aceitar a origem do frontend (`CORS_ALLOWED_ORIGINS`)
+- [ ] `npm run build` passa sem erros antes do deploy
+- [ ] Pasta `dist/` publicada em um serviço de hospedagem estática
+
+### Build de produção
+
+```bash
+# 1. Defina a URL do backend
+echo "VITE_API_BASE_URL=https://sua-api.com" > .env
+
+# 2. Gere o build
+npm run build
+
+# 3. O build estático estará em: dist/
+```
+
+### Notas por plataforma
+
+**Vercel / Netlify / GitHub Pages**
+
+Faça upload da pasta `dist/` ou conecte o repositório. Configure a variável de ambiente `VITE_API_BASE_URL` nas configurações do projeto da plataforma antes de acionar o build.
+
+**VPS / servidor próprio**
+
+Sirva o conteúdo de `dist/` com qualquer servidor HTTP estático (Nginx, Apache, `serve`, etc.). Configure `VITE_API_BASE_URL` como variável de build.
+
+> **Atenção:** a variável `VITE_API_BASE_URL` é embutida em tempo de build pelo Vite. Alterar a variável exige um novo `npm run build`.
 
 ---
 
