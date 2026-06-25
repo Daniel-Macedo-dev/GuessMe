@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { WinnerData } from "../types/guessme";
 import PersonagemCard from "./PersonagemCard";
 
@@ -22,18 +22,22 @@ function ConfettiBurst({ active }: { active: boolean }) {
 export default function VictoryModal({ winner, onRestart }: Props) {
   const open = !!winner;
   const [confettiOn, setConfettiOn] = useState(false);
+  const restartBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!open) return;
 
-    setConfettiOn(true);
-    const t = window.setTimeout(() => setConfettiOn(false), 1400);
+    const tStart = window.setTimeout(() => setConfettiOn(true), 0);
+    const tStop = window.setTimeout(() => setConfettiOn(false), 1400);
 
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
+    restartBtnRef.current?.focus();
+
     return () => {
-      window.clearTimeout(t);
+      window.clearTimeout(tStart);
+      window.clearTimeout(tStop);
       document.body.style.overflow = prev;
     };
   }, [open]);
@@ -41,20 +45,26 @@ export default function VictoryModal({ winner, onRestart }: Props) {
   if (!open || !winner) return null;
 
   return (
-    <div className="modalOverlay" role="dialog" aria-modal="true">
+    <div
+      className="modalOverlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="victory-dialog-title"
+      onKeyDown={(e) => { if (e.key === "Escape") onRestart(); }}
+    >
       <ConfettiBurst active={confettiOn} />
 
       <div className="modal victoryModal">
         <div className="victoryHeader">
-          <h3 className="h3 victoryTitle">Você venceu! 🎉</h3>
-          <p className="muted victorySubtitle">O personagem era:</p>
+          <div id="victory-dialog-title" className="caseSolvedStamp">Caso Encerrado</div>
+          <p className="muted victorySubtitle">Identidade confirmada:</p>
         </div>
 
         <PersonagemCard winner={winner} />
 
         <div className="victoryActions">
-          <button className="btn btn-primary" onClick={onRestart}>
-            Jogar de novo
+          <button ref={restartBtnRef} className="btn btn-primary" onClick={onRestart}>
+            Novo caso
           </button>
         </div>
       </div>
