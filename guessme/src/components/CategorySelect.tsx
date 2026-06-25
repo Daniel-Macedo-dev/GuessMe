@@ -5,9 +5,10 @@ type Props = {
   options: string[];
   onChange: (value: string) => void;
   disabled?: boolean;
+  label?: string;
 };
 
-export default function CategorySelect({ value, options, onChange, disabled }: Props) {
+export default function CategorySelect({ value, options, onChange, disabled, label }: Props) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
 
@@ -61,6 +62,7 @@ export default function CategorySelect({ value, options, onChange, disabled }: P
         aria-haspopup="listbox"
         aria-expanded={open}
       >
+        {label && <span className="catSelectLabel">{label}</span>}
         <span className="catSelectValue">{safeValue}</span>
         <span className={`catSelectChevron ${open ? "open" : ""}`} aria-hidden="true" />
       </button>

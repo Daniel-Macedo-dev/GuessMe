@@ -145,7 +145,7 @@ a:focus-visible{
   border: 1px solid var(--border);
   background: rgba(255,255,255,0.03);
 }
-.cardTitle{ font-weight: 900; margin-bottom: 6px; }
+.cardTitle{ font-weight: 900; font-size: 16px; margin: 0 0 6px; }
 .cardText{ color: var(--muted); line-height: 1.45; }
 
 .pagePanel{ padding: 18px; }
@@ -186,8 +186,6 @@ a:focus-visible{
 .stat{ display:flex; flex-direction:column; }
 .statLabel{ font-size: 11px; color: var(--muted); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.10em; }
 .statValue{ font-size: 18px; font-weight: 900; font-family: var(--font-mono); }
-.statHint{ font-size: 13px; }
-
 .chips{ display:flex; flex-wrap:wrap; gap: 8px; margin-bottom: 12px; }
 .chip{
   padding: 8px 10px;
@@ -523,8 +521,9 @@ a:focus-visible{
 }
 /* ===== Game header spacing ===== */
 .gameSubtitle{
-  margin: 10px 0 0; /* antes tava muito colado */
+  margin: 6px 0 0;
   line-height: 1.6;
+  font-size: 14px;
 }
 
 /* ===== Select dark (sem dropdown branco gigante) ===== */
@@ -794,4 +793,126 @@ a:focus-visible{
   color: var(--accent-evidence);
 }
 
+/* ===== Home: step card labels ===== */
+.cardStep{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
 
+/* ===== CategorySelect label prefix ===== */
+.catSelectLabel{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+/* ===== GameStatsBar: dynamic phase text ===== */
+.statPhase{
+  font-size: 13px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+}
+
+/* ===== HowItWorks: Agent Manual ===== */
+.pageHeader{
+  margin-bottom: 6px;
+}
+
+.pageLead{
+  margin: 6px 0 0;
+  font-size: 15px;
+}
+
+.manualSteps{
+  display: flex;
+  flex-direction: column;
+}
+
+.manualStep{
+  display: flex;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.manualStep:last-child{
+  border-bottom: none;
+}
+
+.stepNumber{
+  font-family: var(--font-mono);
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--accent);
+  opacity: 0.45;
+  min-width: 28px;
+  line-height: 1;
+  padding-top: 2px;
+}
+
+.stepContent{
+  flex: 1;
+}
+
+.stepTitle{
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.stepContent p{
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* Evidence legend tags (HowItWorks) */
+.evidenceLegend{
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 10px 0 12px;
+}
+
+.evidenceTag{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid;
+}
+
+.evidenceSim{
+  color: var(--accent);
+  border-color: rgba(16,185,129,0.35);
+  background: rgba(16,185,129,0.08);
+}
+
+.evidenceNao{
+  color: rgba(239,68,68,0.90);
+  border-color: rgba(239,68,68,0.28);
+  background: rgba(239,68,68,0.07);
+}
+
+.evidenceTalvez{
+  color: var(--accent-evidence);
+  border-color: rgba(245,158,11,0.28);
+  background: rgba(245,158,11,0.06);
+}
+
+/* Responsive: tighter on narrow screens */
+@media (max-width: 480px){
+  .heroTitle{ font-size: 30px; }
+  .stepNumber{ font-size: 20px; min-width: 22px; }
+  .manualStep{ gap: 12px; padding: 14px 0; }
+}

@@ -9,19 +9,75 @@ export default function HowItWorks() {
 
       <main className="main">
         <section className="panel pagePanel">
-          <h2 className="h2">Manual do investigador</h2>
-          <p className="muted">
-            Cada pergunta é uma pista. Use-as com precisão.
-          </p>
+          <div className="pageHeader">
+            <span className="caseLabel">Dossiê Operacional</span>
+            <h2 className="h2">Manual do Agente</h2>
+            <p className="muted pageLead">Cinco etapas para fechar qualquer caso.</p>
+          </div>
 
           <div className="divider" />
 
-          <ul className="list">
-            <li>Perguntas curtas e diretas funcionam melhor.</li>
-            <li>Comece amplo: categoria, forma, universo. Depois feche o cerco.</li>
-            <li>Se travar, solicite uma pista para desbloquear a investigação.</li>
-            <li>Quando tiver certeza, confronte o suspeito: "É o ___?"</li>
-          </ul>
+          <div className="manualSteps">
+            <div className="manualStep">
+              <div className="stepNumber">01</div>
+              <div className="stepContent">
+                <h3 className="stepTitle">Abrir o caso</h3>
+                <p className="muted">
+                  Escolha um domínio — Anime, Games, Filmes ou Geral. A IA sorteia um
+                  personagem e o caso começa imediatamente. Você não sabe a identidade.
+                </p>
+              </div>
+            </div>
+
+            <div className="manualStep">
+              <div className="stepNumber">02</div>
+              <div className="stepContent">
+                <h3 className="stepTitle">Formular perguntas</h3>
+                <p className="muted">
+                  Faça perguntas que aceitem Sim ou Não. Comece amplo: "É humano?",
+                  "É de anime?". Depois estreite: "É villain?", "Tem poderes?".
+                </p>
+              </div>
+            </div>
+
+            <div className="manualStep">
+              <div className="stepNumber">03</div>
+              <div className="stepContent">
+                <h3 className="stepTitle">Ler as evidências</h3>
+                <div className="evidenceLegend">
+                  <span className="evidenceTag evidenceSim">Sim — confirmado</span>
+                  <span className="evidenceTag evidenceNao">Não — descartado</span>
+                  <span className="evidenceTag evidenceTalvez">Talvez — inconclusivo</span>
+                </div>
+                <p className="muted">
+                  Cada resposta estreita o cerco. Acumule padrões antes de arriscar
+                  uma hipótese.
+                </p>
+              </div>
+            </div>
+
+            <div className="manualStep">
+              <div className="stepNumber">04</div>
+              <div className="stepContent">
+                <h3 className="stepTitle">Solicitar intel</h3>
+                <p className="muted">
+                  Se a investigação travar, peça uma pista. A pista revela uma
+                  característica sem encerrar o caso — use com moderação.
+                </p>
+              </div>
+            </div>
+
+            <div className="manualStep">
+              <div className="stepNumber">05</div>
+              <div className="stepContent">
+                <h3 className="stepTitle">Revelar o suspeito</h3>
+                <p className="muted">
+                  Quando tiver certeza, confronte pelo nome: "É o Naruto?". Se correto,
+                  o caso é encerrado e o dossiê completo é revelado.
+                </p>
+              </div>
+            </div>
+          </div>
 
           <div className="divider" />
 

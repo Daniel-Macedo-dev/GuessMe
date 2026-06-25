@@ -8,13 +8,13 @@ export default function Home() {
       <Navbar />
       <main className="main mainCenter">
         <section className="panel hero">
-          <div className="heroBadge">GuessMe</div>
+          <div className="heroBadge">Jogo de Investigação</div>
 
           <h1 className="heroTitle">Desvende a identidade</h1>
 
           <p className="heroText">
-            Um personagem oculto. Um dossiê em branco. Use perguntas
-            cirúrgicas para confirmar a identidade e fechar o caso.
+            A IA escolheu um personagem. Você não sabe quem é. Interrogue com
+            perguntas fechadas, acumule evidências e revele o suspeito.
           </p>
 
           <div className="heroActions">
@@ -28,21 +28,27 @@ export default function Home() {
 
           <div className="heroGrid">
             <div className="card">
-              <h3 className="cardTitle">Interrogação</h3>
+              <div className="cardStep">01 — Abertura</div>
+              <h2 className="cardTitle">Caso registrado</h2>
               <div className="cardText">
-                Perguntas fechadas revelam padrões. Comece amplo e feche o cerco.
+                A IA mantém uma identidade oculta. Você abre o caso sem saber
+                quem é o suspeito.
               </div>
             </div>
             <div className="card">
-              <h3 className="cardTitle">Análise</h3>
+              <div className="cardStep">02 — Interrogação</div>
+              <h2 className="cardTitle">Evidências coletadas</h2>
               <div className="cardText">
-                A IA responde sem revelar. Interprete cada resposta como evidência.
+                Faça perguntas fechadas. Sim confirma, Não descarta, Talvez
+                restringe o cerco.
               </div>
             </div>
             <div className="card">
-              <h3 className="cardTitle">Caso encerrado</h3>
+              <div className="cardStep">03 — Encerramento</div>
+              <h2 className="cardTitle">Dossiê revelado</h2>
               <div className="cardText">
-                Ao confirmar o suspeito, o dossiê é revelado com nome e obra.
+                Quando a identidade for certa, confronte pelo nome. O dossiê
+                completo é aberto.
               </div>
             </div>
           </div>

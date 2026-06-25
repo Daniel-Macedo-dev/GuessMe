@@ -30,12 +30,13 @@ export default function GameHeader({
           </span>
         </h2>
         <p className="muted gameSubtitle">
-          Interrogue a IA com perguntas fechadas. Colete pistas. Quando souber a resposta, revele o suspeito.
+          Interrogue. Acumule evidências. Revele o suspeito.
         </p>
       </div>
 
       <div className="gameHeaderActions">
         <CategorySelect
+          label="Domínio"
           value={category}
           options={categories}
           onChange={onChangeCategory}
