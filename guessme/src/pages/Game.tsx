@@ -19,7 +19,7 @@ export default function Game() {
     bootError,
     canAsk,
     sessionExpired,
-    bottomRef,
+    chatScrollRef,
 
     categories,
     category,
@@ -33,13 +33,13 @@ export default function Game() {
 
   const inputPlaceholder = !canAsk
     ? sessionExpired
-      ? "Sessão expirada — clique em Reiniciar"
+      ? "Sessão expirada — clique em Novo caso"
       : winner
-      ? "Você venceu! Reinicie para jogar novamente."
+      ? "Caso encerrado. Inicie um novo caso."
       : loading
-      ? "Aguardando resposta…"
-      : "Inicie um jogo primeiro"
-    : "Faça uma pergunta (ex: É humano?)";
+      ? "Aguardando análise…"
+      : "Inicie um caso primeiro"
+    : "Interrogue a IA (ex: É humano?)";
 
   return (
     <div className="shell">
@@ -58,11 +58,10 @@ export default function Game() {
         <section className="panel chatPanelWide">
           <GameStatsBar questionsCount={questionsCount} />
 
-          <div className="chatScroll" aria-live="polite">
+          <div className="chatScroll" ref={chatScrollRef} aria-live="polite">
             {messages.map((m) => (
               <MessageBubble key={m.id} sender={m.sender} text={m.text} kind={m.kind} />
             ))}
-            <div ref={bottomRef} />
             {loading ? <LoadingSpinner /> : null}
           </div>
 
@@ -71,7 +70,7 @@ export default function Game() {
               <span>{error}</span>
               {sessionExpired && (
                 <button className="btn btn-primary errorRestartBtn" onClick={restart}>
-                  Novo Jogo
+                  Novo caso
                 </button>
               )}
               {bootError && !sessionExpired && (
