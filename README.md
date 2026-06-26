@@ -210,6 +210,16 @@ docker run --rm -p 4173:80 guessme-frontend:local
 # Acesse em http://localhost:4173
 ```
 
+### nginx e SPA routing
+
+O container usa um `nginx.conf` customizado com `try_files $uri $uri/ /index.html`, garantindo que o React Router DOM controle a navegação mesmo em acesso direto por URL:
+
+- `/` → Home
+- `/game` → Game
+- `/how-it-works` → HowItWorks
+
+Assets estáticos (`/assets/`, `/favicon.ico`) são servidos diretamente pelo nginx.
+
 ---
 
 ## ⚙️ CI (GitHub Actions)
@@ -220,6 +230,8 @@ O repositório possui um workflow em `.github/workflows/ci.yml` que executa auto
 - instala dependências com `npm ci`
 - executa `npm run lint`
 - executa `npm run build` (sem credenciais de API — build usa fallback para `http://localhost:8080`)
+- configura Docker Buildx e valida o build da imagem frontend com `VITE_API_BASE_URL=http://localhost:8080`
+- imagens **não são publicadas** em nenhum registry
 
 ---
 
