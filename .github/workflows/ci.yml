@@ -6,9 +6,13 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - uses: actions/checkout@v6
@@ -43,3 +47,5 @@ jobs:
           tags: guessme-frontend:ci
           build-args: |
             VITE_API_BASE_URL=http://localhost:8080
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
