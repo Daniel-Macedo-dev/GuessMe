@@ -1,0 +1,6 @@
+.git
+.claude
+guessme/node_modules
+guessme/dist
+guessme/.env
+guessme/*.local

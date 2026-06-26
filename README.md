@@ -188,6 +188,41 @@ Sirva o conteúdo de `dist/` com qualquer servidor HTTP estático (Nginx, Apache
 
 ---
 
+## 🐳 Docker
+
+> **Atenção:** `VITE_API_BASE_URL` é embutida no bundle em **tempo de build** pelo Vite.
+> É necessário passar o valor correto como argumento de build — não é possível alterá-lo em tempo de execução.
+
+### Build da imagem
+
+```bash
+# Desenvolvimento local (padrão: http://localhost:8080)
+docker build -t guessme-frontend:local .
+
+# Produção (substitua pela URL real do backend)
+docker build --build-arg VITE_API_BASE_URL=https://sua-api.com -t guessme-frontend:prod .
+```
+
+### Executar o container
+
+```bash
+docker run --rm -p 4173:80 guessme-frontend:local
+# Acesse em http://localhost:4173
+```
+
+---
+
+## ⚙️ CI (GitHub Actions)
+
+O repositório possui um workflow em `.github/workflows/ci.yml` que executa automaticamente em push e pull request para `main`:
+
+- configura Node 22 com cache npm
+- instala dependências com `npm ci`
+- executa `npm run lint`
+- executa `npm run build` (sem credenciais de API — build usa fallback para `http://localhost:8080`)
+
+---
+
 ## 🔗 Projeto Relacionado
 
 Este frontend foi criado para funcionar em conjunto com a **GuessMe API**, responsável por processar as perguntas do usuário e retornar as respostas da inteligência artificial.
