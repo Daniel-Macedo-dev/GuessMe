@@ -174,11 +174,30 @@ npm run build
 # 3. O build estático estará em: dist/
 ```
 
+### Deploy na Vercel
+
+1. Acesse [vercel.com](https://vercel.com) e importe o repositório `GuessMe` do GitHub.
+2. Em **Root Directory**, defina `guessme` (onde está o `package.json`).
+3. Framework Preset: **Vite** (detectado automaticamente).
+4. Build Command: `npm run build`
+5. Output Directory: `dist`
+6. Em **Environment Variables**, adicione:
+
+| Variável            | Valor                                                    |
+|---------------------|----------------------------------------------------------|
+| `VITE_API_BASE_URL` | URL real do backend (ex: `https://minha-api.onrender.com`) |
+
+> `VITE_API_BASE_URL` é embutida no bundle em **tempo de build** pelo Vite. Qualquer alteração exige um novo deploy.
+
+7. O arquivo `vercel.json` (em `guessme/`) configura rewrites para SPA routing:
+   - `/game` e `/how-it-works` abertos diretamente no navegador funcionam corretamente.
+   - Sem esse arquivo, o Vercel retornaria 404 para rotas client-side acessadas diretamente.
+
 ### Notas por plataforma
 
-**Vercel / Netlify / GitHub Pages**
+**Netlify / GitHub Pages**
 
-Faça upload da pasta `dist/` ou conecte o repositório. Configure a variável de ambiente `VITE_API_BASE_URL` nas configurações do projeto da plataforma antes de acionar o build.
+Conecte o repositório e configure `VITE_API_BASE_URL` nas configurações do projeto antes de acionar o build. Para Netlify, adicione um arquivo `_redirects` em `public/` com `/* /index.html 200` para SPA routing.
 
 **VPS / servidor próprio**
 
