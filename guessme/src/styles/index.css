@@ -354,6 +354,9 @@ a:focus-visible{
   .catSelectMenu{ width: 100%; }
   .topbarInner{ padding: 10px 12px; }
 }
+@media (max-width: 480px){
+  .nav{ display: none; }
+}
 @media (max-width: 400px){
   .chatScroll{ height: 36vh; min-height: 180px; }
   .chip{ padding: 6px 8px; font-size: 13px; }
