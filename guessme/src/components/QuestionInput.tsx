@@ -49,7 +49,7 @@ export default function QuestionInput({ disabled, loading, placeholder, onSend }
         <button
           className="btn btn-primary"
           onClick={submit}
-          disabled={disabled || loading || overLimit}
+          disabled={disabled || loading || overLimit || !value.trim()}
         >
           {loading ? "Aguardando…" : "Enviar"}
         </button>
