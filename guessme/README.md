@@ -1,16 +1,109 @@
-# React + Vite
+# GuessMe — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + TypeScript + Vite frontend for the [GuessMe](https://github.com/Daniel-Macedo-dev/guessme-api) guessing game.
 
-Currently, two official plugins are available:
+## Tech stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 19, TypeScript, Vite 6
+- React Router DOM (client-side routing)
+- Custom CSS only (`src/styles/index.css`) — no CSS framework
 
-## React Compiler
+## Routes
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Path | Page |
+|------|------|
+| `/` | Home — landing page |
+| `/game` | Game — investigation interface |
+| `/how-it-works` | Manual — rules and tips |
 
-## Expanding the ESLint configuration
+## Project structure
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```
+src/
+  components/   # Shared UI components
+  hooks/        # useGame — all game state logic
+  pages/        # Route-level pages
+  services/     # api.ts (fetch wrapper), guessme.ts (API calls)
+  styles/       # index.css (global styles)
+  types/        # TypeScript interfaces
+```
+
+## Environment variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `VITE_API_BASE_URL` | Backend base URL (baked at build time) | `http://localhost:8080` |
+
+Create `.env.local` for local development:
+```
+VITE_API_BASE_URL=http://localhost:8080
+```
+
+## Local development
+
+```bash
+npm install
+npm run dev       # http://localhost:5173
+npm run build     # production build
+npm run lint      # ESLint check
+```
+
+## Backend error handling
+
+The frontend classifies backend `answer` strings into four categories:
+
+| Category | Trigger prefix | UI treatment |
+|----------|---------------|--------------|
+| `game` | (normal AI response) | Chat bubble |
+| `stale-session` | `Sessão não encontrada` | Error box + "Novo caso" button |
+| `system-error` | `Config inválida`, `Erro da API Gemini`, `Erro inesperado`, `Resposta vazia`, `Resposta inválida`, `Pergunta inválida` | Error box (red) |
+| `user-limit` | `Aguarde`, `Limite`, `Pergunta muito longa` | Warning box (amber) |
+
+`user-limit` responses decrement the question counter so the rejected question is not counted.
+
+## Backend session limits
+
+The backend enforces per-session limits. The frontend handles them transparently via `user-limit` warnings:
+
+- **Cooldown:** 3 s between requests (ask and hint share the timer)
+- **Max questions:** 50 per session
+- **Max hints:** 10 per session
+- **Max question length:** 300 characters (also enforced in UI with counter)
+- **Session TTL:** 60 minutes of inactivity
+
+## QA smoke checklist
+
+### Boot
+- [ ] Opening `/game` starts a new session and shows the opening AI message
+- [ ] If the backend is unreachable, an amber error box appears with "Tentar novamente"
+
+### Asking questions
+- [ ] Typing a question and pressing Enter or "Enviar" sends it
+- [ ] The character counter appears and turns amber > 264 chars, red > 300 chars
+- [ ] The "Enviar" button is disabled when input exceeds 300 chars
+- [ ] Rapid repeated questions show the amber cooldown warning ("Aguarde…")
+- [ ] After 50 questions the warning "Limite de perguntas" appears
+
+### Hints
+- [ ] "Solicitar pista" adds a hint bubble to the chat
+- [ ] Button shows "Buscando pista…" and `aria-busy` while in flight
+- [ ] After 10 hints the warning "Limite de dicas" appears
+- [ ] Hint button is disabled when session has expired
+
+### Session expiry
+- [ ] After 60 min idle, the next request shows the red expiry error with "Novo caso"
+- [ ] Clicking "Novo caso" restarts with a fresh session
+
+### Category switching
+- [ ] Changing domain restarts the game with the new category
+- [ ] Dropdown focus moves into the menu when opened
+
+### Win state
+- [ ] Correct guess shows VictoryModal with character name and image
+- [ ] Input is disabled and session controls lock after win
+- [ ] "Novo caso" in modal or header starts a fresh game
+
+### Mobile (≤ 640 px)
+- [ ] Chat area is readable without scrolling past the input row
+- [ ] Category dropdown does not overflow the screen
+- [ ] Header stacks vertically on narrow screens
