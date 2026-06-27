@@ -1,4 +1,4 @@
-import type { Message, WinnerData } from "../types/guessme";
+import type { AnswerVerdict, Message, WinnerData } from "../types/guessme";
 
 export type EvidenceKind = "confirmed" | "refuted" | "inconclusive";
 
@@ -27,7 +27,14 @@ export type SolvedSummary = {
   image: string;
 };
 
-function classifyAIText(text: string): EvidenceKind | null {
+function classifyByVerdict(verdict?: AnswerVerdict): EvidenceKind | null {
+  if (verdict === "YES") return "confirmed";
+  if (verdict === "NO") return "refuted";
+  if (verdict === "MAYBE") return "inconclusive";
+  return null;
+}
+
+function classifyByText(text: string): EvidenceKind | null {
   const lower = text.trim().toLowerCase();
   if (lower.startsWith("sim")) return "confirmed";
   if (lower.startsWith("não") || lower.startsWith("nao")) return "refuted";
@@ -57,7 +64,7 @@ export function deriveEvidence(messages: Message[]): Evidence {
     }
 
     if (m.kind === "ai") {
-      const kind = classifyAIText(m.text);
+      const kind = classifyByVerdict(m.verdict) ?? classifyByText(m.text);
       if (!kind) continue;
 
       const entry: EvidenceEntry = {
