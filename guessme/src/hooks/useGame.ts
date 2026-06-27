@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { Message, MessageKind, WinnerData } from "../types/guessme";
+import type { AnswerVerdict, Message, MessageKind, WinnerData } from "../types/guessme";
 import { askGuessMe, getCategories, requestHint, startGame } from "../services/guessme";
 
 const STORAGE_KEY = "guessme:state:v5";
@@ -53,8 +53,8 @@ function uid() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
-function msg(sender: Message["sender"], text: string, kind: MessageKind): Message {
-  return { id: uid(), sender, text, ts: Date.now(), kind };
+function msg(sender: Message["sender"], text: string, kind: MessageKind, verdict?: AnswerVerdict): Message {
+  return { id: uid(), sender, text, ts: Date.now(), kind, verdict };
 }
 
 function safeLoad(): Stored | null {
@@ -239,7 +239,7 @@ export function useGame() {
         setQuestionsCount((n) => n - 1);
         setLimitMessage(res.answer);
       } else {
-        setMessages((prev) => [...prev, msg("AI", res.answer, "ai")]);
+        setMessages((prev) => [...prev, msg("AI", res.answer, "ai", res.verdict)]);
         if (res.success && res.character) {
           setWinner({
             name: res.character.name,
