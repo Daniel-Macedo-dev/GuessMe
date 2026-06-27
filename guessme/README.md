@@ -35,18 +35,38 @@ The game page shows a live **Caderno de Evidências** (Evidence Notebook) alongs
 
 ### What it does
 
-- Classifies each AI answer as **Confirmado** (starts with "Sim"), **Refutado** (starts with "Não"), or **Inconclusivo** (starts with "Talvez")
+- Classifies each AI answer as **Confirmado**, **Refutado**, or **Inconclusivo** using the structured `verdict` field from the backend, with text-prefix fallback for legacy responses
 - Pairs each classified answer with the question that preceded it
 - Collects **Inteligência** entries from hint messages
 - Shows a **Caso Encerrado** summary block when the player wins
+
+### Structured verdict contract
+
+The backend returns a `verdict` field on every `/api/game/ask` response:
+
+| Verdict | Evidence kind | Typical `answer` text |
+|---------|--------------|----------------------|
+| `YES` | Confirmado | Starts with "Sim" |
+| `NO` | Refutado | Starts with "Não" |
+| `MAYBE` | Inconclusivo | Starts with "Talvez" |
+| `UNKNOWN` | Not classified | Errors, limits, hints, boot messages |
+
+Classification priority:
+1. **`message.verdict`** — used when present (structured backend verdict)
+2. **Text prefix** — fallback for old/legacy messages without a `verdict` field
+
+Hint responses always carry `verdict: UNKNOWN` and are collected as intel, never as Sim/Não/Talvez evidence.
 
 ### Where it lives
 
 | File | Role |
 |------|------|
-| `src/helpers/deriveEvidence.ts` | Pure function — takes `Message[]` + `WinnerData`, returns structured `Evidence` |
+| `src/types/guessme.ts` | `AnswerVerdict` type; `AIResponse.verdict`; `Message.verdict` |
+| `src/hooks/useGame.ts` | Propagates `verdict` from API response into each `Message` |
+| `src/helpers/deriveEvidence.ts` | `classifyByVerdict()` (primary) + `classifyByText()` (fallback) |
+| `src/components/MessageBubble.tsx` | `resolveAnswerState()` — verdict-first, text fallback |
 | `src/components/EvidenceNotebook.tsx` | Renders sections, entries, empty state, and solved summary |
-| `src/pages/Game.tsx` | Calls `deriveEvidence`, passes result to `<EvidenceNotebook>` |
+| `src/pages/Game.tsx` | Calls `deriveEvidence`, passes verdict to `<MessageBubble>` and `<EvidenceNotebook>` |
 
 ### Layout behavior
 
@@ -55,7 +75,8 @@ The game page shows a live **Caderno de Evidências** (Evidence Notebook) alongs
 
 ### Limitations
 
-- Classification relies on the AI answer starting with "Sim", "Não", or "Talvez". If Gemini returns a multi-sentence answer where the verdict is not the first word, it will not be classified.
+- UNKNOWN verdicts (ambiguous Gemini answers, errors, limits) are not classified and do not appear in the notebook — this is intentional; only YES/NO/MAYBE are evidence.
+- Text-prefix fallback works for messages stored in localStorage before the verdict contract was introduced.
 - Notebook state is derived from `messages` in memory; it resets on page refresh if localStorage is cleared.
 
 ## Environment variables
@@ -103,7 +124,7 @@ The backend enforces per-session limits. The frontend handles them transparently
 
 ## E2E tests
 
-Playwright 1.61 covers 93 tests across five spec files. All API calls are intercepted with `page.route()` — no backend required.
+Playwright 1.61 covers 98 tests across five spec files. All API calls are intercepted with `page.route()` — no backend required.
 
 ### Setup
 
@@ -122,7 +143,7 @@ npm run e2e:report    # open last HTML report
 | `game-flow.spec.ts` | Boot; category select; question input (empty, overlong, Enter, clear); Sim/Não/Talvez answer bubbles; hint flow; victory modal |
 | `error-states.spec.ts` | Backend unavailable; cooldown; max questions; max hints; stale session; Gemini system error |
 | `mobile.spec.ts` | Overflow-free layout at 390 px and 360 px; key controls visible on mobile |
-| `notebook.spec.ts` | Notebook presence; empty state; confirmed/refuted/inconclusive entries; intel hints; solved summary; mobile overflow |
+| `notebook.spec.ts` | Notebook presence; empty state; confirmed/refuted/inconclusive entries; intel hints; solved summary; verdict-based YES/NO/MAYBE classification; legacy text fallback; mobile overflow |
 
 ### Troubleshooting
 
