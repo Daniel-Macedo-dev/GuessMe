@@ -4,11 +4,14 @@ export type ApiCharacterData = {
   image: string;
 };
 
+export type AnswerVerdict = "YES" | "NO" | "MAYBE" | "UNKNOWN";
+
 export type AIResponse = {
   answer: string;
   success: boolean;
   character: ApiCharacterData | null;
   sessionId: string | null;
+  verdict?: AnswerVerdict;
 };
 
 export type WinnerData = {
@@ -25,4 +28,5 @@ export type Message = {
   text: string;
   ts: number;
   kind?: MessageKind;
+  verdict?: AnswerVerdict;
 };
