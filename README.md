@@ -140,6 +140,62 @@ Esses scripts estão definidos no `package.json`.
 
 ---
 
+## 🔗 Integração Full-Stack (rodando localmente)
+
+Para rodar o frontend com o backend real da GuessMe API localmente:
+
+**Terminal 1 — backend (guessme-api):**
+
+```powershell
+cd guessme-api/guessme
+.\mvnw.cmd spring-boot:run
+# → http://localhost:8080
+```
+
+**Terminal 2 — frontend (GuessMe):**
+
+```bash
+cd GuessMe/guessme
+npm install
+npm run dev
+# → http://localhost:5173
+```
+
+> O CORS padrão do backend já aceita `http://localhost:5173`. Nenhuma configuração adicional é necessária para desenvolvimento local.
+
+### Smoke checklist local (full-stack)
+
+| Verificação | Ação | Resultado esperado |
+|---|---|---|
+| Backend ativo | `GET /api/game/health` | `{"status":"ok"}` |
+| Categorias carregadas | Abrir `/game` | Dropdown de domínio populado com 6 opções |
+| Início de sessão | Abrir `/game` | Mensagem de abertura do caso + chat ativo |
+| Pergunta normal | Enviar pergunta por texto ou chip | Bolha de resposta ("Sim" verde / "Não" vermelho / "Talvez" âmbar) |
+| Pergunta longa (301+ chars) | Digitar mais de 300 chars | Contador vermelho; botão Enviar desabilitado |
+| Cooldown (< 3 s) | Duas perguntas rápidas | Aviso âmbar "Aguarde alguns instantes…" |
+| Limite de perguntas | 50+ perguntas na mesma sessão | Aviso âmbar "Limite de perguntas atingido…" |
+| Pista | Clicar "Solicitar pista" | Bolha âmbar com texto de dica |
+| Sessão inválida | `POST /api/game/ask` com sessionId inexistente | Box de erro vermelho + botão "Novo caso" |
+| Gemini sem chave real | `/ask` ou `/hint` com `gemini.properties` contendo placeholder | Box de erro vermelho com `Erro da API Gemini (400): API key not valid…` |
+| Novo caso | Clicar "Novo caso" | Chat reinicia com nova mensagem de abertura |
+| Troca de categoria | Selecionar outro domínio | Chat reinicia na nova categoria |
+| Rota direta `/game` | Abrir diretamente no navegador | Renderiza corretamente (SPA routing) |
+| Rota direta `/how-it-works` | Abrir diretamente no navegador | Renderiza corretamente (SPA routing) |
+
+### Estados de erro esperados com `gemini.properties` placeholder
+
+Se `gemini.properties` contiver `YOUR_GEMINI_API_KEY_HERE` (valor padrão), o backend iniciará normalmente mas as chamadas a `/ask` e `/hint` retornarão:
+
+```
+Erro da API Gemini (400): API key not valid. Please pass a valid API key.
+```
+
+O frontend exibe esse erro em um box vermelho. Para usar o Gemini de verdade, substitua o placeholder pelo seu valor real em `guessme/src/main/resources/gemini.properties`.
+
+> **Nunca comite `gemini.properties` com a chave real.** O arquivo está listado no `.gitignore` e não deve ser incluído em commits.
+
+---
+
 ## 🧠 Objetivo do Projeto
 
 Este projeto foi desenvolvido com foco em:
