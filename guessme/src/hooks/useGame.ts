@@ -4,7 +4,7 @@ import { askGuessMe, getCategories, requestHint, startGame } from "../services/g
 
 const STORAGE_KEY = "guessme:state:v5";
 
-type AnswerKind = "stale-session" | "system-error" | "game";
+type AnswerKind = "stale-session" | "system-error" | "user-limit" | "game";
 
 function classifyAnswer(answer: string): AnswerKind {
   if (answer.startsWith("Sessão não encontrada")) return "stale-session";
@@ -17,6 +17,13 @@ function classifyAnswer(answer: string): AnswerKind {
     answer.startsWith("Pergunta inválida")
   )
     return "system-error";
+  // Backend limit/cooldown messages — show as inline warning, not as game bubbles.
+  if (
+    answer.startsWith("Aguarde") ||
+    answer.startsWith("Limite") ||
+    answer.startsWith("Pergunta muito longa")
+  )
+    return "user-limit";
   return "game";
 }
 
@@ -76,6 +83,8 @@ export function useGame() {
   const [hintLoading, setHintLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [bootError, setBootError] = useState(false);
+  // Inline warning for backend limit/cooldown rejections (user-facing, non-critical).
+  const [limitMessage, setLimitMessage] = useState<string | null>(null);
 
   const startedRef = useRef(false);
   const inFlightRef = useRef<AbortController | null>(null);
@@ -147,6 +156,7 @@ export function useGame() {
     setSessionExpired(false);
     setBootError(false);
     setError(null);
+    setLimitMessage(null);
     setLoading(true);
     cancelInFlight();
 
@@ -166,7 +176,7 @@ export function useGame() {
     } catch (e: any) {
       if (inFlightRef.current !== controller) return;
       setBootError(true);
-      setError(e?.message || "Erro ao iniciar o jogo.");
+      setError("Não foi possível abrir o caso. Verifique se a API está acessível e tente novamente.");
       setMessages([msg("AI", "Não foi possível abrir o caso agora. Verifique se a API está rodando.", "error")]);
     } finally {
       if (inFlightRef.current === controller) inFlightRef.current = null;
@@ -186,6 +196,7 @@ export function useGame() {
     if (!q || !canAsk) return;
 
     setError(null);
+    setLimitMessage(null);
     setLoading(true);
     cancelInFlight();
 
@@ -209,6 +220,10 @@ export function useGame() {
         setError("Sessão expirada. Clique em 'Novo caso' para iniciar uma nova investigação.");
       } else if (kind === "system-error") {
         setError(res.answer);
+      } else if (kind === "user-limit") {
+        // Backend rejected the request (cooldown, max questions, overlong) — not counted.
+        setQuestionsCount((n) => n - 1);
+        setLimitMessage(res.answer);
       } else {
         setMessages((prev) => [...prev, msg("AI", res.answer, "ai")]);
         if (res.success && res.character) {
@@ -235,6 +250,7 @@ export function useGame() {
     hintInFlightRef.current = true;
     setHintLoading(true);
     setError(null);
+    setLimitMessage(null);
 
     try {
       const res = await requestHint(sessionId);
@@ -247,6 +263,8 @@ export function useGame() {
         setError("Sessão expirada. Clique em 'Novo caso' para iniciar uma nova investigação.");
       } else if (kind === "system-error") {
         setError(res.answer);
+      } else if (kind === "user-limit") {
+        setLimitMessage(res.answer);
       } else {
         const txt = (res?.answer || "").trim();
         const text = txt || "(vazia)";
@@ -271,6 +289,7 @@ export function useGame() {
     setSessionId(null);
     setSessionExpired(false);
     setError(null);
+    setLimitMessage(null);
     setMessages([]);
     startedRef.current = false;
 
@@ -285,6 +304,7 @@ export function useGame() {
     setSessionId(null);
     setSessionExpired(false);
     setError(null);
+    setLimitMessage(null);
     setMessages([]);
     startedRef.current = false;
     await boot(category);
@@ -301,6 +321,7 @@ export function useGame() {
     loading,
     error,
     bootError,
+    limitMessage,
     canAsk,
     sessionExpired,
     chatScrollRef,
