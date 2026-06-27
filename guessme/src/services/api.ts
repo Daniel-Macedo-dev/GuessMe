@@ -7,7 +7,11 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}) {
   const { timeoutMs = 20000, ...rest } = options;
 
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  let timedOut = false;
+  const timer = setTimeout(() => {
+    timedOut = true;
+    controller.abort();
+  }, timeoutMs);
 
   try {
     const res = await fetch(`${BASE_URL}${path}`, {
@@ -30,6 +34,13 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}) {
     }
 
     return data as T;
+  } catch (e) {
+    if (e instanceof DOMException && e.name === "AbortError" && timedOut) {
+      throw new Error(
+        "Tempo limite atingido. Verifique sua conexão e tente novamente."
+      );
+    }
+    throw e;
   } finally {
     clearTimeout(timer);
   }
