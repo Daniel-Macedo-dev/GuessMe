@@ -51,10 +51,10 @@ function Section({ title, count, testId, children, colorClass = "" }: SectionPro
   return (
     <div className={`nbSection ${colorClass}`} data-testid={testId}>
       <h4 className="nbSectionTitle">
-        {title}
-        <span className="nbCount">{count}</span>
+        <span>{title}</span>
+        <span className="nbCount" aria-label={`${count} entrada${count !== 1 ? "s" : ""}`}>{count}</span>
       </h4>
-      <ul className="nbList">{children}</ul>
+      <ul className="nbList" aria-label={title}>{children}</ul>
     </div>
   );
 }
@@ -74,7 +74,7 @@ export default function EvidenceNotebook({ evidence, solved, questionsCount }: P
       </div>
 
       {isEmpty && (
-        <div className="nbEmpty" data-testid="evidence-empty">
+        <div className="nbEmpty" role="status" data-testid="evidence-empty">
           <p className="muted small">
             Sem evidências ainda.<br />
             Faça perguntas para acumular pistas.
