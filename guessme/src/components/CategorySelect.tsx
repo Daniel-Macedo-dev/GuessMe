@@ -11,15 +11,14 @@ type Props = {
 export default function CategorySelect({ value, options, onChange, disabled, label }: Props) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
   const safeValue = (value || "").trim() || "Geral";
 
   const items = useMemo(() => {
-    // garante "Geral" primeiro se existir
     const uniq = Array.from(new Set(options.map((o) => o.trim()).filter(Boolean)));
     const hasGeral = uniq.some((x) => x.toLowerCase() === "geral");
     if (!hasGeral) uniq.unshift("Geral");
-    // coloca Geral no topo
     uniq.sort((a, b) => {
       const ag = a.toLowerCase() === "geral";
       const bg = b.toLowerCase() === "geral";
@@ -38,7 +37,6 @@ export default function CategorySelect({ value, options, onChange, disabled, lab
     function onEsc(e: KeyboardEvent) {
       if (e.key === "Escape") setOpen(false);
     }
-
     document.addEventListener("mousedown", onDocClick);
     document.addEventListener("keydown", onEsc);
     return () => {
@@ -46,6 +44,15 @@ export default function CategorySelect({ value, options, onChange, disabled, lab
       document.removeEventListener("keydown", onEsc);
     };
   }, []);
+
+  // Move focus into the menu when it opens.
+  useEffect(() => {
+    if (open && menuRef.current) {
+      const active = menuRef.current.querySelector<HTMLElement>(".catSelectItem.active");
+      const first = menuRef.current.querySelector<HTMLElement>(".catSelectItem");
+      (active ?? first)?.focus();
+    }
+  }, [open]);
 
   function pick(opt: string) {
     onChange(opt);
@@ -59,8 +66,9 @@ export default function CategorySelect({ value, options, onChange, disabled, lab
         className="catSelectBtn"
         onClick={() => !disabled && setOpen((v) => !v)}
         disabled={disabled}
-        aria-haspopup="listbox"
+        aria-haspopup="menu"
         aria-expanded={open}
+        aria-label={`${label ? label + ": " : ""}${safeValue}`}
       >
         {label && <span className="catSelectLabel">{label}</span>}
         <span className="catSelectValue">{safeValue}</span>
@@ -68,7 +76,7 @@ export default function CategorySelect({ value, options, onChange, disabled, lab
       </button>
 
       {open ? (
-        <div className="catSelectMenu" role="listbox">
+        <div className="catSelectMenu" role="menu" ref={menuRef} aria-label="Domínio da investigação">
           {items.map((opt) => {
             const active = opt === safeValue;
             return (
@@ -77,8 +85,8 @@ export default function CategorySelect({ value, options, onChange, disabled, lab
                 type="button"
                 className={`catSelectItem ${active ? "active" : ""}`}
                 onClick={() => pick(opt)}
-                role="option"
-                aria-selected={active}
+                role="menuitemradio"
+                aria-checked={active}
               >
                 {opt}
               </button>
