@@ -51,7 +51,7 @@ export default function Game() {
           onRestart={restart}
           onHint={hint}
           hintLoading={hintLoading}
-          hintDisabled={sessionExpired}
+          hintDisabled={sessionExpired || loading}
           solved={Boolean(winner)}
           categories={categories}
           category={category}
