@@ -5,6 +5,7 @@ import {
   mockAskNao,
   mockAskTalvez,
   mockAskWin,
+  mockAskSimLegacy,
   mockHint,
 } from "./helpers/api-mocks";
 
@@ -249,6 +250,60 @@ test.describe("Solved case notebook summary", () => {
     await sendAndWait(page, "É o Naruto?", "Sim");
     await expect(page.getByTestId("evidence-confirmed")).toBeVisible();
     await expect(page.getByTestId("evidence-confirmed")).toContainText("É o Naruto?");
+  });
+});
+
+// ─── Verdict-based classification ────────────────────────────────────────────
+
+test.describe("Verdict-based evidence classification", () => {
+  test("YES verdict produces confirmed entry", async ({ page }) => {
+    await mockAskSim(page);
+    await page.goto("/game");
+    await waitForBoot(page);
+    await sendAndWait(page, "É humano?", "Sim");
+    await expect(page.getByTestId("evidence-confirmed")).toBeVisible();
+    await expect(page.getByTestId("evidence-refuted")).not.toBeVisible();
+    await expect(page.getByTestId("evidence-inconclusive")).not.toBeVisible();
+  });
+
+  test("NO verdict produces refuted entry", async ({ page }) => {
+    await mockAskNao(page);
+    await page.goto("/game");
+    await waitForBoot(page);
+    await sendAndWait(page, "É vilão?", "Não");
+    await expect(page.getByTestId("evidence-refuted")).toBeVisible();
+    await expect(page.getByTestId("evidence-confirmed")).not.toBeVisible();
+  });
+
+  test("MAYBE verdict produces inconclusive entry", async ({ page }) => {
+    await mockAskTalvez(page);
+    await page.goto("/game");
+    await waitForBoot(page);
+    await sendAndWait(page, "Tem poderes?", "Talvez");
+    await expect(page.getByTestId("evidence-inconclusive")).toBeVisible();
+    await expect(page.getByTestId("evidence-confirmed")).not.toBeVisible();
+  });
+
+  test("YES verdict win answer appears in confirmed evidence", async ({ page }) => {
+    await mockAskWin(page);
+    await page.goto("/game");
+    await waitForBoot(page);
+    await sendAndWait(page, "É o Naruto?", "Sim");
+    await expect(page.getByTestId("evidence-confirmed")).toBeVisible();
+    await expect(page.getByTestId("evidence-confirmed")).toContainText("É o Naruto?");
+  });
+});
+
+// ─── Legacy text fallback ─────────────────────────────────────────────────────
+
+test.describe("Legacy text-only fallback", () => {
+  test("confirmed entry still appears when verdict field is absent from response", async ({ page }) => {
+    await mockAskSimLegacy(page);
+    await page.goto("/game");
+    await waitForBoot(page);
+    await sendAndWait(page, "É humano?", "Sim");
+    await expect(page.getByTestId("evidence-confirmed")).toBeVisible();
+    await expect(page.getByTestId("evidence-confirmed")).toContainText("É humano?");
   });
 });
 
