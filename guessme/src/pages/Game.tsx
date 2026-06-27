@@ -61,7 +61,7 @@ export default function Game() {
         <section className="panel chatPanelWide">
           <GameStatsBar questionsCount={questionsCount} />
 
-          <div className="chatScroll" ref={chatScrollRef} aria-live="polite">
+          <div className="chatScroll" ref={chatScrollRef} aria-live="polite" data-testid="chat-scroll">
             {messages.map((m) => (
               <MessageBubble key={m.id} sender={m.sender} text={m.text} kind={m.kind} />
             ))}
@@ -69,7 +69,7 @@ export default function Game() {
           </div>
 
           {error ? (
-            <div className="errorBox" role="alert">
+            <div className="errorBox" role="alert" data-testid="error-box">
               <span>{error}</span>
               {sessionExpired && (
                 <button className="btn btn-primary errorRestartBtn" onClick={restart}>
@@ -85,7 +85,7 @@ export default function Game() {
           ) : null}
 
           {limitMessage ? (
-            <div className="warningBox" role="alert">
+            <div className="warningBox" role="alert" data-testid="warning-box">
               <span>{limitMessage}</span>
             </div>
           ) : null}
