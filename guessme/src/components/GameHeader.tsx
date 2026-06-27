@@ -4,6 +4,7 @@ type Props = {
   onRestart: () => void;
   onHint: () => void;
   hintLoading?: boolean;
+  hintDisabled?: boolean;
   solved?: boolean;
 
   categories: string[];
@@ -15,11 +16,14 @@ export default function GameHeader({
   onRestart,
   onHint,
   hintLoading,
+  hintDisabled,
   solved = false,
   categories,
   category,
   onChangeCategory,
 }: Props) {
+  const hintBlocked = !!hintLoading || !!hintDisabled || solved;
+
   return (
     <div className="gameHeader">
       <div className="gameHeaderLeft">
@@ -40,10 +44,16 @@ export default function GameHeader({
           value={category}
           options={categories}
           onChange={onChangeCategory}
-          disabled={!!hintLoading || solved}
+          disabled={hintBlocked}
         />
 
-        <button className="btn" onClick={onHint} disabled={!!hintLoading || solved}>
+        <button
+          className="btn"
+          onClick={onHint}
+          disabled={hintBlocked}
+          aria-busy={hintLoading ? "true" : undefined}
+          aria-label={hintLoading ? "Solicitando pista…" : "Solicitar pista"}
+        >
           {hintLoading ? "Buscando pista…" : "Solicitar pista"}
         </button>
 
