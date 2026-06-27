@@ -959,3 +959,157 @@ a:focus-visible{
   .stepNumber{ font-size: 20px; min-width: 22px; }
   .manualStep{ gap: 12px; padding: 14px 0; }
 }
+
+/* ===== Two-column game page layout ===== */
+.gamePageGrid{
+  display: grid;
+  grid-template-columns: 1fr 272px;
+  gap: 14px;
+  align-items: start;
+  margin-top: 14px;
+}
+
+/* ===== Evidence Notebook ===== */
+.notebook{
+  padding: 16px;
+  position: sticky;
+  top: 70px;
+  max-height: calc(100vh - 90px);
+  overflow-y: auto;
+}
+
+.nbHeader{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.nbTitle{
+  margin: 0;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  font-family: var(--font-mono);
+  color: var(--muted);
+}
+
+.nbMeta{
+  font-size: 11px;
+  font-family: var(--font-mono);
+  flex-shrink: 0;
+}
+
+.nbEmpty{
+  text-align: center;
+  padding: 20px 0 8px;
+}
+.nbEmpty p{ margin: 0; line-height: 1.55; }
+
+/* Sections */
+.nbSection{
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+}
+.nbSection:last-child{ margin-bottom: 0; }
+
+.nbSectionTitle{
+  margin: 0 0 6px;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.nbCount{ font-weight: 400; opacity: 0.65; }
+
+.nbList{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Section accent colors */
+.nbSectionSim{ border-color: rgba(16,185,129,0.22); background: rgba(16,185,129,0.04); }
+.nbSectionSim .nbSectionTitle{ color: var(--accent); }
+
+.nbSectionNao{ border-color: rgba(239,68,68,0.20); background: rgba(239,68,68,0.03); }
+.nbSectionNao .nbSectionTitle{ color: rgba(239,68,68,0.85); }
+
+.nbSectionTalvez{ border-color: rgba(245,158,11,0.20); background: rgba(245,158,11,0.03); }
+.nbSectionTalvez .nbSectionTitle{ color: var(--accent-evidence); }
+
+.nbSectionIntel{ border-color: rgba(217,119,6,0.22); background: rgba(217,119,6,0.03); }
+.nbSectionIntel .nbSectionTitle{ color: rgba(217,119,6,0.88); }
+
+/* Evidence entries */
+.nbEntry{
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.nbVerdict{
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 1px 4px;
+  border-radius: 3px;
+  border: 1px solid;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.nbVerdictSim{ color: var(--accent); border-color: rgba(16,185,129,0.40); background: rgba(16,185,129,0.10); }
+.nbVerdictNao{ color: rgba(239,68,68,0.90); border-color: rgba(239,68,68,0.35); background: rgba(239,68,68,0.08); }
+.nbVerdictTalvez{ color: var(--accent-evidence); border-color: rgba(245,158,11,0.35); background: rgba(245,158,11,0.08); }
+.nbVerdictIntel{ color: rgba(217,119,6,0.88); border-color: rgba(217,119,6,0.35); background: rgba(217,119,6,0.08); }
+
+.nbQuestion{ color: var(--text); flex: 1; }
+.nbEntryIntel .nbQuestion{ font-size: 11px; color: var(--muted); }
+
+/* Solved summary */
+.nbSolved{
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(16,185,129,0.32);
+  background: rgba(16,185,129,0.07);
+  text-align: center;
+}
+
+.nbSolvedStamp{
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+.nbSolvedName{ margin: 0 0 2px; font-weight: 900; font-size: 14px; }
+.nbSolvedWork{ margin: 0; }
+
+/* Notebook responsive: collapse to full width below 900px */
+@media (max-width: 900px){
+  .gamePageGrid{ grid-template-columns: 1fr; }
+  .notebook{ position: static; max-height: none; overflow-y: visible; }
+}
