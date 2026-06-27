@@ -54,8 +54,9 @@ function fulfillAsk(
   answer: string,
   success = false,
   character: object | null = null,
+  verdict = "UNKNOWN",
 ) {
-  return JSON.stringify({ answer, success, character, sessionId: TEST_SESSION_ID });
+  return JSON.stringify({ answer, success, character, sessionId: TEST_SESSION_ID, verdict });
 }
 
 export async function mockAskSim(page: Page) {
@@ -63,7 +64,7 @@ export async function mockAskSim(page: Page) {
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: fulfillAsk("Sim"),
+      body: fulfillAsk("Sim", false, null, "YES"),
     });
   });
 }
@@ -73,7 +74,7 @@ export async function mockAskNao(page: Page) {
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: fulfillAsk("Não"),
+      body: fulfillAsk("Não", false, null, "NO"),
     });
   });
 }
@@ -83,7 +84,7 @@ export async function mockAskTalvez(page: Page) {
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: fulfillAsk("Talvez"),
+      body: fulfillAsk("Talvez", false, null, "MAYBE"),
     });
   });
 }
@@ -97,6 +98,7 @@ export async function mockAskWin(page: Page) {
         "Sim! O personagem é Naruto Uzumaki.\nObra: Naruto",
         true,
         { name: "Naruto Uzumaki", work: "Naruto", image: "" },
+        "YES",
       ),
     });
   });
@@ -107,7 +109,7 @@ export async function mockAskCooldown(page: Page) {
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: fulfillAsk("Aguarde alguns instantes antes de fazer outra pergunta."),
+      body: fulfillAsk("Aguarde alguns instantes antes de fazer outra pergunta.", false, null, "UNKNOWN"),
     });
   });
 }
@@ -119,6 +121,7 @@ export async function mockAskMaxQuestions(page: Page) {
       contentType: "application/json",
       body: fulfillAsk(
         "Limite de perguntas atingido para esta sessão. Inicie um novo jogo com POST /api/game/start.",
+        false, null, "UNKNOWN",
       ),
     });
   });
@@ -131,6 +134,7 @@ export async function mockAskStaleSession(page: Page) {
       contentType: "application/json",
       body: fulfillAsk(
         "Sessão não encontrada. Inicie um novo jogo com POST /api/game/start.",
+        false, null, "UNKNOWN",
       ),
     });
   });
@@ -143,7 +147,19 @@ export async function mockAskGeminiError(page: Page) {
       contentType: "application/json",
       body: fulfillAsk(
         'Erro da API Gemini (400): {"error":{"code":400,"message":"API key not valid. Please pass a valid API key.","status":"INVALID_ARGUMENT"}}',
+        false, null, "UNKNOWN",
       ),
+    });
+  });
+}
+
+// Legacy mock: omits verdict to test backwards-compatible text fallback.
+export async function mockAskSimLegacy(page: Page) {
+  await page.route("**/api/game/ask", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ answer: "Sim", success: false, character: null, sessionId: TEST_SESSION_ID }),
     });
   });
 }
