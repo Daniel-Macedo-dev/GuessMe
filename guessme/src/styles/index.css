@@ -227,7 +227,8 @@ a:focus-visible{
 .sender{ font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .text{ line-height: 1.45; }
 
-.inputRow{ display:flex; gap: 10px; margin-top: 12px; }
+.inputArea{ margin-top: 12px; }
+.inputRow{ display:flex; gap: 10px; }
 .input{
   flex: 1;
   height: 46px;
@@ -236,8 +237,22 @@ a:focus-visible{
   border: 1px solid var(--border);
   background: rgba(255,255,255,0.03);
   color: var(--text);
+  transition: border-color 120ms;
 }
 .input::placeholder{ color: var(--muted); }
+.inputOverLimit{ border-color: rgba(239,68,68,0.5); }
+
+.charCount{
+  display: block;
+  text-align: right;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--muted);
+  padding-right: 6px;
+  margin-top: 4px;
+}
+.charCountWarn{ color: #d97706; }
+.charCountError{ color: #ef4444; font-weight: 700; }
 
 .errorBox{
   margin-top: 10px;
