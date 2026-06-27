@@ -3,10 +3,11 @@ type Props = {
 };
 
 function investigationPhase(count: number): string {
-  if (count === 0) return "Caso recém-aberto";
-  if (count < 6) return "Fase inicial — explore o perfil";
-  if (count < 12) return "Fase intermediária — estreite o cerco";
-  return "Fase avançada — identifique o suspeito";
+  if (count === 0) return "Nenhuma evidência coletada";
+  if (count < 6) return "Fase inicial — delimite o perfil do suspeito";
+  if (count < 14) return "Fase intermediária — estreite o cerco";
+  if (count < 30) return "Fase avançada — identifique o suspeito";
+  return "Fase crítica — aja antes que o caso esfrie";
 }
 
 export default function GameStatsBar({ questionsCount }: Props) {
