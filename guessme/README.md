@@ -71,6 +71,33 @@ The backend enforces per-session limits. The frontend handles them transparently
 - **Max question length:** 300 characters (also enforced in UI with counter)
 - **Session TTL:** 60 minutes of inactivity
 
+## E2E tests
+
+Playwright 1.61 covers 64 tests across four spec files. All API calls are intercepted with `page.route()` — no backend required.
+
+### Setup
+
+```bash
+npx playwright install --with-deps chromium   # one-time
+npm run e2e           # headless run (starts Vite dev server automatically)
+npm run e2e:ui        # interactive UI mode
+npm run e2e:report    # open last HTML report
+```
+
+### Coverage
+
+| Spec | What it covers |
+|------|----------------|
+| `routes.spec.ts` | Home, HowItWorks, Game render; navigation links; SPA direct URL access; unknown route redirect |
+| `game-flow.spec.ts` | Boot; category select; question input (empty, overlong, Enter, clear); Sim/Não/Talvez answer bubbles; hint flow; victory modal |
+| `error-states.spec.ts` | Backend unavailable; cooldown; max questions; max hints; stale session; Gemini system error |
+| `mobile.spec.ts` | Overflow-free layout at 390 px and 360 px; key controls visible on mobile |
+
+### Troubleshooting
+
+- **Port 5173 already in use:** the `webServer` reuses an existing server in non-CI runs; otherwise kill the process and retry.
+- **Flaky on slow CI:** each test has Playwright's default 5 s per assertion; increase via `expect.timeout` in `playwright.config.ts` if needed.
+
 ## QA smoke checklist
 
 ### Boot
