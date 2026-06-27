@@ -1,15 +1,21 @@
-import type { MessageKind } from "../types/guessme";
+import type { AnswerVerdict, MessageKind } from "../types/guessme";
 
 type Props = {
   sender: "Você" | "AI";
   text: string;
   kind?: MessageKind;
+  verdict?: AnswerVerdict;
 };
 
 type AnswerState = "sim" | "nao" | "talvez" | null;
 
-function classifyAnswer(text: string): AnswerState {
-  const normalized = text.trim().toLowerCase();
+function resolveAnswerState(verdict?: AnswerVerdict, text?: string): AnswerState {
+  // Structured verdict takes priority over text parsing.
+  if (verdict === "YES") return "sim";
+  if (verdict === "NO") return "nao";
+  if (verdict === "MAYBE") return "talvez";
+  // Text-prefix fallback for old/local/mock messages without a verdict field.
+  const normalized = (text || "").trim().toLowerCase();
   if (normalized.startsWith("sim")) return "sim";
   if (normalized.startsWith("não") || normalized.startsWith("nao")) return "nao";
   if (normalized.startsWith("talvez")) return "talvez";
@@ -27,12 +33,12 @@ const ANSWER_STATE_CLASS: Record<NonNullable<AnswerState>, string> = {
   talvez: "bubbleTalvez",
 };
 
-export default function MessageBubble({ sender, text, kind }: Props) {
+export default function MessageBubble({ sender, text, kind, verdict }: Props) {
   const isUser = sender === "Você";
   const isHint = kind === "hint";
   const isError = kind === "error";
 
-  const answerState = !isUser && kind === "ai" ? classifyAnswer(text) : null;
+  const answerState = !isUser && kind === "ai" ? resolveAnswerState(verdict, text) : null;
 
   const bubbleClass = [
     "bubble",

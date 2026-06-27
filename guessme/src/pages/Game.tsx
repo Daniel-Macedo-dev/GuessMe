@@ -69,7 +69,7 @@ export default function Game() {
 
             <div className="chatScroll" ref={chatScrollRef} aria-live="polite" data-testid="chat-scroll">
               {messages.map((m) => (
-                <MessageBubble key={m.id} sender={m.sender} text={m.text} kind={m.kind} />
+                <MessageBubble key={m.id} sender={m.sender} text={m.text} kind={m.kind} verdict={m.verdict} />
               ))}
               {loading ? <LoadingSpinner /> : null}
             </div>
