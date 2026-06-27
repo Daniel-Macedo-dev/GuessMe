@@ -17,6 +17,7 @@ export default function Game() {
     loading,
     error,
     bootError,
+    limitMessage,
     canAsk,
     sessionExpired,
     chatScrollRef,
@@ -49,7 +50,8 @@ export default function Game() {
         <GameHeader
           onRestart={restart}
           onHint={hint}
-          hintLoading={hintLoading || sessionExpired}
+          hintLoading={hintLoading}
+          hintDisabled={sessionExpired}
           solved={Boolean(winner)}
           categories={categories}
           category={category}
@@ -67,7 +69,7 @@ export default function Game() {
           </div>
 
           {error ? (
-            <div className="errorBox">
+            <div className="errorBox" role="alert">
               <span>{error}</span>
               {sessionExpired && (
                 <button className="btn btn-primary errorRestartBtn" onClick={restart}>
@@ -79,6 +81,12 @@ export default function Game() {
                   Tentar novamente
                 </button>
               )}
+            </div>
+          ) : null}
+
+          {limitMessage ? (
+            <div className="warningBox" role="alert">
+              <span>{limitMessage}</span>
             </div>
           ) : null}
 
