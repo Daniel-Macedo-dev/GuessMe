@@ -6,6 +6,20 @@ const STORAGE_KEY = "guessme:state:v5";
 
 type AnswerKind = "stale-session" | "system-error" | "user-limit" | "game";
 
+function cleanGeminiError(answer: string): string {
+  const prefix = answer.match(/^(Erro da API Gemini \(\d+\)):\s*/);
+  if (!prefix) return answer;
+  const body = answer.slice(prefix[0].length).trim();
+  try {
+    const parsed = JSON.parse(body) as { error?: { message?: string } };
+    const msg = parsed?.error?.message;
+    if (msg) return `${prefix[1]}: ${msg}`;
+  } catch {
+    if (body.length > 100) return `${prefix[1]}: ${body.slice(0, 100)}…`;
+  }
+  return answer;
+}
+
 function classifyAnswer(answer: string): AnswerKind {
   if (answer.startsWith("Sessão não encontrada")) return "stale-session";
   if (
@@ -219,7 +233,7 @@ export function useGame() {
         setQuestionsCount((n) => n - 1);
         setError("Sessão expirada. Clique em 'Novo caso' para iniciar uma nova investigação.");
       } else if (kind === "system-error") {
-        setError(res.answer);
+        setError(cleanGeminiError(res.answer));
       } else if (kind === "user-limit") {
         // Backend rejected the request (cooldown, max questions, overlong) — not counted.
         setQuestionsCount((n) => n - 1);
@@ -262,7 +276,7 @@ export function useGame() {
         setSessionExpired(true);
         setError("Sessão expirada. Clique em 'Novo caso' para iniciar uma nova investigação.");
       } else if (kind === "system-error") {
-        setError(res.answer);
+        setError(cleanGeminiError(res.answer));
       } else if (kind === "user-limit") {
         setLimitMessage(res.answer);
       } else {
