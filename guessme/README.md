@@ -21,12 +21,42 @@ React + TypeScript + Vite frontend for the [GuessMe](https://github.com/Daniel-M
 ```
 src/
   components/   # Shared UI components
+  helpers/      # Pure derivation helpers (deriveEvidence)
   hooks/        # useGame — all game state logic
   pages/        # Route-level pages
   services/     # api.ts (fetch wrapper), guessme.ts (API calls)
   styles/       # index.css (global styles)
   types/        # TypeScript interfaces
 ```
+
+## Evidence Notebook
+
+The game page shows a live **Caderno de Evidências** (Evidence Notebook) alongside the investigation chat.
+
+### What it does
+
+- Classifies each AI answer as **Confirmado** (starts with "Sim"), **Refutado** (starts with "Não"), or **Inconclusivo** (starts with "Talvez")
+- Pairs each classified answer with the question that preceded it
+- Collects **Inteligência** entries from hint messages
+- Shows a **Caso Encerrado** summary block when the player wins
+
+### Where it lives
+
+| File | Role |
+|------|------|
+| `src/helpers/deriveEvidence.ts` | Pure function — takes `Message[]` + `WinnerData`, returns structured `Evidence` |
+| `src/components/EvidenceNotebook.tsx` | Renders sections, entries, empty state, and solved summary |
+| `src/pages/Game.tsx` | Calls `deriveEvidence`, passes result to `<EvidenceNotebook>` |
+
+### Layout behavior
+
+- **≥ 901 px:** two-column grid — chat (flex) + notebook (272 px fixed) side-by-side; notebook is sticky to the top
+- **≤ 900 px:** single column — notebook collapses below the chat
+
+### Limitations
+
+- Classification relies on the AI answer starting with "Sim", "Não", or "Talvez". If Gemini returns a multi-sentence answer where the verdict is not the first word, it will not be classified.
+- Notebook state is derived from `messages` in memory; it resets on page refresh if localStorage is cleared.
 
 ## Environment variables
 
@@ -73,7 +103,7 @@ The backend enforces per-session limits. The frontend handles them transparently
 
 ## E2E tests
 
-Playwright 1.61 covers 64 tests across four spec files. All API calls are intercepted with `page.route()` — no backend required.
+Playwright 1.61 covers 93 tests across five spec files. All API calls are intercepted with `page.route()` — no backend required.
 
 ### Setup
 
@@ -92,6 +122,7 @@ npm run e2e:report    # open last HTML report
 | `game-flow.spec.ts` | Boot; category select; question input (empty, overlong, Enter, clear); Sim/Não/Talvez answer bubbles; hint flow; victory modal |
 | `error-states.spec.ts` | Backend unavailable; cooldown; max questions; max hints; stale session; Gemini system error |
 | `mobile.spec.ts` | Overflow-free layout at 390 px and 360 px; key controls visible on mobile |
+| `notebook.spec.ts` | Notebook presence; empty state; confirmed/refuted/inconclusive entries; intel hints; solved summary; mobile overflow |
 
 ### Troubleshooting
 
@@ -129,6 +160,16 @@ npm run e2e:report    # open last HTML report
 - [ ] Correct guess shows VictoryModal with character name and image
 - [ ] Input is disabled and session controls lock after win
 - [ ] "Novo caso" in modal or header starts a fresh game
+
+### Evidence Notebook
+- [ ] Notebook shows "Sem evidências ainda" before any questions are asked
+- [ ] After a "Sim" answer the Confirmado section appears with the question
+- [ ] After a "Não" answer the Refutado section appears with the question
+- [ ] After a "Talvez" answer the Inconclusivo section appears with the question
+- [ ] After a hint the Inteligência section appears with the hint text
+- [ ] After winning, the notebook shows "Caso Encerrado" with character name and work
+- [ ] On desktop (≥ 901 px), notebook appears to the right of the chat
+- [ ] On mobile (≤ 900 px), notebook stacks below the chat without horizontal overflow
 
 ### Mobile (≤ 640 px)
 - [ ] Chat area is readable without scrolling past the input row
