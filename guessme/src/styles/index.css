@@ -1355,10 +1355,10 @@ a:focus-visible{
   .notebook{ position: static; max-height: none; overflow-y: visible; }
 }
 
-/* ===== Case History Panel ===== */
+/* ── Case History Panel ── */
 .historyPanel{
   margin-top: 14px;
-  padding: 16px;
+  padding: 16px 20px;
 }
 
 .historyPanelHeader{
@@ -1369,21 +1369,9 @@ a:focus-visible{
   margin-bottom: 12px;
 }
 
-/* reuses same visual spec as .nbTitle */
 .historyPanelTitle{
   margin: 0;
-  font-size: 12px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.10em;
-  font-family: var(--font-mono);
-  color: var(--muted);
-}
-
-/* replaySectionTitle: same spec as nbSectionTitle, color fixed to muted */
-.replaySectionTitle{
-  margin: 0 0 8px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -1391,9 +1379,19 @@ a:focus-visible{
   color: var(--muted);
 }
 
+.replaySectionTitle{
+  margin: 0 0 8px;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-family: var(--font-mono);
+  color: var(--muted-dim);
+}
+
 .historyEmpty{
   text-align: center;
-  padding: 20px 0 8px;
+  padding: 20px 0 10px;
 }
 .historyEmpty p{ margin: 0; }
 
@@ -1406,12 +1404,27 @@ a:focus-visible{
   gap: 10px;
 }
 
-/* ===== Case History Card ===== */
+/* ── History Card ── */
 .historyCard{
-  padding: 12px 14px;
+  padding: 14px 16px 14px 20px;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border2);
-  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.026);
+  position: relative;
+  overflow: hidden;
+  transition: background var(--t-base), border-color var(--t-base);
+}
+.historyCard:hover{
+  background: rgba(255,255,255,0.040);
+  border-color: var(--border2);
+}
+.historyCard::before{
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  opacity: 0.45;
 }
 
 .historyCardHeader{
@@ -1433,6 +1446,7 @@ a:focus-visible{
 .historyCardName{
   font-weight: 900;
   font-size: 15px;
+  letter-spacing: -0.1px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1447,11 +1461,13 @@ a:focus-visible{
 
 .historyCardCategory{
   flex-shrink: 0;
-  padding: 2px 6px;
+  padding: 2px 8px;
   border-radius: 4px;
   border: 1px solid var(--border);
   background: rgba(255,255,255,0.03);
+  font-family: var(--font-mono);
   font-size: 10px;
+  letter-spacing: 0.04em;
 }
 
 .historyCardStats{
@@ -1489,15 +1505,18 @@ a:focus-visible{
 }
 
 .historyActionBtn{
-  padding: 6px 12px;
+  padding: 6px 14px;
   font-size: 13px;
 }
 
 .historyDeleteBtn{
-  border-color: rgba(239,90,90,0.40);
-  color: rgba(239,100,100,1);
+  border-color: rgba(248,100,100,0.35);
+  color: var(--danger);
 }
-.historyDeleteBtn:hover{ border-color: rgba(239,90,90,0.55); background: rgba(239,68,68,0.08); }
+.historyDeleteBtn:hover{
+  border-color: rgba(248,100,100,0.55);
+  background: rgba(248,113,113,0.07);
+}
 
 /* ===== Case Replay Modal ===== */
 .replayModal{
