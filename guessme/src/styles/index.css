@@ -501,29 +501,31 @@ a:focus-visible{
 }
 @keyframes spin{ to{ transform: rotate(360deg); } }
 
-/* Modal */
+/* ── Modals ── */
 .modalOverlay{
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 16px;
   animation: fadeIn 140ms ease-out;
 }
 .modal{
   width: min(560px, 100%);
-  padding: 16px;
+  padding: 20px;
   border-radius: var(--radius);
-  border: 1px solid var(--border);
-  background: rgba(15,20,28,0.92);
-  box-shadow: var(--shadow);
+  border: 1px solid var(--border2);
+  background: linear-gradient(145deg, rgba(16,24,36,0.96) 0%, rgba(10,16,26,0.96) 100%);
+  box-shadow: var(--shadow-float), 0 0 0 1px rgba(52,211,153,0.06);
   animation: popIn 160ms ease-out;
 }
 .modalHeader{ margin-bottom: 12px; }
 @keyframes fadeIn{ from{opacity:0} to{opacity:1} }
-@keyframes popIn{ from{transform:scale(.98);opacity:0} to{transform:scale(1);opacity:1} }
+@keyframes popIn{ from{transform:scale(.97);opacity:0} to{transform:scale(1);opacity:1} }
 
 /* Character card */
 .characterCard{
@@ -601,7 +603,7 @@ a:focus-visible{
   padding: 14px;
   width: 100%;
 }
-/* ===== Vitória centralizada + imagem destacada ===== */
+/* ── Victory Modal ── */
 .victoryModal{
   text-align: center;
 }
@@ -611,7 +613,7 @@ a:focus-visible{
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .victoryTitle{
@@ -619,29 +621,34 @@ a:focus-visible{
 }
 
 .victorySubtitle{
-  margin: 8px 0 0;
+  margin: 6px 0 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
 }
 
 .victoryCard{
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 14px;
+  gap: 14px;
+  padding: 16px;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(52,211,153,0.20);
+  background: rgba(52,211,153,0.05);
   margin: 14px 0 10px;
+  box-shadow: inset 0 0 30px rgba(52,211,153,0.05);
 }
 
 .victoryAvatarWrap{
   width: 140px;
   height: 140px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   overflow: hidden;
-  border: 1px solid rgba(16,185,129,0.35);
-  box-shadow: 0 0 0 6px rgba(16,185,129,0.08), 0 18px 40px rgba(0,0,0,0.45);
-  background: rgba(0,0,0,0.25);
+  border: 2px solid rgba(52,211,153,0.40);
+  box-shadow: 0 0 0 6px rgba(52,211,153,0.10), 0 0 40px rgba(52,211,153,0.18), 0 20px 50px rgba(0,0,0,0.55);
+  background: rgba(0,0,0,0.28);
 }
 
 .victoryAvatar{
@@ -661,7 +668,7 @@ a:focus-visible{
 .victoryName{
   font-size: 18px;
   font-weight: 900;
-  letter-spacing: .2px;
+  letter-spacing: -0.1px;
 }
 
 .victoryWork{
@@ -995,9 +1002,8 @@ a:focus-visible{
   font-size: 13px;
 }
 
-/* ===== Investigation identity system ===== */
+/* ── Investigation identity system ── */
 
-/* Monospace label used for case status, evidence labels */
 .caseLabel{
   font-family: var(--font-mono);
   font-size: 11px;
@@ -1006,56 +1012,52 @@ a:focus-visible{
   color: var(--muted);
 }
 
-/* "● CASO ABERTO" badge in game header */
 .caseStatusBadge{
   display: inline-block;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10px;
+  font-weight: 900;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent);
-  border: 1px solid rgba(16,185,129,0.35);
+  border: 1px solid rgba(52,211,153,0.38);
   border-radius: 4px;
   padding: 2px 8px;
   margin-left: 10px;
   vertical-align: middle;
+  box-shadow: 0 0 10px rgba(52,211,153,0.14);
 }
 
 .caseStatusBadge::before{
   content: "● ";
+  font-size: 8px;
+  animation: pulse 2.4s ease-in-out infinite;
 }
 
-/* Solved state: muted dot and border, case is no longer open */
 .caseStatusBadgeSolved{
   color: var(--muted);
-  border-color: rgba(255,255,255,0.18);
+  border-color: var(--border2);
+  box-shadow: none;
 }
 
 .caseStatusBadgeSolved::before{
   content: "◼ ";
+  animation: none;
 }
 
-/* "CASO ENCERRADO" stamp on victory modal */
 .caseSolvedStamp{
   display: inline-block;
   font-family: var(--font-mono);
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 900;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--accent);
-  border: 2px solid rgba(16,185,129,0.5);
+  border: 2px solid rgba(52,211,153,0.52);
   border-radius: 4px;
-  padding: 5px 14px;
-}
-
-/* Sender label for hint bubbles (amber) */
-.bubbleHint .sender{
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--accent-evidence);
+  padding: 6px 16px;
+  box-shadow: 0 0 26px rgba(52,211,153,0.20), inset 0 0 16px rgba(52,211,153,0.06);
+  text-shadow: 0 0 20px rgba(52,211,153,0.48);
 }
 
 /* ===== Home: step card labels ===== */
@@ -1518,12 +1520,12 @@ a:focus-visible{
   background: rgba(248,113,113,0.07);
 }
 
-/* ===== Case Replay Modal ===== */
+/* ── Case Replay Modal ── */
 .replayModal{
-  width: min(780px, 100%);
+  width: min(800px, 100%);
   max-height: 90vh;
   overflow-y: auto;
-  padding: 20px;
+  padding: 22px;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -1537,14 +1539,16 @@ a:focus-visible{
 }
 
 .replayStamp{
-  font-size: 14px;
-  padding: 3px 10px;
+  font-size: 13px;
+  padding: 4px 12px;
+  letter-spacing: 0.24em;
 }
 
 .replayCharacter{
   margin: 8px 0 2px;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 900;
+  letter-spacing: -0.2px;
 }
 
 .replayWork{
@@ -1554,15 +1558,16 @@ a:focus-visible{
 .replayCloseBtn{
   flex-shrink: 0;
   padding: 6px 12px;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1;
 }
 
 .replayWinningQuestion{
-  padding: 10px 12px;
+  padding: 10px 14px;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(16,185,129,0.30);
-  background: rgba(16,185,129,0.07);
+  border: 1px solid rgba(52,211,153,0.28);
+  background: rgba(52,211,153,0.06);
+  box-shadow: inset 3px 0 0 rgba(52,211,153,0.55);
 }
 
 .replayWinningText{
@@ -1598,10 +1603,11 @@ a:focus-visible{
 .replayChat{
   max-height: 380px;
   overflow-y: auto;
-  padding: 10px;
+  padding: 12px;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(16,185,129,0.15);
-  background: rgba(0,6,3,0.32);
+  border: 1px solid rgba(52,211,153,0.14);
+  background: var(--surface-chat);
+  box-shadow: inset 0 2px 12px rgba(0,0,0,0.22);
 }
 
 .replayEvidence{
@@ -1613,7 +1619,7 @@ a:focus-visible{
 .replayFooter{
   display: flex;
   justify-content: flex-end;
-  padding-top: 4px;
+  padding-top: 6px;
   border-top: 1px solid var(--border);
 }
 
