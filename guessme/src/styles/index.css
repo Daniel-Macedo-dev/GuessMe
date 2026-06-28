@@ -192,32 +192,112 @@ a:focus-visible{
   border-color: rgba(16,185,129,0.35);
 }
 
-/* Home */
-.hero{ max-width: 980px; width:100%; padding: 26px; }
-.heroBadge{
-  display:inline-block;
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.03);
-  color: var(--muted);
-  font-size: 12px;
+/* ── Home ── */
+.hero{
+  max-width: 980px;
+  width: 100%;
+  padding: 32px;
+  position: relative;
 }
-.heroTitle{ margin: 10px 0 6px; font-size: 40px; }
-.heroText{ margin:0 0 16px; color: var(--muted); max-width: 62ch; line-height: 1.5; }
-.heroActions{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 18px; }
+.hero::before,
+.hero::after{
+  content: '';
+  position: absolute;
+  pointer-events: none;
+}
+.hero::before{
+  top: 0; right: 0;
+  width: 72px; height: 72px;
+  border-top: 1px solid rgba(52,211,153,0.28);
+  border-right: 1px solid rgba(52,211,153,0.28);
+  border-top-right-radius: var(--radius);
+}
+.hero::after{
+  bottom: 0; left: 0;
+  width: 48px; height: 48px;
+  border-bottom: 1px solid rgba(52,211,153,0.14);
+  border-left: 1px solid rgba(52,211,153,0.14);
+  border-bottom-left-radius: var(--radius);
+}
+
+.heroBadge{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(52,211,153,0.28);
+  background: rgba(52,211,153,0.07);
+  color: var(--accent);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.heroBadge::before{
+  content: '●';
+  font-size: 8px;
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.heroTitle{
+  margin: 14px 0 8px;
+  font-size: 46px;
+  font-weight: 900;
+  letter-spacing: -0.8px;
+  line-height: 1.08;
+}
+.heroText{
+  margin: 0 0 20px;
+  color: var(--muted);
+  max-width: 60ch;
+  line-height: 1.55;
+  font-size: 15px;
+}
+.heroActions{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 22px; }
 
 .heroGrid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .card{
-  padding: 14px;
+  padding: 16px 16px 16px 20px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
-  background: rgba(255,255,255,0.03);
+  background: rgba(255,255,255,0.025);
+  position: relative;
+  overflow: hidden;
+  transition: border-color var(--t-base), background var(--t-base);
 }
-.cardTitle{ font-weight: 900; font-size: 16px; margin: 0 0 6px; }
-.cardText{ color: var(--muted); line-height: 1.45; }
+.card:hover{
+  background: rgba(255,255,255,0.038);
+  border-color: var(--border2);
+}
+.card::before{
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+.heroGrid .card:nth-child(1)::before{ background: var(--accent); }
+.heroGrid .card:nth-child(2)::before{ background: var(--accent-evidence); }
+.heroGrid .card:nth-child(3)::before{ background: var(--mystery); }
 
-.pagePanel{ padding: 18px; }
+.cardStep{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+  margin-bottom: 8px;
+}
+.cardTitle{ font-weight: 900; font-size: 15px; margin: 0 0 6px; letter-spacing: -0.1px; }
+.cardText{ color: var(--muted); line-height: 1.48; font-size: 14px; }
+
+.pagePanel{ padding: 20px; }
 .list{ color: var(--muted); line-height: 1.6; }
 
 /* Game layout */
