@@ -1348,24 +1348,6 @@ a:focus-visible{
   gap: 8px;
 }
 
-.replayVerdict{
-  display: inline-block;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 1px 4px;
-  border-radius: 3px;
-  border: 1px solid;
-  margin-left: 6px;
-  vertical-align: middle;
-}
-
-.replayVerdictSim{ color: var(--accent); border-color: rgba(16,185,129,0.40); background: rgba(16,185,129,0.10); }
-.replayVerdictNao{ color: rgba(239,68,68,0.90); border-color: rgba(239,68,68,0.35); background: rgba(239,68,68,0.08); }
-.replayVerdictTalvez{ color: var(--accent-evidence); border-color: rgba(245,158,11,0.35); background: rgba(245,158,11,0.08); }
-
 .replayFooter{
   display: flex;
   justify-content: flex-end;

@@ -191,12 +191,11 @@ test.describe("Case replay modal", () => {
     await expect(timeline).toContainText("Sim");
   });
 
-  test("replay timeline shows verdict badges", async ({ page }) => {
+  test("replay timeline shows verdict-colored bubbles", async ({ page }) => {
     await page.goto("/game");
     await page.getByTestId("history-replay-btn").first().click();
     const timeline = page.getByTestId("replay-timeline");
-    const verdictBadges = timeline.locator(".replayVerdict");
-    await expect(verdictBadges.first()).toBeVisible();
+    await expect(timeline.locator(".bubbleSim").first()).toBeVisible();
   });
 
   test("replay shows evidence snapshot with confirmed section", async ({ page }) => {

@@ -1,53 +1,11 @@
 import { useEffect, useRef } from "react";
-import type { CaseEvidenceEntry, CaseHistoryEntry, CaseIntelEntry, Message } from "../types/guessme";
+import type { CaseEvidenceEntry, CaseHistoryEntry, CaseIntelEntry } from "../types/guessme";
+import MessageBubble from "./MessageBubble";
 
 type Props = {
   entry: CaseHistoryEntry;
   onClose: () => void;
 };
-
-const VERDICT_LABEL: Record<string, string> = {
-  confirmed: "Sim",
-  refuted: "Não",
-  inconclusive: "Talvez",
-};
-
-const VERDICT_CLASS: Record<string, string> = {
-  confirmed: "replayVerdictSim",
-  refuted: "replayVerdictNao",
-  inconclusive: "replayVerdictTalvez",
-};
-
-function ReplayMessage({ message }: { message: Message }) {
-  const isUser = message.sender === "Você";
-  const isHint = message.kind === "hint";
-
-  let bubbleExtra = "";
-  if (isHint) bubbleExtra = "bubbleHint";
-  else if (message.verdict === "YES") bubbleExtra = "bubbleSim";
-  else if (message.verdict === "NO") bubbleExtra = "bubbleNao";
-  else if (message.verdict === "MAYBE") bubbleExtra = "bubbleTalvez";
-
-  const senderLabel = isHint ? "Nova pista" : message.sender;
-
-  return (
-    <div className={`msgRow${isUser ? " user" : " ai"}`}>
-      <div className={`bubble ${bubbleExtra}`}>
-        <div className="sender">{senderLabel}</div>
-        <div className="text">{message.text}</div>
-        {message.verdict && message.verdict !== "UNKNOWN" && (
-          <span className={`replayVerdict ${VERDICT_CLASS[
-            message.verdict === "YES" ? "confirmed" : message.verdict === "NO" ? "refuted" : "inconclusive"
-          ]}`}>
-            {VERDICT_LABEL[
-              message.verdict === "YES" ? "confirmed" : message.verdict === "NO" ? "refuted" : "inconclusive"
-            ]}
-          </span>
-        )}
-      </div>
-    </div>
-  );
-}
 
 function EvidenceSection({
   title,
@@ -181,7 +139,7 @@ export default function CaseReplayModal({ entry, onClose }: Props) {
             <h4 className="replaySectionTitle">Sequência de perguntas</h4>
             <div className="replayChat">
               {entry.messages.map((m) => (
-                <ReplayMessage key={m.id} message={m} />
+                <MessageBubble key={m.id} sender={m.sender} text={m.text} kind={m.kind} verdict={m.verdict} />
               ))}
             </div>
           </div>
