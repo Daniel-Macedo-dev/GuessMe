@@ -1116,7 +1116,7 @@ a:focus-visible{
 
 /* ===== Case History Panel ===== */
 .historyPanel{
-  margin-top: 18px;
+  margin-top: 14px;
   padding: 16px;
 }
 
@@ -1128,12 +1128,24 @@ a:focus-visible{
   margin-bottom: 12px;
 }
 
+/* reuses same visual spec as .nbTitle */
 .historyPanelTitle{
   margin: 0;
   font-size: 12px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.10em;
+  font-family: var(--font-mono);
+  color: var(--muted);
+}
+
+/* replaySectionTitle: same spec as nbSectionTitle, color fixed to muted */
+.replaySectionTitle{
+  margin: 0 0 8px;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
   font-family: var(--font-mono);
   color: var(--muted);
 }
@@ -1323,16 +1335,6 @@ a:focus-visible{
   min-width: 0;
 }
 
-.replaySectionTitle{
-  margin: 0 0 8px;
-  font-size: 10px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-family: var(--font-mono);
-  color: var(--muted);
-}
-
 .replayChat{
   max-height: 380px;
   overflow-y: auto;
@@ -1366,4 +1368,8 @@ a:focus-visible{
 @media (max-width: 640px){
   .historyCardStats{ gap: 8px; }
   .historyCardActions{ gap: 6px; }
+}
+@media (max-width: 400px){
+  .historyCardActions{ flex-direction: column; }
+  .historyActionBtn{ width: 100%; text-align: center; }
 }
