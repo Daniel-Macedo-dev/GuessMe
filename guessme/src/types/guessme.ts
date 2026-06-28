@@ -30,3 +30,44 @@ export type Message = {
   kind?: MessageKind;
   verdict?: AnswerVerdict;
 };
+
+export type VerdictStats = {
+  yes: number;
+  no: number;
+  maybe: number;
+  unknown: number;
+};
+
+export type CaseEvidenceEntry = {
+  id: string;
+  question: string;
+  answer: string;
+  kind: "confirmed" | "refuted" | "inconclusive";
+};
+
+export type CaseIntelEntry = {
+  id: string;
+  text: string;
+};
+
+export type CaseEvidence = {
+  confirmed: CaseEvidenceEntry[];
+  refuted: CaseEvidenceEntry[];
+  inconclusive: CaseEvidenceEntry[];
+  hints: CaseIntelEntry[];
+};
+
+export type CaseHistoryEntry = {
+  id: string;
+  createdAt: number;
+  characterName: string;
+  work: string;
+  category: string;
+  questionCount: number;
+  hintCount: number;
+  messages: Message[];
+  evidence: CaseEvidence;
+  solvedSummary: { name: string; work: string; image: string } | null;
+  winningQuestion: string | null;
+  verdictStats: VerdictStats;
+};
