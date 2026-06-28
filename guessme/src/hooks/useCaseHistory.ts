@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import type { CaseHistoryEntry, CaseEvidence, Message, VerdictStats, WinnerData } from "../types/guessme";
+import { useCallback, useState } from "react";
+import type { CaseEvidence, CaseHistoryEntry, Message, VerdictStats, WinnerData } from "../types/guessme";
 import {
   clearCaseHistory,
   deleteCaseHistoryEntry,
@@ -51,7 +51,6 @@ function countHints(messages: Message[]): number {
 
 export function useCaseHistory() {
   const [history, setHistory] = useState<CaseHistoryEntry[]>(() => getCaseHistory());
-  const savedCaseIdRef = useRef<string | null>(null);
 
   function refresh() {
     setHistory(getCaseHistory());
@@ -64,18 +63,13 @@ export function useCaseHistory() {
       category: string,
       questionsCount: number,
     ) => {
-      if (savedCaseIdRef.current !== null) return;
-
       const winningQuestion = findWinningQuestion(messages);
       const evidence = toCaseEvidence(messages);
       const verdictStats = buildVerdictStats(messages);
       const hintCount = countHints(messages);
 
-      const caseId = uid();
-      savedCaseIdRef.current = caseId;
-
       const entry: CaseHistoryEntry = {
-        id: caseId,
+        id: uid(),
         createdAt: Date.now(),
         characterName: winner.name,
         work: winner.work,
@@ -105,9 +99,5 @@ export function useCaseHistory() {
     refresh();
   }, []);
 
-  useEffect(() => {
-    savedCaseIdRef.current = null;
-  }, []);
-
-  return { history, saveOnVictory, deleteEntry, clearAll, savedCaseIdRef };
+  return { history, saveOnVictory, deleteEntry, clearAll };
 }

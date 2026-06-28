@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import GameHeader from "../components/GameHeader";
@@ -8,7 +9,9 @@ import QuestionInput from "../components/QuestionInput";
 import VictoryModal from "../components/VictoryModal";
 import LoadingSpinner from "../components/LoadingSpinner";
 import EvidenceNotebook from "../components/EvidenceNotebook";
+import CaseHistoryPanel from "../components/CaseHistoryPanel";
 import { useGame } from "../hooks/useGame";
+import { useCaseHistory } from "../hooks/useCaseHistory";
 import { deriveEvidence, deriveSolvedSummary } from "../helpers/deriveEvidence";
 
 export default function Game() {
@@ -33,6 +36,19 @@ export default function Game() {
     hintLoading,
     restart,
   } = useGame();
+
+  const { history, saveOnVictory, deleteEntry, clearAll } = useCaseHistory();
+
+  const savedWinnerRef = useRef(winner);
+  useEffect(() => {
+    if (!winner) {
+      savedWinnerRef.current = null;
+      return;
+    }
+    if (savedWinnerRef.current === winner) return;
+    savedWinnerRef.current = winner;
+    saveOnVictory(winner, messages, category, questionsCount);
+  }, [winner, messages, category, questionsCount, saveOnVictory]);
 
   const evidence = deriveEvidence(messages);
   const solved = deriveSolvedSummary(winner);
@@ -116,6 +132,12 @@ export default function Game() {
         </div>
 
         <VictoryModal winner={winner} onRestart={restart} />
+
+        <CaseHistoryPanel
+          history={history}
+          onDelete={deleteEntry}
+          onClearAll={clearAll}
+        />
       </main>
 
       <Footer />
