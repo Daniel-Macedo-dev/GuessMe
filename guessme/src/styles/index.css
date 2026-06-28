@@ -1,20 +1,54 @@
 :root{
-  --bg: #0b0f14;
-  --card: rgba(255,255,255,0.05);
-  --card2: rgba(255,255,255,0.07);
-  --border: rgba(255,255,255,0.10);
-  --border2: rgba(255,255,255,0.14);
+  /* ── Backgrounds ── */
+  --bg:              #070b0f;
 
-  --text: rgba(255,255,255,0.92);
-  --muted: rgba(255,255,255,0.62);
+  /* ── Surfaces ── */
+  --surface:         rgba(13,20,32,0.76);
+  --surface-raised:  rgba(18,28,44,0.74);
+  --surface-chat:    rgba(3,8,5,0.62);
+  --surface-menu:    rgba(7,12,19,0.97);
 
-  --accent: #10b981;
-  --accent-evidence: #d97706;
-  --shadow: 0 10px 30px rgba(0,0,0,0.35);
+  /* ── Legacy surface aliases (backward-compat) ── */
+  --card:  rgba(255,255,255,0.04);
+  --card2: rgba(255,255,255,0.065);
 
-  --radius: 18px;
-  --radius-sm: 12px;
-  --font-mono: 'Courier New', ui-monospace, monospace;
+  /* ── Borders ── */
+  --border:       rgba(255,255,255,0.085);
+  --border2:      rgba(255,255,255,0.13);
+  --border-glow:  rgba(52,211,153,0.32);
+
+  /* ── Text ── */
+  --text:       rgba(212,226,244,0.92);
+  --muted:      rgba(148,172,208,0.55);
+  --muted-dim:  rgba(148,172,208,0.35);
+
+  /* ── Investigation accent palette ── */
+  --accent:          #34d399;   /* evidence green  */
+  --accent-dim:      rgba(52,211,153,0.55);
+  --accent-evidence: #fbbf24;   /* clue amber      */
+  --danger:          #f87171;   /* refuted red     */
+  --mystery:         #94a3b8;   /* inconclusive slate */
+  --intel:           #22d3ee;   /* intel cyan      */
+
+  /* ── Shadows ── */
+  --shadow:       0 6px 28px rgba(0,0,0,0.52), 0 2px 6px rgba(0,0,0,0.28);
+  --shadow-glow:  0 0 28px rgba(52,211,153,0.16);
+  --shadow-float: 0 16px 60px rgba(0,0,0,0.62), 0 4px 12px rgba(0,0,0,0.32);
+
+  /* ── Radius ── */
+  --radius:     18px;
+  --radius-sm:  12px;
+  --radius-inner: 8px;
+  --radius-pill:  999px;
+
+  /* ── Typography ── */
+  --font-display: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-body:    'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Courier New', ui-monospace, monospace;
+
+  /* ── Transitions ── */
+  --t-fast: 100ms ease;
+  --t-base: 160ms ease;
 }
 
 *{ box-sizing: border-box; }
