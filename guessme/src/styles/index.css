@@ -165,31 +165,45 @@ b{ font-weight: 800; }
   border-color: var(--border-glow);
 }
 
-/* Buttons */
+/* ── Buttons ── */
 .btn{
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.03);
+  padding: 10px 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border2);
+  background: rgba(255,255,255,0.04);
   color: var(--text);
-  cursor:pointer;
-  transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: background var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast), transform var(--t-fast);
 }
-.btn:hover{ filter: brightness(1.08); }
+.btn:hover{
+  background: rgba(255,255,255,0.07);
+  border-color: var(--border2);
+  filter: none;
+}
 .btn:active{ transform: translateY(1px); }
-.btn:disabled{ opacity:.55; cursor:not-allowed; }
+.btn:disabled{ opacity: .48; cursor: not-allowed; }
 
 .btn-primary{
-  border-color: rgba(16,185,129,0.45);
-  background: rgba(16,185,129,0.14);
+  border-color: rgba(52,211,153,0.45);
+  background: rgba(52,211,153,0.11);
+  box-shadow: 0 0 18px rgba(52,211,153,0.10), inset 0 1px 0 rgba(52,211,153,0.12);
+}
+.btn-primary:hover{
+  background: rgba(52,211,153,0.18);
+  border-color: rgba(52,211,153,0.62);
+  box-shadow: 0 0 26px rgba(52,211,153,0.22), inset 0 1px 0 rgba(52,211,153,0.18);
 }
 
 .btn:focus-visible,
 .input:focus-visible,
 a:focus-visible{
-  outline:none;
-  box-shadow: 0 0 0 0.22rem rgba(16,185,129,0.20);
-  border-color: rgba(16,185,129,0.35);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52,211,153,0.22);
+  border-color: var(--border-glow);
 }
 
 /* ── Home ── */
@@ -428,16 +442,18 @@ a:focus-visible{
 .inputRow{ display:flex; gap: 10px; }
 .input{
   flex: 1;
-  height: 46px;
-  padding: 0 12px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.03);
+  height: 44px;
+  padding: 0 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border2);
+  background: rgba(8,14,22,0.65);
   color: var(--text);
-  transition: border-color 120ms;
+  font-family: var(--font-body);
+  font-size: 14px;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
 }
-.input::placeholder{ color: var(--muted); }
-.inputOverLimit{ border-color: rgba(239,68,68,0.5); }
+.input::placeholder{ color: var(--muted-dim); }
+.inputOverLimit{ border-color: rgba(248,113,113,0.55); }
 
 .charCount{
   display: block;
