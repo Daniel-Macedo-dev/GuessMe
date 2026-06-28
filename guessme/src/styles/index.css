@@ -1113,3 +1113,275 @@ a:focus-visible{
   .gamePageGrid{ grid-template-columns: 1fr; }
   .notebook{ position: static; max-height: none; overflow-y: visible; }
 }
+
+/* ===== Case History Panel ===== */
+.historyPanel{
+  margin-top: 18px;
+  padding: 16px;
+}
+
+.historyPanelHeader{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.historyPanelTitle{
+  margin: 0;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  font-family: var(--font-mono);
+  color: var(--muted);
+}
+
+.historyEmpty{
+  text-align: center;
+  padding: 20px 0 8px;
+}
+.historyEmpty p{ margin: 0; }
+
+.historyList{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ===== Case History Card ===== */
+.historyCard{
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border2);
+  background: rgba(255,255,255,0.03);
+}
+
+.historyCardHeader{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.historyCardMeta{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.historyCardName{
+  font-weight: 900;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.historyCardWork{
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.historyCardCategory{
+  flex-shrink: 0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  font-size: 10px;
+}
+
+.historyCardStats{
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.historyStat{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.historyStatValue{
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.historyStatLabel{
+  display: block;
+}
+
+.historyCardDate{
+  margin-bottom: 10px;
+}
+
+.historyCardActions{
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.historyActionBtn{
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.historyDeleteBtn{
+  border-color: rgba(239,68,68,0.30);
+  color: rgba(239,68,68,0.85);
+}
+.historyDeleteBtn:hover{ border-color: rgba(239,68,68,0.50); background: rgba(239,68,68,0.08); }
+
+/* ===== Case Replay Modal ===== */
+.replayModal{
+  width: min(780px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.replayHeader{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.replayStamp{
+  font-size: 14px;
+  padding: 3px 10px;
+}
+
+.replayCharacter{
+  margin: 8px 0 2px;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.replayWork{
+  margin: 0;
+}
+
+.replayCloseBtn{
+  flex-shrink: 0;
+  padding: 6px 12px;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.replayWinningQuestion{
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(16,185,129,0.30);
+  background: rgba(16,185,129,0.07);
+}
+
+.replayWinningText{
+  margin: 4px 0 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.replayStats{
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.replayStat{
+  font-size: 14px;
+}
+
+.replayBody{
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 14px;
+  align-items: start;
+}
+
+.replayTimeline{
+  min-width: 0;
+}
+
+.replaySectionTitle{
+  margin: 0 0 8px;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-family: var(--font-mono);
+  color: var(--muted);
+}
+
+.replayChat{
+  max-height: 380px;
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(16,185,129,0.15);
+  background: rgba(0,6,3,0.32);
+}
+
+.replayEvidence{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.replayVerdict{
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 1px 4px;
+  border-radius: 3px;
+  border: 1px solid;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.replayVerdictSim{ color: var(--accent); border-color: rgba(16,185,129,0.40); background: rgba(16,185,129,0.10); }
+.replayVerdictNao{ color: rgba(239,68,68,0.90); border-color: rgba(239,68,68,0.35); background: rgba(239,68,68,0.08); }
+.replayVerdictTalvez{ color: var(--accent-evidence); border-color: rgba(245,158,11,0.35); background: rgba(245,158,11,0.08); }
+
+.replayFooter{
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+}
+
+/* Replay responsive */
+@media (max-width: 640px){
+  .replayBody{ grid-template-columns: 1fr; }
+  .replayModal{ padding: 14px; gap: 10px; }
+  .replayChat{ max-height: 260px; }
+}
+
+/* History panel responsive */
+@media (max-width: 640px){
+  .historyCardStats{ gap: 8px; }
+  .historyCardActions{ gap: 6px; }
+}
