@@ -29,6 +29,55 @@ src/
   types/        # TypeScript interfaces
 ```
 
+## Case History
+
+The game page shows a **Histórico de Casos** section below the investigation interface. Solved investigations are automatically archived locally so the player can review or replay any past case.
+
+### What is stored
+
+Each solved case saves:
+
+- Character name, work, and category
+- Full message sequence (question/answer timeline)
+- Evidence snapshot (confirmed, refuted, inconclusive entries + hints)
+- Verdict statistics (YES / NO / MAYBE counts)
+- Winning question and question/hint counts
+- Timestamp of when the case was solved
+
+Storage is limited to 25 most recent entries (oldest are dropped when the cap is reached).
+
+### Privacy
+
+**History is stored only in the browser's `localStorage`.** Nothing is sent to a server. Clearing browser data or clicking "Limpar" removes all stored cases.
+
+### How to clear history
+
+Click the **Limpar** button in the Histórico de Casos panel on the `/game` page to remove all archived cases.
+
+### Replay behavior
+
+Each history card has a **Rever caso** button that opens a read-only replay modal showing:
+
+- Solved character name, work, and category
+- Winning question (the question that solved the case)
+- Verdict statistics summary
+- Full question/answer timeline with verdict badge colors (green = Sim, red = Não, amber = Talvez)
+- Evidence snapshot (Confirmado / Refutado / Inconclusivo / Inteligência)
+
+The replay modal is keyboard-dismissible (Escape key). It does not call the backend and does not modify the current game session.
+
+### Where it lives
+
+| File | Role |
+|------|------|
+| `src/types/guessme.ts` | `CaseHistoryEntry`, `CaseEvidence`, `VerdictStats` types |
+| `src/services/caseHistoryStorage.ts` | `getCaseHistory`, `saveCaseHistoryEntry`, `deleteCaseHistoryEntry`, `clearCaseHistory` — localStorage adapter with JSON guard and 25-entry cap |
+| `src/hooks/useCaseHistory.ts` | `saveOnVictory`, `deleteEntry`, `clearAll` — state and side-effect layer |
+| `src/pages/Game.tsx` | Calls `saveOnVictory` on victory with duplicate-save guard |
+| `src/components/CaseHistoryPanel.tsx` | List shell, empty state, clear button |
+| `src/components/CaseHistoryCard.tsx` | Individual archived case card with stats and actions |
+| `src/components/CaseReplayModal.tsx` | Full read-only replay overlay |
+
 ## Evidence Notebook
 
 The game page shows a live **Caderno de Evidências** (Evidence Notebook) alongside the investigation chat.
@@ -124,7 +173,7 @@ The backend enforces per-session limits. The frontend handles them transparently
 
 ## E2E tests
 
-Playwright 1.61 covers 98 tests across five spec files. All API calls are intercepted with `page.route()` — no backend required.
+Playwright 1.61 covers **148+ tests** across six spec files. All API calls are intercepted with `page.route()` — no backend required. History tests use `localStorage` seeding via `addInitScript` — no backend required for replay coverage either.
 
 ### Setup
 
@@ -144,6 +193,7 @@ npm run e2e:report    # open last HTML report
 | `error-states.spec.ts` | Backend unavailable; cooldown; max questions; max hints; stale session; Gemini system error |
 | `mobile.spec.ts` | Overflow-free layout at 390 px and 360 px; key controls visible on mobile |
 | `notebook.spec.ts` | Notebook presence; empty state; confirmed/refuted/inconclusive entries; intel hints; solved summary; verdict-based YES/NO/MAYBE classification; legacy text fallback; mobile overflow |
+| `history.spec.ts` | History empty state; seeded cards (name/work/counts); victory saves case; duplicate-save prevention; reload persistence; replay modal (timeline, verdict badges, evidence snapshot, winning question, keyboard/button close); delete one case; clear all; corrupted storage fallback; game flow not broken; mobile layout at 390 px |
 
 ### Troubleshooting
 
@@ -192,7 +242,23 @@ npm run e2e:report    # open last HTML report
 - [ ] On desktop (≥ 901 px), notebook appears to the right of the chat
 - [ ] On mobile (≤ 900 px), notebook stacks below the chat without horizontal overflow
 
+### Case History
+- [ ] "Histórico de Casos" panel appears below the game interface
+- [ ] Before any victories, panel shows "Nenhum caso arquivado ainda."
+- [ ] After winning a case, a card appears with character name, work, and question count
+- [ ] Only one card is saved per victory (no duplicates on modal re-render)
+- [ ] Cards persist after page refresh
+- [ ] "Rever caso" button opens the replay modal
+- [ ] Replay modal shows character name, question/answer timeline, and evidence snapshot
+- [ ] Verdict badge colors match the chat bubbles (green / red / amber)
+- [ ] Escape key or the ✕ button closes the replay modal
+- [ ] Replay does not send requests to the backend
+- [ ] "Excluir" removes the card immediately and after reload
+- [ ] "Limpar" removes all archived cases
+- [ ] History panel does not break existing game chat, hints, or victory flow
+
 ### Mobile (≤ 640 px)
 - [ ] Chat area is readable without scrolling past the input row
 - [ ] Category dropdown does not overflow the screen
 - [ ] Header stacks vertically on narrow screens
+- [ ] History panel and cards render without horizontal overflow on 390 px
