@@ -173,7 +173,7 @@ The backend enforces per-session limits. The frontend handles them transparently
 
 ## E2E tests
 
-Playwright 1.61 covers **148+ tests** across six spec files. All API calls are intercepted with `page.route()` — no backend required. History tests use `localStorage` seeding via `addInitScript` — no backend required for replay coverage either.
+Playwright 1.61 covers **130 tests** across six spec files. All API calls are intercepted with `page.route()` — no backend required. History tests use `localStorage` seeding via `addInitScript` — no backend required for replay coverage either.
 
 ### Setup
 
