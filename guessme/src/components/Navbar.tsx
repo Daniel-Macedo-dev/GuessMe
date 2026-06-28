@@ -12,7 +12,8 @@ export default function Navbar({ onRestart, disabled = false }: Props) {
     <header className="topbar">
       <div className="topbarInner">
         <Link className="brand" to="/">
-          GuessMe
+          <span className="brandName">GuessMe</span>
+          <span className="brandSub" aria-hidden="true">Dossiê Digital</span>
         </Link>
 
         <nav className="nav">
