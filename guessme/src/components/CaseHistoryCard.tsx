@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { CaseHistoryEntry } from "../types/guessme";
 
 type Props = {
@@ -16,7 +17,7 @@ function formatDate(ts: number): string {
   });
 }
 
-export default function CaseHistoryCard({ entry, onReplay, onDelete }: Props) {
+function CaseHistoryCard({ entry, onReplay, onDelete }: Props) {
   const { confirmed, refuted, inconclusive } = entry.evidence;
 
   return (
@@ -75,3 +76,5 @@ export default function CaseHistoryCard({ entry, onReplay, onDelete }: Props) {
     </article>
   );
 }
+
+export default memo(CaseHistoryCard);

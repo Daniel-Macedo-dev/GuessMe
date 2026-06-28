@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import type { CaseEvidenceEntry, CaseHistoryEntry, CaseIntelEntry } from "../types/guessme";
 import MessageBubble from "./MessageBubble";
 
@@ -74,7 +74,7 @@ export default function CaseReplayModal({ entry, onClose }: Props) {
     return () => { document.body.style.overflow = prev; };
   }, []);
 
-  function handleKeyDown(e: React.KeyboardEvent) {
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === "Escape") { onClose(); return; }
     if (e.key !== "Tab") return;
     const focusable = Array.from(
@@ -90,7 +90,7 @@ export default function CaseReplayModal({ entry, onClose }: Props) {
       e.preventDefault();
       first.focus();
     }
-  }
+  }, [onClose]);
 
   const { confirmed, refuted, inconclusive, hints } = entry.evidence;
   const hasEvidence =
