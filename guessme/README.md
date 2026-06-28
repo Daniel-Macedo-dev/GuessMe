@@ -2,11 +2,49 @@
 
 React + TypeScript + Vite frontend for the [GuessMe](https://github.com/Daniel-Macedo-dev/guessme-api) guessing game.
 
+## Visual identity — Casefile Noir
+
+GuessMe uses a custom investigation/dossier theme called **Casefile Noir**. It avoids generic dark-mode SaaS conventions in favor of a digital interrogation aesthetic:
+
+| Element | Treatment |
+|---------|-----------|
+| Background | Obsidian `#070b0f` with petrol-green radial glow (top-left) + navy depth (right) + 40 px investigation grid overlay |
+| Panels | Dark petrol-navy surface gradient with `backdrop-filter: blur(14px)` |
+| Typography (body) | **Inter** (loaded via Google Fonts) — clean, high-contrast |
+| Typography (mono) | **JetBrains Mono** — case stamps, stat counters, badge labels |
+| Navbar | Green-glowing bottom border, evidence-green active pill, "DOSSIÊ DIGITAL" monospace sub-mark |
+| Accent (evidence) | `#34d399` — bright emerald green (Confirmado, active states, glow) |
+| Accent (clue) | `#fbbf24` — amber (Inteligência, hints, MAYBE/Talvez, warnings) |
+| Accent (danger) | `#f87171` — soft red (Refutado, error states) |
+| Accent (mystery) | `#94a3b8` — slate (Inconclusivo, third step card) |
+| Verdict bubbles | 3 px inset `box-shadow` left accent (not border) — communicates verdict without relying solely on color |
+| Evidence sections | Same 3 px inset left accent pattern — green / red / amber |
+| Case stamp | `CASO ENCERRADO` in mono with text-shadow and border glow |
+| Buttons (primary) | Green border + glow shadow, intensifies on hover |
+| Home step cards | Each card has a 3 px colored left border: green (01 Abertura), amber (02 Interrogação), slate (03 Encerramento) |
+| Error/warning boxes | Inset left-accent matching verdict color (red=error, amber=warning) |
+
+### Design token reference
+
+All visual values live in `:root {}` in `src/styles/index.css`:
+
+```
+--bg, --surface, --surface-raised, --surface-chat, --surface-menu
+--border, --border2, --border-glow
+--text, --muted, --muted-dim
+--accent, --accent-dim, --accent-evidence, --danger, --mystery, --intel
+--shadow, --shadow-glow, --shadow-float
+--radius, --radius-sm, --radius-inner, --radius-pill
+--font-display, --font-body, --font-mono
+--t-fast, --t-base
+```
+
 ## Tech stack
 
-- React 19, TypeScript, Vite 6
+- React 19, TypeScript, Vite 7
 - React Router DOM (client-side routing)
 - Custom CSS only (`src/styles/index.css`) — no CSS framework
+- Inter + JetBrains Mono via Google Fonts (`index.html`)
 
 ## Routes
 
