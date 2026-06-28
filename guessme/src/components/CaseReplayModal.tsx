@@ -61,8 +61,11 @@ function IntelSection({ hints }: { hints: CaseIntelEntry[] }) {
   );
 }
 
+const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 export default function CaseReplayModal({ entry, onClose }: Props) {
   const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -70,6 +73,24 @@ export default function CaseReplayModal({ entry, onClose }: Props) {
     closeBtnRef.current?.focus();
     return () => { document.body.style.overflow = prev; };
   }, []);
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Escape") { onClose(); return; }
+    if (e.key !== "Tab") return;
+    const focusable = Array.from(
+      modalRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? [],
+    );
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
 
   const { confirmed, refuted, inconclusive, hints } = entry.evidence;
   const hasEvidence =
@@ -82,9 +103,9 @@ export default function CaseReplayModal({ entry, onClose }: Props) {
       aria-modal="true"
       aria-labelledby="replay-dialog-title"
       data-testid="replay-modal"
-      onKeyDown={(e) => { if (e.key === "Escape") onClose(); }}
+      onKeyDown={handleKeyDown}
     >
-      <div className="modal replayModal">
+      <div className="modal replayModal" ref={modalRef}>
         <div className="replayHeader">
           <div>
             <div id="replay-dialog-title" className="caseSolvedStamp replayStamp">
@@ -137,7 +158,7 @@ export default function CaseReplayModal({ entry, onClose }: Props) {
         <div className="replayBody">
           <div className="replayTimeline" data-testid="replay-timeline">
             <h4 className="replaySectionTitle">Sequência de perguntas</h4>
-            <div className="replayChat">
+            <div className="replayChat" role="log" aria-label="Sequência de perguntas e respostas" aria-readonly="true">
               {entry.messages.map((m) => (
                 <MessageBubble key={m.id} sender={m.sender} text={m.text} kind={m.kind} verdict={m.verdict} />
               ))}

@@ -1241,10 +1241,10 @@ a:focus-visible{
 }
 
 .historyDeleteBtn{
-  border-color: rgba(239,68,68,0.30);
-  color: rgba(239,68,68,0.85);
+  border-color: rgba(239,90,90,0.40);
+  color: rgba(239,100,100,1);
 }
-.historyDeleteBtn:hover{ border-color: rgba(239,68,68,0.50); background: rgba(239,68,68,0.08); }
+.historyDeleteBtn:hover{ border-color: rgba(239,90,90,0.55); background: rgba(239,68,68,0.08); }
 
 /* ===== Case Replay Modal ===== */
 .replayModal{
