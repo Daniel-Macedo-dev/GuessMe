@@ -464,8 +464,8 @@ a:focus-visible{
   padding-right: 6px;
   margin-top: 4px;
 }
-.charCountWarn{ color: #d97706; }
-.charCountError{ color: #ef4444; font-weight: 700; }
+.charCountWarn{ color: var(--accent-evidence); }
+.charCountError{ color: var(--danger); font-weight: 700; }
 
 .errorBox{
   margin-top: 10px;
@@ -592,21 +592,22 @@ a:focus-visible{
 @media (prefers-reduced-motion: reduce){
   *{ transition-duration:0.01ms !important; animation-duration:0.01ms !important; }
 }
-/* ===== Footer barra destacada ===== */
+/* ── Footer bar ── */
 .footerBar{
-  border-top: 1px solid rgba(255,255,255,0.10);
-  background: rgba(11,15,20,0.85);
-  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(52,211,153,0.10);
+  background: rgba(5,9,14,0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   padding: 14px 16px;
   text-align: center;
 }
 .footerBarLink{
-  color: rgba(255,255,255,0.72);
-  font-weight: 700;
-  letter-spacing: .2px;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: .1px;
 }
 .footerBarLink:hover{
-  color: rgba(255,255,255,0.92);
+  color: var(--text);
 }
 
 /* ===== Game sem sidebar: deixa o painel maior ===== */
@@ -793,11 +794,13 @@ a:focus-visible{
   background: rgba(255,255,255,0.06);
   border-color: rgba(255,255,255,0.16);
 }
-/* ===== Game header spacing ===== */
+/* ── Game header ── */
 .gameSubtitle{
-  margin: 6px 0 0;
+  margin: 4px 0 0;
   line-height: 1.6;
-  font-size: 14px;
+  font-size: 13px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
 }
 
 /* ===== Select dark (sem dropdown branco gigante) ===== */
