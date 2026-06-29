@@ -71,3 +71,10 @@ export type CaseHistoryEntry = {
   winningQuestion: string | null;
   verdictStats: VerdictStats;
 };
+
+export type CaseExportPayload = {
+  schemaVersion: 1;
+  app: "GuessMe";
+  exportedAt: string;
+  case: CaseHistoryEntry;
+};
