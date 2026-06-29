@@ -67,6 +67,57 @@ src/
   types/        # TypeScript interfaces
 ```
 
+## Case Archive Portability
+
+Solved cases can be exported, shared, and imported between browsers — all locally, without any server or login.
+
+### Copy summary
+
+Open a solved case with **Rever caso**, then click **Copiar resumo**. A Markdown-formatted summary is copied to your clipboard, ready to paste into any document or chat.
+
+The summary includes: character name, work, category, question/hint counts, verdict statistics, winning question, and all evidence entries.
+
+### Download JSON
+
+Click **Baixar JSON** in the replay modal. A versioned JSON file is downloaded (schema below). The file can be imported on any other device or browser.
+
+### Import JSON
+
+Click **Importar caso** in the Histórico de Casos panel and select a `.json` file previously exported from GuessMe. The case is validated and added to your history. If the case ID already exists, a new ID is assigned automatically — your existing cases are never silently overwritten.
+
+### Download share card
+
+Click **Baixar card** in the replay modal. An SVG card (520×300 px) is downloaded with the Casefile Noir visual identity — character name, stats, evidence counts, and the CASO ENCERRADO stamp. Open in any browser or SVG viewer.
+
+### JSON export schema
+
+```json
+{
+  "schemaVersion": 1,
+  "app": "GuessMe",
+  "exportedAt": "<ISO 8601 timestamp>",
+  "case": {
+    "id": "<string>",
+    "createdAt": "<unix ms>",
+    "characterName": "<string>",
+    "work": "<string>",
+    "category": "<string>",
+    "questionCount": "<number>",
+    "hintCount": "<number>",
+    "winningQuestion": "<string | null>",
+    "verdictStats": { "yes": 0, "no": 0, "maybe": 0, "unknown": 0 },
+    "evidence": { "confirmed": [], "refuted": [], "inconclusive": [], "hints": [] },
+    "messages": []
+  }
+}
+```
+
+### Privacy
+
+**All export, import, and share operations happen entirely in your browser.** No files are uploaded anywhere. No data is sent to a server. Exported JSON files live only on your local device.
+
+---
+
 ## Case History
 
 The game page shows a **Histórico de Casos** section below the investigation interface. Solved investigations are automatically archived locally so the player can review or replay any past case.
@@ -211,7 +262,7 @@ The backend enforces per-session limits. The frontend handles them transparently
 
 ## E2E tests
 
-Playwright 1.61 covers **130 tests** across six spec files. All API calls are intercepted with `page.route()` — no backend required. History tests use `localStorage` seeding via `addInitScript` — no backend required for replay coverage either.
+Playwright 1.61 covers **174 tests** across seven spec files. All API calls are intercepted with `page.route()` — no backend required. History tests use `localStorage` seeding via `addInitScript` — no backend required for replay or portability coverage either.
 
 ### Setup
 
@@ -232,6 +283,7 @@ npm run e2e:report    # open last HTML report
 | `mobile.spec.ts` | Overflow-free layout at 390 px and 360 px; key controls visible on mobile |
 | `notebook.spec.ts` | Notebook presence; empty state; confirmed/refuted/inconclusive entries; intel hints; solved summary; verdict-based YES/NO/MAYBE classification; legacy text fallback; mobile overflow |
 | `history.spec.ts` | History empty state; seeded cards (name/work/counts); victory saves case; duplicate-save prevention; reload persistence; replay modal (timeline, verdict badges, evidence snapshot, winning question, keyboard/button close); delete one case; clear all; corrupted storage fallback; game flow not broken; mobile layout at 390 px |
+| `portability.spec.ts` | Replay export buttons visible/keyboard reachable; copy summary (clipboard, text content); JSON download (filename, schemaVersion, fields); SVG share card (filename, CASO ENCERRADO, branding); import valid JSON (wrapped + bare, card appears, replay works, localStorage persistence); import invalid JSON (parse error, missing fields, no card); duplicate import prevention (renamed message, two cards); mobile 390 px and 360 px (no overflow) |
 
 ### Troubleshooting
 
@@ -295,8 +347,25 @@ npm run e2e:report    # open last HTML report
 - [ ] "Limpar" removes all archived cases
 - [ ] History panel does not break existing game chat, hints, or victory flow
 
+### Case Archive Portability
+- [ ] **Copiar resumo** button is visible in the replay modal
+- [ ] Clicking Copiar resumo copies Markdown text to clipboard
+- [ ] Copied text includes character name, category, and evidence summary
+- [ ] A success/error status message appears below the Fechar button after the action
+- [ ] **Baixar JSON** downloads a `.json` file with `schemaVersion: 1` and `app: "GuessMe"`
+- [ ] **Baixar card** downloads a `.svg` file with CASO ENCERRADO and character name
+- [ ] **Importar caso** button is visible in the Histórico de Casos panel
+- [ ] Clicking Importar caso opens a file picker accepting `.json`
+- [ ] Importing a valid exported JSON adds a card to the history panel
+- [ ] Importing an invalid file shows a readable error message
+- [ ] Importing a case with a duplicate ID assigns a new ID (does not silently overwrite)
+- [ ] An imported case opens correctly in the replay modal
+- [ ] Imported cases persist across page reload
+
 ### Mobile (≤ 640 px)
 - [ ] Chat area is readable without scrolling past the input row
 - [ ] Category dropdown does not overflow the screen
 - [ ] Header stacks vertically on narrow screens
 - [ ] History panel and cards render without horizontal overflow on 390 px
+- [ ] Export buttons in replay modal are visible and usable on 390 px without overflow
+- [ ] Import button in history panel is visible and usable on 390 px
