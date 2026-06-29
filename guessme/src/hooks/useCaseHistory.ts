@@ -7,6 +7,7 @@ import {
   saveCaseHistoryEntry,
 } from "../services/caseHistoryStorage";
 import { deriveEvidence } from "../helpers/deriveEvidence";
+import { normalizeImportedCase } from "../helpers/caseImport";
 
 function uid() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -99,5 +100,17 @@ export function useCaseHistory() {
     refresh();
   }, []);
 
-  return { history, saveOnVictory, deleteEntry, clearAll };
+  const importEntry = useCallback(
+    (entry: CaseHistoryEntry): { renamed: boolean } => {
+      const current = getCaseHistory();
+      const existingIds = new Set(current.map((e) => e.id));
+      const { entry: normalized, renamed } = normalizeImportedCase(entry, existingIds);
+      saveCaseHistoryEntry(normalized);
+      refresh();
+      return { renamed };
+    },
+    [],
+  );
+
+  return { history, saveOnVictory, deleteEntry, clearAll, importEntry };
 }
