@@ -37,7 +37,7 @@ export default function Game() {
     restart,
   } = useGame();
 
-  const { history, saveOnVictory, deleteEntry, clearAll } = useCaseHistory();
+  const { history, saveOnVictory, deleteEntry, clearAll, importEntry } = useCaseHistory();
 
   const savedWinnerRef = useRef(winner);
   useEffect(() => {
@@ -137,6 +137,7 @@ export default function Game() {
           history={history}
           onDelete={deleteEntry}
           onClearAll={clearAll}
+          onImport={importEntry}
         />
       </main>
 
