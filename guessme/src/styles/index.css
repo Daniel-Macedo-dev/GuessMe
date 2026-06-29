@@ -1598,6 +1598,120 @@ a:focus-visible{
   .replayChat{ max-height: 260px; }
 }
 
+/* ── Replay: export actions ── */
+.replayFooter{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+}
+
+.replayExportActions{
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.replayExportBtn{
+  padding: 6px 14px;
+  font-size: 13px;
+  border-color: rgba(52,211,153,0.22);
+  color: var(--muted);
+}
+.replayExportBtn:hover{
+  border-color: rgba(52,211,153,0.42);
+  color: var(--text);
+  background: rgba(52,211,153,0.05);
+}
+.replayExportBtn:focus-visible{
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.replayExportStatus{
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid;
+  animation: fadeIn 0.15s ease;
+}
+.replayExportStatusOk{
+  color: var(--accent);
+  border-color: rgba(52,211,153,0.28);
+  background: rgba(52,211,153,0.07);
+}
+.replayExportStatusError{
+  color: var(--danger);
+  border-color: rgba(248,113,113,0.28);
+  background: rgba(248,113,113,0.06);
+}
+
+@keyframes fadeIn{
+  from{ opacity: 0; transform: translateY(4px); }
+  to{ opacity: 1; transform: translateY(0); }
+}
+
+/* ── History Panel: import controls ── */
+.historyPanelActions{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.historyImportBtn{
+  border-color: rgba(52,211,153,0.22);
+  color: var(--muted);
+}
+.historyImportBtn:hover{
+  border-color: rgba(52,211,153,0.42);
+  color: var(--text);
+  background: rgba(52,211,153,0.05);
+}
+.historyImportBtn:focus-visible{
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.historyImportInput{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.historyImportStatus{
+  font-size: 13px;
+  padding: 8px 14px;
+  margin-bottom: 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid;
+  animation: fadeIn 0.15s ease;
+}
+.historyImportStatusOk{
+  color: var(--accent);
+  border-color: rgba(52,211,153,0.28);
+  background: rgba(52,211,153,0.07);
+}
+.historyImportStatusError{
+  color: var(--danger);
+  border-color: rgba(248,113,113,0.28);
+  background: rgba(248,113,113,0.06);
+}
+
+@media (max-width: 480px){
+  .replayExportActions{ gap: 6px; }
+  .replayExportBtn{ padding: 5px 10px; font-size: 12px; }
+  .historyPanelActions{ gap: 6px; }
+  .historyImportBtn{ padding: 5px 10px; font-size: 12px; }
+}
+
 /* History panel responsive */
 @media (max-width: 640px){
   .historyCardStats{ gap: 8px; }
