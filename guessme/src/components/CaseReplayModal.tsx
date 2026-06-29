@@ -1,11 +1,24 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { CaseEvidenceEntry, CaseHistoryEntry, CaseIntelEntry } from "../types/guessme";
 import MessageBubble from "./MessageBubble";
+import {
+  buildCaseExportFilename,
+  createCaseExportPayload,
+  formatCaseAsMarkdown,
+} from "../helpers/caseExport";
+import { createCaseShareSvg } from "../helpers/caseShareCard";
+import {
+  copyTextToClipboard,
+  downloadJsonFile,
+  downloadSvgFile,
+} from "../services/caseExportService";
 
 type Props = {
   entry: CaseHistoryEntry;
   onClose: () => void;
 };
+
+type ActionStatus = "idle" | "success" | "error";
 
 function EvidenceSection({
   title,
@@ -63,38 +76,118 @@ function IntelSection({ hints }: { hints: CaseIntelEntry[] }) {
 
 const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
+const STATUS_LABELS: Record<string, { success: string; error: string }> = {
+  copy: { success: "Resumo copiado!", error: "Falha ao copiar — tente novamente." },
+  json: { success: "JSON baixado!", error: "Falha ao baixar JSON." },
+  svg: { success: "Card baixado!", error: "Falha ao baixar card." },
+};
+
 export default function CaseReplayModal({ entry, onClose }: Props) {
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+  const statusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const [copyStatus, setCopyStatus] = useState<ActionStatus>("idle");
+  const [jsonStatus, setJsonStatus] = useState<ActionStatus>("idle");
+  const [svgStatus, setSvgStatus] = useState<ActionStatus>("idle");
 
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     closeBtnRef.current?.focus();
-    return () => { document.body.style.overflow = prev; };
+    return () => {
+      document.body.style.overflow = prev;
+      if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
+    };
   }, []);
 
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === "Escape") { onClose(); return; }
-    if (e.key !== "Tab") return;
-    const focusable = Array.from(
-      modalRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? [],
-    );
-    if (focusable.length === 0) return;
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault();
-      first.focus();
+  const setStatus = useCallback(
+    (setter: (s: ActionStatus) => void, status: ActionStatus) => {
+      setter(status);
+      if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
+      statusTimerRef.current = setTimeout(() => {
+        setCopyStatus("idle");
+        setJsonStatus("idle");
+        setSvgStatus("idle");
+      }, 3000);
+    },
+    [],
+  );
+
+  const handleCopy = useCallback(async () => {
+    try {
+      const text = formatCaseAsMarkdown(entry);
+      await copyTextToClipboard(text);
+      setStatus(setCopyStatus, "success");
+    } catch {
+      setStatus(setCopyStatus, "error");
     }
-  }, [onClose]);
+  }, [entry, setStatus]);
+
+  const handleDownloadJson = useCallback(() => {
+    try {
+      const payload = createCaseExportPayload(entry);
+      const filename = buildCaseExportFilename(entry, "json");
+      downloadJsonFile(filename, payload);
+      setStatus(setJsonStatus, "success");
+    } catch {
+      setStatus(setJsonStatus, "error");
+    }
+  }, [entry, setStatus]);
+
+  const handleDownloadSvg = useCallback(() => {
+    try {
+      const svg = createCaseShareSvg(entry);
+      const filename = buildCaseExportFilename(entry, "svg");
+      downloadSvgFile(filename, svg);
+      setStatus(setSvgStatus, "success");
+    } catch {
+      setStatus(setSvgStatus, "error");
+    }
+  }, [entry, setStatus]);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Escape") { onClose(); return; }
+      if (e.key !== "Tab") return;
+      const focusable = Array.from(
+        modalRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? [],
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    },
+    [onClose],
+  );
 
   const { confirmed, refuted, inconclusive, hints } = entry.evidence;
   const hasEvidence =
     confirmed.length + refuted.length + inconclusive.length + hints.length > 0;
+
+  const anyStatus =
+    copyStatus !== "idle"
+      ? copyStatus === "success"
+        ? STATUS_LABELS.copy.success
+        : STATUS_LABELS.copy.error
+      : jsonStatus !== "idle"
+        ? jsonStatus === "success"
+          ? STATUS_LABELS.json.success
+          : STATUS_LABELS.json.error
+        : svgStatus !== "idle"
+          ? svgStatus === "success"
+            ? STATUS_LABELS.svg.success
+            : STATUS_LABELS.svg.error
+          : null;
+
+  const statusIsError =
+    copyStatus === "error" || jsonStatus === "error" || svgStatus === "error";
 
   return (
     <div
@@ -198,10 +291,47 @@ export default function CaseReplayModal({ entry, onClose }: Props) {
         </div>
 
         <div className="replayFooter">
+          <div className="replayExportActions" data-testid="replay-export-actions">
+            <button
+              className="btn replayExportBtn"
+              onClick={handleCopy}
+              data-testid="replay-copy-btn"
+              aria-label="Copiar resumo do caso como Markdown"
+            >
+              Copiar resumo
+            </button>
+            <button
+              className="btn replayExportBtn"
+              onClick={handleDownloadJson}
+              data-testid="replay-download-json-btn"
+              aria-label="Baixar caso como arquivo JSON"
+            >
+              Baixar JSON
+            </button>
+            <button
+              className="btn replayExportBtn"
+              onClick={handleDownloadSvg}
+              data-testid="replay-download-svg-btn"
+              aria-label="Baixar card visual do caso"
+            >
+              Baixar card
+            </button>
+          </div>
           <button className="btn btn-primary" onClick={onClose}>
             Fechar
           </button>
         </div>
+
+        {anyStatus && (
+          <div
+            className={`replayExportStatus ${statusIsError ? "replayExportStatusError" : "replayExportStatusOk"}`}
+            role="status"
+            aria-live="polite"
+            data-testid="replay-export-status"
+          >
+            {anyStatus}
+          </div>
+        )}
       </div>
     </div>
   );
