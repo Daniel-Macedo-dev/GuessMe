@@ -53,19 +53,45 @@ All visual values live in `:root {}` in `src/styles/index.css`:
 | `/` | Home — landing page |
 | `/game` | Game — investigation interface |
 | `/how-it-works` | Manual — rules and tips |
+| `/stats` | Personal Statistics — dashboard derived from local case history |
 
 ## Project structure
 
 ```
 src/
   components/   # Shared UI components
-  helpers/      # Pure derivation helpers (deriveEvidence)
-  hooks/        # useGame — all game state logic
-  pages/        # Route-level pages
-  services/     # api.ts (fetch wrapper), guessme.ts (API calls)
+  helpers/      # Pure derivation helpers (deriveEvidence, caseStats, caseExport, caseImport)
+  hooks/        # useGame, useCaseHistory
+  pages/        # Route-level pages (Home, Game, HowItWorks, Stats)
+  services/     # api.ts (fetch wrapper), guessme.ts (API calls), caseHistoryStorage.ts
   styles/       # index.css (global styles)
-  types/        # TypeScript interfaces
+  types/        # TypeScript interfaces (guessme.ts, stats.ts)
 ```
+
+## Personal Statistics Dashboard
+
+Navigate to `/stats` (Estatísticas link in the navbar) to see a dashboard derived from your local case history. All data is computed in the browser from `localStorage` — no server call is made.
+
+### Metrics displayed
+
+| Section | What it shows |
+|---------|---------------|
+| Overview cards | Total cases solved, total questions asked, total hints used, average questions per case |
+| Verdict distribution | Bar chart of YES / NO / MAYBE / UNKNOWN responses across all cases |
+| Evidence collected | Bar chart of confirmed, refuted, inconclusive entries and hints |
+| Categories investigated | Bar chart sorted by case count, with avg questions per category |
+| Cases of note | "Mais eficiente" (fewest questions) and "Mais longo" (most questions) |
+| Recent activity | Last 5 cases sorted by date, with category badge, date, and question count |
+
+### Empty state
+
+When no cases have been solved yet, the dashboard shows an empty state with a direct link to `/game`.
+
+### Privacy
+
+**All statistics are derived entirely in your browser.** No data is collected or transmitted. Clearing `localStorage` removes the history and returns the dashboard to the empty state.
+
+---
 
 ## Case Archive Portability
 
@@ -262,7 +288,7 @@ The backend enforces per-session limits. The frontend handles them transparently
 
 ## E2E tests
 
-Playwright 1.61 covers **174 tests** across seven spec files. All API calls are intercepted with `page.route()` — no backend required. History tests use `localStorage` seeding via `addInitScript` — no backend required for replay or portability coverage either.
+Playwright 1.61 covers **215 tests** across eight spec files. All API calls are intercepted with `page.route()` — no backend required. History and stats tests use `localStorage` seeding via `addInitScript`.
 
 ### Setup
 
@@ -284,6 +310,7 @@ npm run e2e:report    # open last HTML report
 | `notebook.spec.ts` | Notebook presence; empty state; confirmed/refuted/inconclusive entries; intel hints; solved summary; verdict-based YES/NO/MAYBE classification; legacy text fallback; mobile overflow |
 | `history.spec.ts` | History empty state; seeded cards (name/work/counts); victory saves case; duplicate-save prevention; reload persistence; replay modal (timeline, verdict badges, evidence snapshot, winning question, keyboard/button close); delete one case; clear all; corrupted storage fallback; game flow not broken; mobile layout at 390 px |
 | `portability.spec.ts` | Replay export buttons visible/keyboard reachable; copy summary (clipboard, text content); JSON download (filename, schemaVersion, fields); SVG share card (filename, CASO ENCERRADO, branding); import valid JSON (wrapped + bare, card appears, replay works, localStorage persistence); import invalid JSON (parse error, missing fields, no card); duplicate import prevention (renamed message, two cards); mobile 390 px and 360 px (no overflow) |
+| `stats.spec.ts` | Empty state (route, message, CTA, no dashboard); single case totals (cases/questions/hints/avg); multiple cases (totals, verdict panel, category bars, evidence panel, ranking cards — best and longest, recent activity list); navigation (Estatísticas link, active state, existing routes unaffected); import compatibility (missing fields, zero questions, corrupted storage); mobile 390 px and 360 px (no overflow) |
 
 ### Troubleshooting
 
@@ -361,6 +388,22 @@ npm run e2e:report    # open last HTML report
 - [ ] Importing a case with a duplicate ID assigns a new ID (does not silently overwrite)
 - [ ] An imported case opens correctly in the replay modal
 - [ ] Imported cases persist across page reload
+
+### Personal Statistics Dashboard
+- [ ] Clicking "Estatísticas" in the navbar navigates to `/stats`
+- [ ] The Estatísticas link shows an active pill when on `/stats`
+- [ ] Without any case history, the empty state message is displayed
+- [ ] Empty state CTA "Abrir um caso" links to `/game`
+- [ ] After solving a case, visiting `/stats` shows the populated dashboard
+- [ ] Overview cards show correct totals (cases, questions, hints, average)
+- [ ] Verdict distribution bars are shown for each verdict type
+- [ ] Evidence bars show confirmed, refuted, inconclusive, and hints counts
+- [ ] Category bars show the categories played, sorted by case count
+- [ ] "Mais eficiente" card shows the case solved in fewest questions
+- [ ] "Mais longo" card shows the case with the most questions
+- [ ] Recent activity lists the last 5 cases with category badges and dates
+- [ ] The dashboard does not call the backend at any point
+- [ ] Clearing history from `/game` resets the dashboard to empty state
 
 ### Mobile (≤ 640 px)
 - [ ] Chat area is readable without scrolling past the input row
