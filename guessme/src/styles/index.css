@@ -1584,13 +1584,6 @@ a:focus-visible{
   gap: 8px;
 }
 
-.replayFooter{
-  display: flex;
-  justify-content: flex-end;
-  padding-top: 6px;
-  border-top: 1px solid var(--border);
-}
-
 /* Replay responsive */
 @media (max-width: 640px){
   .replayBody{ grid-template-columns: 1fr; }
