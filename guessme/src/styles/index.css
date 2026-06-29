@@ -69,7 +69,7 @@ body{
 a{ color: inherit; text-decoration:none; }
 b{ font-weight: 800; }
 
-.shell{ min-height: 100%; display:flex; flex-direction:column; }
+.shell{ min-height: 100vh; display:flex; flex-direction:column; }
 .main{ width:100%; max-width: 1180px; margin:0 auto; padding: 22px 16px; flex:1; }
 .mainCenter{ display:flex; align-items:center; justify-content:center; }
 
@@ -300,14 +300,6 @@ a:focus-visible{
 .heroGrid .card:nth-child(2)::before{ background: var(--accent-evidence); }
 .heroGrid .card:nth-child(3)::before{ background: var(--mystery); }
 
-.cardStep{
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted-dim);
-  margin-bottom: 8px;
-}
 .cardTitle{ font-weight: 900; font-size: 15px; margin: 0 0 6px; letter-spacing: -0.1px; }
 .cardText{ color: var(--muted); line-height: 1.48; font-size: 14px; }
 
@@ -323,27 +315,6 @@ a:focus-visible{
   flex-wrap: wrap;
   margin-bottom: 14px;
 }
-.gameHeaderLeft{ flex: 1 1 auto; min-width: 0; }
-.gameHeaderActions{
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-}
-
-.gameLayout{
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 14px;
-}
-
-.sideStack{ display:flex; flex-direction:column; gap: 12px; }
-.side{ padding: 14px; }
-.tips{ margin: 10px 0 0; padding-left: 18px; color: var(--muted); line-height: 1.55; }
-
-.chatPanel{ padding: 14px; }
-
 .statsBar{
   display: flex;
   align-items: center;
@@ -551,16 +522,9 @@ a:focus-visible{
 .characterImg{ width:100%; height:100%; object-fit: cover; }
 .characterName{ font-size: 18px; font-weight: 900; }
 
-/* ── Footer ── */
-.footer{ border-top: 1px solid rgba(52,211,153,0.10); }
-.footerInner{ max-width:1180px; margin:0 auto; padding: 16px; text-align:center; }
-.footerLink{ color: var(--muted); font-weight: 500; }
-.footerLink:hover{ color: var(--text); }
-
 /* ── Responsive ── */
 @media (max-width: 980px){
   .heroGrid{ grid-template-columns: 1fr; }
-  .gameLayout{ grid-template-columns: 1fr; }
   .chatScroll{ height: 48vh; }
 }
 @media (max-width: 640px){
@@ -601,15 +565,6 @@ a:focus-visible{
   padding: 14px 16px;
   text-align: center;
 }
-.footerBarLink{
-  color: var(--muted);
-  font-weight: 600;
-  letter-spacing: .1px;
-}
-.footerBarLink:hover{
-  color: var(--text);
-}
-
 /* ===== Game sem sidebar: deixa o painel maior ===== */
 .chatPanelWide{
   padding: 14px;
