@@ -26,6 +26,9 @@ export default function Navbar({ onRestart, disabled = false }: Props) {
           <Link className={`navLink ${pathname === "/game" ? "active" : ""}`} to="/game">
             Jogo
           </Link>
+          <Link className={`navLink ${pathname === "/stats" ? "active" : ""}`} to="/stats">
+            Estatísticas
+          </Link>
         </nav>
 
         {onRestart ? (
