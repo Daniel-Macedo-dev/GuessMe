@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import StatsEmptyState from "../components/StatsEmptyState";
 import StatsOverviewGrid from "../components/StatsOverviewGrid";
 import StatsVerdictPanel from "../components/StatsVerdictPanel";
@@ -46,7 +47,7 @@ export default function Stats() {
   return (
     <div className="shell">
       <Navbar />
-      <main className="main" data-testid="stats-page">
+      <main className="main statsMain" data-testid="stats-page">
         <div className="statsPageHeader">
           <div className="statsPageStamp caseSolvedStamp">Painel de investigação</div>
           <h1 className="statsPageTitle">Estatísticas pessoais</h1>
@@ -79,6 +80,7 @@ export default function Stats() {
           </div>
         )}
       </main>
+      <Footer />
     </div>
   );
 }
