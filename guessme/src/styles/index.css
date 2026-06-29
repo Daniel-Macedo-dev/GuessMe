@@ -1714,3 +1714,305 @@ a:focus-visible{
   .historyCardActions{ flex-direction: column; }
   .historyActionBtn{ width: 100%; text-align: center; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   STATS DASHBOARD
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Page header ── */
+.statsPageHeader{
+  margin-bottom: 22px;
+}
+.statsPageStamp{
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.16em;
+  margin-bottom: 6px;
+}
+.statsPageTitle{
+  margin: 0 0 4px;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.3px;
+}
+
+/* ── Dashboard shell ── */
+.statsDashboard{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Overview grid: 4 metric cards ── */
+.statsOverviewGrid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.statsMetricCard{
+  padding: 16px 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.026);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  overflow: hidden;
+}
+.statsMetricCard::before{
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--muted-dim);
+  opacity: 0.5;
+}
+.statsMetricCard--green::before{ background: var(--accent); opacity: 0.65; }
+.statsMetricCard--amber::before{ background: var(--accent-evidence); opacity: 0.65; }
+.statsMetricCard--red::before{ background: var(--danger); opacity: 0.65; }
+.statsMetricCard--slate::before{ background: var(--mystery); opacity: 0.65; }
+
+.statsMetricValue{
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  line-height: 1;
+}
+.statsMetricLabel{
+  display: block;
+  margin-top: 2px;
+}
+.statsMetricSub{
+  display: block;
+  font-size: 11px;
+}
+
+/* ── Generic panel ── */
+.statsPanel{
+  padding: 16px 20px;
+}
+.statsPanelTitle{
+  margin: 0 0 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+.statsMetricNote{
+  margin: -6px 0 10px;
+}
+
+/* ── Two-column panel grid ── */
+.statsPanelGrid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* ── Bar list ── */
+.statsBarList{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.statsBarItem{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.statsBarMeta{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.statsBarLabel{
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.statsBarValue{
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+}
+.statsBarTrack{
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+.statsBarFill{
+  height: 100%;
+  border-radius: 999px;
+  background: var(--muted-dim);
+  transition: width 0.35s ease;
+}
+.statsBarFill--green{ background: var(--accent); opacity: 0.75; }
+.statsBarFill--red{   background: var(--danger); opacity: 0.75; }
+.statsBarFill--amber{ background: var(--accent-evidence); opacity: 0.75; }
+.statsBarFill--cyan{  background: var(--intel); opacity: 0.75; }
+.statsBarFill--slate{ background: var(--mystery); opacity: 0.55; }
+.statsBarSub{
+  font-size: 11px;
+}
+
+/* ── Case ranking ── */
+.statsRankGrid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.statsRankCard{
+  padding: 14px 16px 14px 20px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+  position: relative;
+  overflow: hidden;
+}
+.statsRankCard::before{
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+}
+.statsRankCard--green::before{ background: var(--accent); }
+.statsRankCard--amber::before{ background: var(--accent-evidence); }
+
+.statsRankLabel{
+  display: block;
+  margin-bottom: 6px;
+}
+.statsRankName{
+  margin: 0 0 2px;
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: -0.1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.statsRankWork{
+  margin: 0 0 8px;
+}
+.statsRankStat{
+  margin: 0;
+}
+
+/* ── Recent activity ── */
+.statsRecentList{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.statsRecentItem{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.statsRecentItem:last-child{ border-bottom: none; }
+.statsRecentMeta{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+.statsRecentName{
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.statsRecentWork{
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.statsRecentInfo{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.statsRecentCategory{
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+}
+.statsRecentDate{
+  font-size: 12px;
+}
+.statsRecentQ{
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ── Empty state ── */
+.statsEmpty{
+  text-align: center;
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.statsEmptyStamp{
+  opacity: 0.5;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+}
+.statsEmptyTitle{
+  margin: 0;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.2px;
+}
+.statsEmptyDesc{
+  margin: 0;
+  max-width: 300px;
+}
+.statsEmptyCta{
+  margin-top: 8px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px){
+  .statsOverviewGrid{ grid-template-columns: repeat(2, 1fr); }
+  .statsPanelGrid{ grid-template-columns: 1fr; }
+  .statsRankGrid{ grid-template-columns: 1fr; }
+}
+@media (max-width: 480px){
+  .statsOverviewGrid{ grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .statsMetricValue{ font-size: 22px; }
+  .statsMetricCard{ padding: 12px 14px; }
+  .statsRecentInfo{ gap: 6px; }
+  .statsPageTitle{ font-size: 20px; }
+}
+@media (max-width: 360px){
+  .statsOverviewGrid{ grid-template-columns: 1fr; }
+  .statsRankGrid{ grid-template-columns: 1fr; }
+}
