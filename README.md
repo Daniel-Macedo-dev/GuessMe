@@ -25,7 +25,8 @@ Com este frontend, o usuário pode:
 - **Vite 7**
 - **TypeScript**
 - **React Router DOM**
-- **Bootstrap 5** (CSS only)
+- **CSS customizado** (sem framework — tema Casefile Noir)
+- **Inter + JetBrains Mono** (Google Fonts)
 - **ESLint**
 
 ---
