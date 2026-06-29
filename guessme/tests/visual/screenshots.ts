@@ -17,6 +17,7 @@ const ROUTES = [
   { name: "home", path: "/" },
   { name: "game", path: "/game" },
   { name: "how-it-works", path: "/how-it-works" },
+  { name: "stats", path: "/stats" },
 ];
 
 async function run() {
