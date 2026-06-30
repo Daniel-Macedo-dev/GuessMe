@@ -2249,3 +2249,372 @@ a:focus-visible{
 @media (prefers-reduced-motion: reduce){
   .rankProgressFill, .achievementProgressFill{ transition: none; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   VISUAL SIGNATURE — DOSSIER IDENTITY SYSTEM
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Brand mark ── */
+.brandMark{
+  color: var(--accent);
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Navbar: brand layout with mark icon */
+.brand{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.brandMarkIcon{
+  opacity: 0.88;
+  transition: opacity var(--t-fast);
+}
+.brand:hover .brandMarkIcon{ opacity: 1; }
+
+.brandText{
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Case stamp primitive ── */
+.caseStamp{
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: 1.5px solid;
+  border-radius: 3px;
+  line-height: 1;
+}
+
+.caseStamp--sm{ font-size: 9px;  padding: 2px 7px; }
+.caseStamp--md{ font-size: 11px; padding: 4px 10px; }
+.caseStamp--lg{ font-size: 14px; padding: 6px 16px; }
+
+.caseStamp--active{
+  color: var(--accent);
+  border-color: rgba(52,211,153,0.50);
+  background: rgba(52,211,153,0.07);
+  box-shadow: 0 0 14px rgba(52,211,153,0.14);
+  text-shadow: 0 0 12px rgba(52,211,153,0.35);
+}
+.caseStamp--closed{
+  color: var(--muted);
+  border-color: var(--border2);
+}
+.caseStamp--classified{
+  color: var(--accent-evidence);
+  border-color: rgba(251,191,36,0.44);
+  background: rgba(251,191,36,0.06);
+}
+.caseStamp--archived{
+  color: var(--mystery);
+  border-color: rgba(148,163,184,0.35);
+  background: rgba(148,163,184,0.05);
+}
+.caseStamp--intel{
+  color: var(--intel);
+  border-color: rgba(34,211,238,0.40);
+  background: rgba(34,211,238,0.05);
+}
+.caseStamp--pulse::before{
+  content: "● ";
+  font-size: 7px;
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+/* ── Dossier section header primitive ── */
+.dossierSectionHeader{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+.dossierSectionLabel{
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.72;
+}
+.dossierSectionTitle{
+  margin: 0;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.2px;
+}
+.dossierSectionMeta{
+  margin: 0;
+  font-family: var(--font-mono);
+}
+
+/* ── Home hero: classification strip ── */
+.heroClassification{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.heroClassLabel{
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+  opacity: 0.75;
+}
+.heroClassDot{
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--muted-dim);
+  opacity: 0.45;
+  flex-shrink: 0;
+}
+
+/* ── Home hero: seal ── */
+.heroSealRow{
+  margin-bottom: 14px;
+}
+.heroSealMark{
+  color: var(--accent);
+  opacity: 0.85;
+}
+
+/* ── Home hero: metadata strip ── */
+.heroMeta{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+.heroMeta span{
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+  opacity: 0.55;
+}
+.heroMetaDot{
+  opacity: 0.35 !important;
+}
+
+/* ── Home: protocol cards ── */
+.heroProtocolCard{
+  position: relative;
+  padding-top: 24px;
+}
+.heroProtocolNum{
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--muted-dim);
+  opacity: 0.22;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── HowItWorks: protocol header ── */
+.protocolHeader{
+  margin-bottom: 6px;
+}
+.protocolClassLabel{
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+  opacity: 0.65;
+  margin-bottom: 8px;
+}
+
+/* ── Game desk: transcript label ── */
+.transcriptLabel{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 8px;
+}
+.transcriptLabelText{
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+  opacity: 0.65;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.transcriptLabelLine{
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border) 0%, transparent 100%);
+}
+
+/* ── Game desk: query section labels ── */
+.querySection{
+  margin-top: 8px;
+}
+.queryLabel{
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+  opacity: 0.60;
+  margin-bottom: 6px;
+}
+.queryInputSection{
+  margin-top: 4px;
+}
+.queryInputLabel{
+  margin-bottom: 4px;
+}
+
+/* ── Stats: intelligence report classification ── */
+.statsReportClass{
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+  opacity: 0.55;
+  margin-bottom: 10px;
+}
+
+/* ── Improved panel hover ── */
+.panel{
+  transition: box-shadow var(--t-base);
+}
+
+/* ── Improved card hover lift ── */
+.card:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.40);
+}
+.card{ transition: background var(--t-base), border-color var(--t-base), transform var(--t-base), box-shadow var(--t-base); }
+
+/* ── Better button glow on hover ── */
+.btn-primary:hover{
+  box-shadow: 0 0 26px rgba(52,211,153,0.22), inset 0 1px 0 rgba(52,211,153,0.18);
+}
+
+/* ── Chip hover glow ── */
+.chip:hover{
+  box-shadow: 0 0 14px rgba(52,211,153,0.10);
+}
+
+/* ── Navbar bottom border enhancement ── */
+.topbar{
+  border-bottom-width: 1px;
+  border-bottom-color: rgba(52,211,153,0.20);
+}
+
+/* ── Footer dossier mark ── */
+.footerBar{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.footerRef{
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+  opacity: 0.40;
+}
+
+/* ── Improved focus ring across all interactive ── */
+.btn:focus-visible,
+.chip:focus-visible,
+.navLink:focus-visible,
+a:focus-visible,
+.input:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52,211,153,0.20), 0 0 0 4px rgba(52,211,153,0.10);
+  border-color: var(--border-glow);
+}
+
+/* ── Evidence notebook dossier pin feel ── */
+.notebook{
+  border-left: 2px solid rgba(52,211,153,0.14);
+}
+
+/* ── Stats panel top indicator ── */
+.statsPanel::before{
+  content: '';
+  display: block;
+  width: 28px;
+  height: 2px;
+  background: var(--accent);
+  opacity: 0.40;
+  margin-bottom: 10px;
+  border-radius: 999px;
+}
+
+/* ── History card hover ── */
+.historyCard:hover{
+  transform: translateY(-1px);
+}
+.historyCard{ transition: background var(--t-base), border-color var(--t-base), transform var(--t-base); }
+
+/* ── Dossier scan line texture for chat/terminal panels ── */
+.chatScroll{
+  background-image:
+    var(--surface-chat),
+    repeating-linear-gradient(0deg, transparent 0px, transparent 22px, rgba(52,211,153,0.018) 22px, rgba(52,211,153,0.018) 23px);
+  background-blend-mode: normal;
+}
+
+/* ── Responsive new classes ── */
+@media (max-width: 640px){
+  .heroClassification{ gap: 6px; }
+  .heroSealMark{ opacity: 0.75; }
+  .heroMeta{ gap: 8px; }
+  .transcriptLabel{ margin-bottom: 6px; }
+  .statsReportClass{ font-size: 8px; }
+}
+@media (max-width: 480px){
+  .brandMarkIcon{ display: none; }
+  .heroSealRow{ margin-bottom: 10px; }
+  .heroProtocolNum{ font-size: 18px; }
+  .queryLabel{ font-size: 8px; }
+  .protocolClassLabel{ font-size: 8px; }
+  .footerRef{ display: none; }
+}
+@media (max-width: 360px){
+  .heroClassification{ display: none; }
+  .heroMeta{ display: none; }
+}
+@media (prefers-reduced-motion: reduce){
+  .card, .historyCard{ transform: none !important; transition: background var(--t-base), border-color var(--t-base) !important; }
+  .btn-primary:hover{ box-shadow: none; }
+  .caseStamp--pulse::before{ animation: none; }
+}
