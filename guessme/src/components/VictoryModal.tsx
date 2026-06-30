@@ -49,10 +49,14 @@ export default function VictoryModal({ winner, onRestart }: Props) {
       <ConfettiBurst active={open} />
 
       <div className="modal victoryModal">
+        <div className="victoryReportLabel" aria-hidden="true">RELATÓRIO DE CASO · ENCERRADO</div>
+
         <div className="victoryHeader">
           <div id="victory-dialog-title" className="caseSolvedStamp">Caso Encerrado</div>
           <p className="muted victorySubtitle">Identidade confirmada:</p>
         </div>
+
+        <div className="victoryDivider" aria-hidden="true" />
 
         <PersonagemCard winner={winner} />
 

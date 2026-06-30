@@ -199,6 +199,8 @@ export default function CaseReplayModal({ entry, onClose }: Props) {
       onKeyDown={handleKeyDown}
     >
       <div className="modal replayModal" ref={modalRef}>
+        <div className="replayClassLabel" aria-hidden="true">DOSSIÊ ARQUIVADO · ACESSO RESTRITO</div>
+
         <div className="replayHeader">
           <div>
             <div id="replay-dialog-title" className="caseSolvedStamp replayStamp">
@@ -250,6 +252,7 @@ export default function CaseReplayModal({ entry, onClose }: Props) {
 
         <div className="replayBody">
           <div className="replayTimeline" data-testid="replay-timeline">
+            <div className="replayDossierLabel" aria-hidden="true">TRANSCRIÇÃO</div>
             <h4 className="replaySectionTitle">Sequência de perguntas</h4>
             <div className="replayChat" role="log" aria-label="Sequência de perguntas e respostas" aria-readonly="true">
               {entry.messages.map((m) => (
@@ -260,6 +263,7 @@ export default function CaseReplayModal({ entry, onClose }: Props) {
 
           {hasEvidence && (
             <div className="replayEvidence" data-testid="replay-evidence-snapshot">
+              <div className="replayDossierLabel" aria-hidden="true">EVIDÊNCIAS</div>
               <h4 className="replaySectionTitle">Evidências</h4>
               <EvidenceSection
                 title="Confirmado"

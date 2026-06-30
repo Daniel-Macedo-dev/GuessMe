@@ -2590,6 +2590,52 @@ a:focus-visible,
 }
 .historyCard{ transition: background var(--t-base), border-color var(--t-base), transform var(--t-base); }
 
+/* ── Victory modal — closed case report ── */
+.victoryReportLabel{
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  opacity: 0.55;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-accent);
+}
+.victoryDivider{
+  height: 1px;
+  background: var(--border-accent);
+  margin: 12px 0;
+}
+.victoryModal{
+  border-color: var(--border-accent);
+}
+
+/* ── Replay modal — archived dossier transcript ── */
+.replayClassLabel{
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  opacity: 0.50;
+  text-transform: uppercase;
+  padding: 6px 0 8px;
+  border-bottom: 1px solid var(--border-accent);
+  margin-bottom: 12px;
+}
+.replayDossierLabel{
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  opacity: 0.45;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
 /* ── Responsive new classes ── */
 @media (max-width: 640px){
   .heroClassification{ gap: 6px; }
