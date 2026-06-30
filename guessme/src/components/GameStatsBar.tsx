@@ -15,9 +15,12 @@ export default function GameStatsBar({ questionsCount }: Props) {
     <div className="statsBar">
       <div className="stat">
         <span className="statLabel">Interrogações</span>
-        <span className="statValue">{questionsCount}</span>
+        <span className="statValue" data-testid="questions-count">{questionsCount}</span>
       </div>
-      <div className="statPhase muted">{investigationPhase(questionsCount)}</div>
+      <div className="statTelemetry">
+        <span className="statTelemetryLabel" aria-hidden="true">STATUS</span>
+        <span className="statPhase muted">{investigationPhase(questionsCount)}</span>
+      </div>
     </div>
   );
 }

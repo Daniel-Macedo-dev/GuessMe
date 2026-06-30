@@ -9,6 +9,7 @@ export default function Footer() {
       >
         Feito por Daniel
       </a>
+      <span className="footerRef" aria-hidden="true">GUESSME · DOSSIÊ DIGITAL · v2</span>
     </footer>
   );
 }
