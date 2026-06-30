@@ -49,6 +49,11 @@
   /* ── Transitions ── */
   --t-fast: 100ms ease;
   --t-base: 160ms ease;
+
+  /* ── Additional dossier tokens ── */
+  --accent-faint:   rgba(52,211,153,0.06);
+  --surface-desk:   rgba(6,11,18,0.72);
+  --border-accent:  rgba(52,211,153,0.18);
 }
 
 *{ box-sizing: border-box; }
@@ -2584,14 +2589,6 @@ a:focus-visible,
   transform: translateY(-1px);
 }
 .historyCard{ transition: background var(--t-base), border-color var(--t-base), transform var(--t-base); }
-
-/* ── Dossier scan line texture for chat/terminal panels ── */
-.chatScroll{
-  background-image:
-    var(--surface-chat),
-    repeating-linear-gradient(0deg, transparent 0px, transparent 22px, rgba(52,211,153,0.018) 22px, rgba(52,211,153,0.018) 23px);
-  background-blend-mode: normal;
-}
 
 /* ── Responsive new classes ── */
 @media (max-width: 640px){
