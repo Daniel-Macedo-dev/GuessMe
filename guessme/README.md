@@ -1,16 +1,166 @@
-# GuessMe — Frontend
+# GuessMe — Dossiê Digital
 
-React + TypeScript + Vite frontend for the [GuessMe](https://github.com/Daniel-Macedo-dev/guessme-api) guessing game.
+**Interrogue a IA e descubra o personagem secreto antes de esgotar suas perguntas.**
+
+GuessMe is a browser-based investigation game with a custom Casefile Noir visual identity. You interrogate an AI that secretly plays a character: ask yes/no questions, build an evidence file, collect hints, and crack the case. Every solved case is archived locally — with a full transcript, evidence snapshot, stats dashboard, and agent rank progression.
+
+Built as a portfolio project demonstrating: AI-powered game mechanics, handcrafted CSS design system, zero-backend client architecture, and production-quality E2E coverage.
+
+- **Frontend:** React 19, TypeScript, Vite 7, custom CSS — this repo
+- **Backend API:** Java + Spring Boot + Gemini — [guessme-api](https://github.com/Daniel-Macedo-dev/guessme-api)
+
+---
+
+## Product features
+
+| Feature | Details |
+|---------|---------|
+| **Investigation game** | Ask yes/no questions; AI responds with structured YES/NO/MAYBE/UNKNOWN verdicts |
+| **Evidence notebook** | Live sidebar classifies each answer as Confirmado / Refutado / Inconclusivo |
+| **Hint system** | Request clues from the AI; collected as Inteligência in the evidence file |
+| **Category select** | Anime, Games, Filmes, Séries — changes what character domain the AI plays |
+| **Victory modal** | Closed-case report showing the identified character with the decisive question |
+| **Case archive** | Every solved case saved locally; replay full question/answer timeline with verdicts |
+| **Case export** | Export as JSON (reimportable) or SVG share card; import between browsers |
+| **Statistics dashboard** | Verdict distribution, evidence totals, category breakdown, best/longest case ranking |
+| **Agent rank** | Six-tier progression ladder (Recruta → Mestre do Dossiê) derived from solved cases |
+| **Achievements** | 11 badges across 5 categories (Casos, Eficiência, Evidências, Categorias, Arquivo) |
+| **Casefile Noir theme** | Handcrafted investigation/dossier visual identity — zero CSS framework |
+| **Fully local** | No auth, no login, no data collection — everything computed from `localStorage` |
+
+---
+
+## Screenshots
+
+Run this to generate screenshots of all routes at five viewport sizes:
+
+```bash
+# Terminal 1 — start the dev server
+npm run dev
+
+# Terminal 2 — capture screenshots (requires dev server on port 5173)
+npm run screenshots
+```
+
+Output is saved to `visual-screenshots/` which is gitignored. 35 PNGs are generated (7 routes × 5 viewports).
+
+### Routes captured
+
+| Filename prefix | Route | Seed |
+|----------------|-------|------|
+| `home` | `/` | — |
+| `how-it-works` | `/how-it-works` | — |
+| `game-empty` | `/game` | — (shows investigation interface) |
+| `game-history` | `/game` | 3 seeded cases (shows populated Histórico de Casos) |
+| `stats-empty` | `/stats` | — (empty state with Agent Dossier) |
+| `stats-progression` | `/stats` | 3 seeded cases (Analista rank, first achievements) |
+| `stats-rich` | `/stats` | 8 seeded cases across 4 categories (full dashboard) |
+
+### Viewports
+
+`desktop-1440` · `desktop-1366` · `tablet-768` · `mobile-390` · `mobile-360`
+
+---
+
+## Getting started
+
+### Prerequisites
+
+- Node.js ≥ 18
+- The backend API running locally at `http://localhost:8080` — see [guessme-api](https://github.com/Daniel-Macedo-dev/guessme-api) for setup (requires a Gemini API key)
+
+### Install and run
+
+```bash
+cd guessme
+npm install
+npm run dev       # http://localhost:5173
+```
+
+### Environment variable
+
+Create `guessme/.env.local` to point at your backend:
+
+```
+VITE_API_BASE_URL=http://localhost:8080
+```
+
+If not set, defaults to `http://localhost:8080`.
+
+### All commands
+
+```bash
+npm run dev            # start Vite dev server
+npm run build          # production build (outputs to dist/)
+npm run lint           # ESLint check (zero warnings)
+npm run e2e            # Playwright — 244 tests, no backend required
+npm run e2e:ui         # Playwright interactive UI mode
+npm run e2e:report     # open last Playwright HTML report
+npm run screenshots    # capture visual-screenshots/ (requires dev server)
+```
+
+---
+
+## Architecture
+
+```
+guessme/
+├── index.html                  # Document shell — title, favicon, OG, fonts
+├── src/
+│   ├── app/                    # Entry point (main.tsx, router setup)
+│   ├── components/             # Shared UI components
+│   │   ├── BrandMark.tsx       # SVG dossier seal — used in Navbar and Home hero
+│   │   ├── CaseStamp.tsx       # Status badge primitive (active/closed/archived/…)
+│   │   ├── DossierSectionHeader.tsx
+│   │   ├── EvidenceNotebook.tsx
+│   │   ├── VictoryModal.tsx    # Closed-case report modal
+│   │   ├── CaseReplayModal.tsx # Archived dossier transcript modal
+│   │   ├── AgentDossierPanel.tsx
+│   │   └── …
+│   ├── helpers/                # Pure derivation functions (no side effects)
+│   │   ├── deriveEvidence.ts   # verdict → Confirmado/Refutado/Inconclusivo
+│   │   ├── caseStats.ts        # CaseHistoryEntry[] → StatsData
+│   │   ├── progression.ts      # CaseHistoryEntry[] → PlayerProgression
+│   │   └── caseExport.ts
+│   ├── hooks/                  # React hooks
+│   │   ├── useGame.ts          # Game state machine (API calls, session, verdicts)
+│   │   └── useCaseHistory.ts   # localStorage read/write with dedup guard
+│   ├── pages/                  # Route-level views
+│   │   ├── Home.tsx            # Landing page with dossier hero
+│   │   ├── Game.tsx            # Investigation desk
+│   │   ├── HowItWorks.tsx      # Rules and protocol
+│   │   └── Stats.tsx           # Statistics dashboard + Agent Dossier
+│   ├── services/               # API adapter + localStorage adapter
+│   ├── styles/
+│   │   └── index.css           # All styles — single file, CSS custom properties
+│   └── types/                  # TypeScript interfaces
+│       ├── guessme.ts          # Game, message, verdict, history types
+│       ├── stats.ts            # StatsData, category breakdown
+│       └── progression.ts      # AgentRank, Achievement, PlayerProgression
+└── tests/
+    ├── e2e/                    # Nine Playwright spec files — 244 tests
+    └── visual/
+        └── screenshots.ts      # Multi-viewport screenshot capture script
+```
+
+### Key design decisions
+
+- **Zero CSS framework** — all styles in `index.css` with CSS custom properties. The Casefile Noir identity requires precise control of gradients, glows, and backdrop filters; utility classes would fight the design.
+- **Pure functional derivation** — stats, progression, and evidence are computed as pure functions of the history array. No secondary localStorage keys, no sync complexity, no reconciliation.
+- **API route isolation in tests** — all 244 Playwright tests mock API responses via `page.route()`. The suite runs with no backend and no Gemini key.
+- **Single localStorage key** — `guessme.caseHistory.v1` is the only persisted state. Clearing it resets history, stats, and progression simultaneously.
+
+---
 
 ## Visual identity — Casefile Noir
 
-GuessMe uses a custom investigation/dossier theme called **Casefile Noir**. It avoids generic dark-mode SaaS conventions in favor of a digital interrogation aesthetic:
+GuessMe uses a custom investigation/dossier design system called **Casefile Noir** (Dossiê Digital). It avoids generic dark-mode SaaS conventions in favor of a digital interrogation desk aesthetic.
 
 | Element | Treatment |
 |---------|-----------|
 | Background | Obsidian `#070b0f` with petrol-green radial glow (top-left) + navy depth (right) + 40 px investigation grid overlay |
 | Panels | Dark petrol-navy surface gradient with `backdrop-filter: blur(14px)` |
-| Typography (body) | **Inter** (loaded via Google Fonts) — clean, high-contrast |
+| Typography (body) | **Inter** — clean, high-contrast |
 | Typography (mono) | **JetBrains Mono** — case stamps, stat counters, badge labels |
 | Navbar | Green-glowing bottom border, evidence-green active pill, "DOSSIÊ DIGITAL" monospace sub-mark |
 | Accent (evidence) | `#34d399` — bright emerald green (Confirmado, active states, glow) |
@@ -18,11 +168,9 @@ GuessMe uses a custom investigation/dossier theme called **Casefile Noir**. It a
 | Accent (danger) | `#f87171` — soft red (Refutado, error states) |
 | Accent (mystery) | `#94a3b8` — slate (Inconclusivo, third step card) |
 | Verdict bubbles | 3 px inset `box-shadow` left accent (not border) — communicates verdict without relying solely on color |
-| Evidence sections | Same 3 px inset left accent pattern — green / red / amber |
 | Case stamp | `CASO ENCERRADO` in mono with text-shadow and border glow |
 | Buttons (primary) | Green border + glow shadow, intensifies on hover |
-| Home step cards | Each card has a 3 px colored left border: green (01 Abertura), amber (02 Interrogação), slate (03 Encerramento) |
-| Error/warning boxes | Inset left-accent matching verdict color (red=error, amber=warning) |
+| Step cards | 3 px colored left border: green (01), amber (02), slate (03) |
 
 ### Visual signature components
 
@@ -48,14 +196,14 @@ GuessMe uses a custom investigation/dossier theme called **Casefile Noir**. It a
 
 ### Design token reference
 
-All visual values live in `:root {}` in `src/styles/index.css`:
+All values live in `:root {}` in `src/styles/index.css`:
 
 ```
 --bg, --surface, --surface-raised, --surface-chat, --surface-menu
 --border, --border2, --border-glow
 --border-accent          /* green accent border: rgba(52,211,153,0.18) */
---accent-faint           /* green fill ghost: rgba(52,211,153,0.06) */
---surface-desk           /* backdrop tint: rgba(6,11,18,0.72) */
+--accent-faint           /* green fill ghost:   rgba(52,211,153,0.06) */
+--surface-desk           /* backdrop tint:      rgba(6,11,18,0.72)   */
 --text, --muted, --muted-dim
 --accent, --accent-dim, --accent-evidence, --danger, --mystery, --intel
 --shadow, --shadow-glow, --shadow-float
@@ -64,38 +212,22 @@ All visual values live in `:root {}` in `src/styles/index.css`:
 --t-fast, --t-base
 ```
 
-## Tech stack
-
-- React 19, TypeScript, Vite 7
-- React Router DOM (client-side routing)
-- Custom CSS only (`src/styles/index.css`) — no CSS framework
-- Inter + JetBrains Mono via Google Fonts (`index.html`)
+---
 
 ## Routes
 
 | Path | Page |
 |------|------|
-| `/` | Home — landing page |
-| `/game` | Game — investigation interface |
-| `/how-it-works` | Manual — rules and tips |
-| `/stats` | Personal Statistics — dashboard derived from local case history |
+| `/` | Home — landing page with dossier hero and how-to-play cards |
+| `/game` | Game — investigation desk with chat, evidence notebook, and case history |
+| `/how-it-works` | Manual — rules, tips, and protocol guide |
+| `/stats` | Statistics — dashboard + Agent Dossier progression panel |
 
-## Project structure
-
-```
-src/
-  components/   # Shared UI components
-  helpers/      # Pure derivation helpers (deriveEvidence, caseStats, caseExport, caseImport)
-  hooks/        # useGame, useCaseHistory
-  pages/        # Route-level pages (Home, Game, HowItWorks, Stats)
-  services/     # api.ts (fetch wrapper), guessme.ts (API calls), caseHistoryStorage.ts
-  styles/       # index.css (global styles)
-  types/        # TypeScript interfaces (guessme.ts, stats.ts, progression.ts)
-```
+---
 
 ## Agent Rank and Achievements
 
-The `/stats` page includes a **Dossiê do Agente** (Agent Dossier) panel that tracks your progression as an investigator. All progression is calculated locally from your case history — no login, no sync, no server.
+The `/stats` page includes a **Dossiê do Agente** panel tracking your progression as an investigator. All progression is calculated locally from case history — no login, no sync, no server.
 
 ### Agent Rank ladder
 
@@ -108,32 +240,19 @@ The `/stats` page includes a **Dossiê do Agente** (Agent Dossier) panel that tr
 | Arquivista | 15 |
 | Mestre do Dossiê | 25 |
 
-Rank advances automatically as you solve more cases. A progress bar shows how many cases remain to reach the next rank.
+Rank advances automatically as you solve more cases. A progress bar shows the distance to the next rank.
 
 ### Achievements
-
-Achievements are grouped into five categories:
 
 | Category | Achievements |
 |----------|-------------|
 | **Casos** | Primeiro Caso (1 case), Sequência Inicial (3 cases), Arquivo Robusto (10 cases) |
-| **Eficiência** | Investigação Cirúrgica (solve in ≤5 questions), Sem Ajuda (solve without hints), Caçador de Pistas (10 total hints) |
+| **Eficiência** | Investigação Cirúrgica (solve in ≤5 questions), Sem Ajuda (no hints), Caçador de Pistas (10 total hints) |
 | **Evidências** | Especialista em Confirmações (20 confirmed), Cético Profissional (20 refuted), Teoria Aberta (20 inconclusive) |
 | **Categorias** | Multiverso (3 different categories) |
 | **Arquivo** | Arquivista Local (5 cases stored) |
 
-Locked achievements show progress bars where applicable. Unlocked achievements receive the Casefile Noir accent treatment (green inset border + stamp).
-
-### How progression is calculated
-
-- Derived entirely from `localStorage` case history — the same data used by the stats dashboard
-- Imported cases count toward rank and achievements identically to played cases
-- No XP, no leveling algorithms — rank and achievements are pure functions of the history array
-- Clearing history resets all progression to Recruta / all locked
-
-### Privacy
-
-**All progression is derived locally from your case history.** Nothing is stored separately. Nothing is sent to a server. No account required.
+Locked achievements show progress bars where applicable. Unlocked achievements receive the Casefile Noir accent treatment (green inset border + stamp). Imported cases count identically to played cases.
 
 ### Where it lives
 
@@ -151,50 +270,38 @@ Locked achievements show progress bars where applicable. Unlocked achievements r
 
 ## Personal Statistics Dashboard
 
-Navigate to `/stats` (Estatísticas link in the navbar) to see a dashboard derived from your local case history. All data is computed in the browser from `localStorage` — no server call is made.
-
-### Metrics displayed
+The `/stats` page shows a dashboard derived entirely from local case history. No server call is made.
 
 | Section | What it shows |
 |---------|---------------|
-| Overview cards | Total cases solved, total questions asked, total hints used, average questions per case |
-| Verdict distribution | Bar chart of YES / NO / MAYBE / UNKNOWN responses across all cases |
-| Evidence collected | Bar chart of confirmed, refuted, inconclusive entries and hints |
-| Categories investigated | Bar chart sorted by case count, with avg questions per category |
+| Overview cards | Total cases, total questions, total hints, average questions per case |
+| Verdict distribution | Bar chart of YES / NO / MAYBE / UNKNOWN across all cases |
+| Evidence collected | Bar chart of confirmed, refuted, inconclusive, and hints |
+| Categories investigated | Bar chart sorted by case count, with average questions per category |
 | Cases of note | "Mais eficiente" (fewest questions) and "Mais longo" (most questions) |
 | Recent activity | Last 5 cases sorted by date, with category badge, date, and question count |
-
-### Empty state
-
-When no cases have been solved yet, the dashboard shows an empty state with a direct link to `/game`.
-
-### Privacy
-
-**All statistics are derived entirely in your browser.** No data is collected or transmitted. Clearing `localStorage` removes the history and returns the dashboard to the empty state.
 
 ---
 
 ## Case Archive Portability
 
-Solved cases can be exported, shared, and imported between browsers — all locally, without any server or login.
+Solved cases can be exported, shared, and imported between browsers — all locally, no server required.
 
 ### Copy summary
 
-Open a solved case with **Rever caso**, then click **Copiar resumo**. A Markdown-formatted summary is copied to your clipboard, ready to paste into any document or chat.
-
-The summary includes: character name, work, category, question/hint counts, verdict statistics, winning question, and all evidence entries.
+Open a solved case with **Rever caso** → **Copiar resumo**. A Markdown-formatted summary is copied to clipboard (character, work, category, question/hint counts, verdict stats, winning question, all evidence entries).
 
 ### Download JSON
 
-Click **Baixar JSON** in the replay modal. A versioned JSON file is downloaded (schema below). The file can be imported on any other device or browser.
+**Baixar JSON** in the replay modal downloads a versioned JSON file that can be imported on any other browser.
 
 ### Import JSON
 
-Click **Importar caso** in the Histórico de Casos panel and select a `.json` file previously exported from GuessMe. The case is validated and added to your history. If the case ID already exists, a new ID is assigned automatically — your existing cases are never silently overwritten.
+**Importar caso** in the Histórico de Casos panel accepts a `.json` file previously exported from GuessMe. If the case ID already exists, a new ID is assigned — existing cases are never silently overwritten.
 
 ### Download share card
 
-Click **Baixar card** in the replay modal. An SVG card (520×300 px) is downloaded with the Casefile Noir visual identity — character name, stats, evidence counts, and the CASO ENCERRADO stamp. Open in any browser or SVG viewer.
+**Baixar card** downloads an SVG card (520×300 px) with the Casefile Noir identity — character name, stats, evidence counts, and the CASO ENCERRADO stamp. Opens in any browser or SVG viewer.
 
 ### JSON export schema
 
@@ -219,75 +326,27 @@ Click **Baixar card** in the replay modal. An SVG card (520×300 px) is download
 }
 ```
 
-### Privacy
-
-**All export, import, and share operations happen entirely in your browser.** No files are uploaded anywhere. No data is sent to a server. Exported JSON files live only on your local device.
-
 ---
 
 ## Case History
 
-The game page shows a **Histórico de Casos** section below the investigation interface. Solved investigations are automatically archived locally so the player can review or replay any past case.
+The `/game` page shows a **Histórico de Casos** panel below the investigation interface. Solved cases are automatically archived locally.
 
-### What is stored
+Each saved case contains: character name, work, category, full message sequence, evidence snapshot (confirmed/refuted/inconclusive/hints), verdict stats, winning question, question/hint counts, and timestamp. Storage is capped at 25 most recent entries.
 
-Each solved case saves:
+The replay modal is keyboard-dismissible (Escape). It does not call the backend or modify the current game session.
 
-- Character name, work, and category
-- Full message sequence (question/answer timeline)
-- Evidence snapshot (confirmed, refuted, inconclusive entries + hints)
-- Verdict statistics (YES / NO / MAYBE counts)
-- Winning question and question/hint counts
-- Timestamp of when the case was solved
-
-Storage is limited to 25 most recent entries (oldest are dropped when the cap is reached).
-
-### Privacy
-
-**History is stored only in the browser's `localStorage`.** Nothing is sent to a server. Clearing browser data or clicking "Limpar" removes all stored cases.
-
-### How to clear history
-
-Click the **Limpar** button in the Histórico de Casos panel on the `/game` page to remove all archived cases.
-
-### Replay behavior
-
-Each history card has a **Rever caso** button that opens a read-only replay modal showing:
-
-- Solved character name, work, and category
-- Winning question (the question that solved the case)
-- Verdict statistics summary
-- Full question/answer timeline with verdict badge colors (green = Sim, red = Não, amber = Talvez)
-- Evidence snapshot (Confirmado / Refutado / Inconclusivo / Inteligência)
-
-The replay modal is keyboard-dismissible (Escape key). It does not call the backend and does not modify the current game session.
-
-### Where it lives
-
-| File | Role |
-|------|------|
-| `src/types/guessme.ts` | `CaseHistoryEntry`, `CaseEvidence`, `VerdictStats` types |
-| `src/services/caseHistoryStorage.ts` | `getCaseHistory`, `saveCaseHistoryEntry`, `deleteCaseHistoryEntry`, `clearCaseHistory` — localStorage adapter with JSON guard and 25-entry cap |
-| `src/hooks/useCaseHistory.ts` | `saveOnVictory`, `deleteEntry`, `clearAll` — state and side-effect layer |
-| `src/pages/Game.tsx` | Calls `saveOnVictory` on victory with duplicate-save guard |
-| `src/components/CaseHistoryPanel.tsx` | List shell, empty state, clear button |
-| `src/components/CaseHistoryCard.tsx` | Individual archived case card with stats and actions |
-| `src/components/CaseReplayModal.tsx` | Full read-only replay overlay |
+---
 
 ## Evidence Notebook
 
-The game page shows a live **Caderno de Evidências** (Evidence Notebook) alongside the investigation chat.
+The `/game` page shows a live **Caderno de Evidências** alongside the chat:
 
-### What it does
-
-- Classifies each AI answer as **Confirmado**, **Refutado**, or **Inconclusivo** using the structured `verdict` field from the backend, with text-prefix fallback for legacy responses
-- Pairs each classified answer with the question that preceded it
+- Classifies each AI answer as **Confirmado**, **Refutado**, or **Inconclusivo** using the structured `verdict` field, with text-prefix fallback for legacy responses
 - Collects **Inteligência** entries from hint messages
-- Shows a **Caso Encerrado** summary block when the player wins
+- Shows a **Caso Encerrado** summary block on win
 
 ### Structured verdict contract
-
-The backend returns a `verdict` field on every `/api/game/ask` response:
 
 | Verdict | Evidence kind | Typical `answer` text |
 |---------|--------------|----------------------|
@@ -296,108 +355,60 @@ The backend returns a `verdict` field on every `/api/game/ask` response:
 | `MAYBE` | Inconclusivo | Starts with "Talvez" |
 | `UNKNOWN` | Not classified | Errors, limits, hints, boot messages |
 
-Classification priority:
-1. **`message.verdict`** — used when present (structured backend verdict)
-2. **Text prefix** — fallback for old/legacy messages without a `verdict` field
-
-Hint responses always carry `verdict: UNKNOWN` and are collected as intel, never as Sim/Não/Talvez evidence.
-
-### Where it lives
-
-| File | Role |
-|------|------|
-| `src/types/guessme.ts` | `AnswerVerdict` type; `AIResponse.verdict`; `Message.verdict` |
-| `src/hooks/useGame.ts` | Propagates `verdict` from API response into each `Message` |
-| `src/helpers/deriveEvidence.ts` | `classifyByVerdict()` (primary) + `classifyByText()` (fallback) |
-| `src/components/MessageBubble.tsx` | `resolveAnswerState()` — verdict-first, text fallback |
-| `src/components/EvidenceNotebook.tsx` | Renders sections, entries, empty state, and solved summary |
-| `src/pages/Game.tsx` | Calls `deriveEvidence`, passes verdict to `<MessageBubble>` and `<EvidenceNotebook>` |
+Classification priority: `message.verdict` (structured backend field) → text prefix (legacy fallback).
 
 ### Layout behavior
 
-- **≥ 901 px:** two-column grid — chat (flex) + notebook (272 px fixed) side-by-side; notebook is sticky to the top
+- **≥ 901 px:** two-column grid — chat (flex) + notebook (272 px fixed) side-by-side; notebook sticky
 - **≤ 900 px:** single column — notebook collapses below the chat
 
-### Limitations
-
-- UNKNOWN verdicts (ambiguous Gemini answers, errors, limits) are not classified and do not appear in the notebook — this is intentional; only YES/NO/MAYBE are evidence.
-- Text-prefix fallback works for messages stored in localStorage before the verdict contract was introduced.
-- Notebook state is derived from `messages` in memory; it resets on page refresh if localStorage is cleared.
-
-## Environment variables
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `VITE_API_BASE_URL` | Backend base URL (baked at build time) | `http://localhost:8080` |
-
-Create `.env.local` for local development:
-```
-VITE_API_BASE_URL=http://localhost:8080
-```
-
-## Local development
-
-```bash
-npm install
-npm run dev       # http://localhost:5173
-npm run build     # production build
-npm run lint      # ESLint check
-```
+---
 
 ## Backend error handling
-
-The frontend classifies backend `answer` strings into four categories:
 
 | Category | Trigger prefix | UI treatment |
 |----------|---------------|--------------|
 | `game` | (normal AI response) | Chat bubble |
 | `stale-session` | `Sessão não encontrada` | Error box + "Novo caso" button |
-| `system-error` | `Config inválida`, `Erro da API Gemini`, `Erro inesperado`, `Resposta vazia`, `Resposta inválida`, `Pergunta inválida` | Error box (red) |
+| `system-error` | `Config inválida`, `Erro da API Gemini`, `Erro inesperado`, others | Error box (red) |
 | `user-limit` | `Aguarde`, `Limite`, `Pergunta muito longa` | Warning box (amber) |
 
-`user-limit` responses decrement the question counter so the rejected question is not counted.
+`user-limit` responses do not increment the question counter.
 
 ## Backend session limits
-
-The backend enforces per-session limits. The frontend handles them transparently via `user-limit` warnings:
 
 - **Cooldown:** 3 s between requests (ask and hint share the timer)
 - **Max questions:** 50 per session
 - **Max hints:** 10 per session
-- **Max question length:** 300 characters (also enforced in UI with counter)
+- **Max question length:** 300 characters (also enforced in UI with live counter)
 - **Session TTL:** 60 minutes of inactivity
 
-## E2E tests
+---
 
-Playwright 1.61 covers **244 tests** across nine spec files. All API calls are intercepted with `page.route()` — no backend required. History, stats, and progression tests use `localStorage` seeding via `addInitScript`.
+## E2E test coverage
 
-### Setup
+Playwright 1.61 — **244 tests** across nine spec files. All API calls are intercepted via `page.route()`. History, stats, and progression tests use `localStorage` seeding via `addInitScript`. No backend or Gemini key required.
 
 ```bash
-npx playwright install --with-deps chromium   # one-time
-npm run e2e           # headless run (starts Vite dev server automatically)
+npx playwright install --with-deps chromium   # one-time setup
+npm run e2e           # headless (auto-starts dev server)
 npm run e2e:ui        # interactive UI mode
-npm run e2e:report    # open last HTML report
+npm run e2e:report    # open HTML report
 ```
 
-### Coverage
+| Spec | Coverage |
+|------|----------|
+| `routes.spec.ts` | Route rendering, navigation links, SPA deep links, unknown route redirect |
+| `game-flow.spec.ts` | Boot, category select, question input (empty/overlong/Enter), answer bubbles, hint flow, victory modal |
+| `error-states.spec.ts` | Backend unavailable, cooldown, max questions/hints, stale session, Gemini error |
+| `mobile.spec.ts` | Overflow-free layout at 390 px and 360 px |
+| `notebook.spec.ts` | Notebook presence, empty/confirmed/refuted/inconclusive/intel states, verdict classification, mobile |
+| `history.spec.ts` | Empty state, seeded cards, victory save, duplicate prevention, reload persistence, replay modal, delete/clear, mobile |
+| `portability.spec.ts` | Copy/JSON/SVG export; import valid/invalid/duplicate JSON; mobile overflow |
+| `stats.spec.ts` | Empty state, single/multi case totals, verdict/evidence/category panels, rankings, navigation, mobile |
+| `progression.spec.ts` | Recruta empty state, rank ladder, achievement unlocks, max rank, imported cases, mobile |
 
-| Spec | What it covers |
-|------|----------------|
-| `routes.spec.ts` | Home, HowItWorks, Game render; navigation links; SPA direct URL access; unknown route redirect |
-| `game-flow.spec.ts` | Boot; category select; question input (empty, overlong, Enter, clear); Sim/Não/Talvez answer bubbles; hint flow; victory modal |
-| `error-states.spec.ts` | Backend unavailable; cooldown; max questions; max hints; stale session; Gemini system error |
-| `mobile.spec.ts` | Overflow-free layout at 390 px and 360 px; key controls visible on mobile |
-| `notebook.spec.ts` | Notebook presence; empty state; confirmed/refuted/inconclusive entries; intel hints; solved summary; verdict-based YES/NO/MAYBE classification; legacy text fallback; mobile overflow |
-| `history.spec.ts` | History empty state; seeded cards (name/work/counts); victory saves case; duplicate-save prevention; reload persistence; replay modal (timeline, verdict badges, evidence snapshot, winning question, keyboard/button close); delete one case; clear all; corrupted storage fallback; game flow not broken; mobile layout at 390 px |
-| `portability.spec.ts` | Replay export buttons visible/keyboard reachable; copy summary (clipboard, text content); JSON download (filename, schemaVersion, fields); SVG share card (filename, CASO ENCERRADO, branding); import valid JSON (wrapped + bare, card appears, replay works, localStorage persistence); import invalid JSON (parse error, missing fields, no card); duplicate import prevention (renamed message, two cards); mobile 390 px and 360 px (no overflow) |
-| `stats.spec.ts` | Empty state (route, message, CTA, no dashboard); single case totals (cases/questions/hints/avg); multiple cases (totals, verdict panel, category bars, evidence panel, ranking cards — best and longest, recent activity list); navigation (Estatísticas link, active state, existing routes unaffected); import compatibility (missing fields, zero questions, corrupted storage); mobile 390 px and 360 px (no overflow) |
-| `progression.spec.ts` | Empty state (Recruta rank, all locked, progress bar 0/1); single case (Analista, Primeiro Caso unlocked); efficiency achievements (Cirúrgica, Sem Ajuda, per-condition); category achievement (Multiverso 3-category unlock); rank ladder (Investigador, Detetive, Mestre); max rank (no progress bar, maxed label); imported cases count; mobile 390 px and 360 px (no overflow) |
-
-### Troubleshooting
-
-- **Port 5173 already in use:** the `webServer` reuses an existing server in non-CI runs; otherwise kill the process and retry.
-- **Flaky on slow CI:** each test has Playwright's default 5 s per assertion; increase via `expect.timeout` in `playwright.config.ts` if needed.
+---
 
 ## QA smoke checklist
 
@@ -523,3 +534,11 @@ npm run e2e:report    # open last HTML report
 - [ ] History panel and cards render without horizontal overflow on 390 px
 - [ ] Export buttons in replay modal are visible and usable on 390 px without overflow
 - [ ] Import button in history panel is visible and usable on 390 px
+
+---
+
+## Privacy and secrets
+
+- **No data collection.** Everything — case history, stats, progression — is computed from a single `localStorage` key (`guessme.caseHistory.v1`). Nothing is sent to a server by this frontend.
+- **No secrets committed.** The only configurable value (`VITE_API_BASE_URL`) is a URL, not a key. The Gemini API key lives exclusively in the backend's environment. `.env.local` is gitignored.
+- **Clearing `localStorage`** resets all data: history, stats, rank, achievements.
