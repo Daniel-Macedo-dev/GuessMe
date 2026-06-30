@@ -4,11 +4,13 @@ import Game from "../pages/Game";
 import HowItWorks from "../pages/HowItWorks";
 import Stats from "../pages/Stats";
 import OfflineBanner from "../components/OfflineBanner";
+import InstallAppPrompt from "../components/InstallAppPrompt";
 
 export default function App() {
   return (
     <BrowserRouter>
       <OfflineBanner />
+      <InstallAppPrompt />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/game" element={<Game />} />
