@@ -11,7 +11,8 @@
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
     "e2e:report": "playwright show-report",
-    "screenshots": "npx tsx tests/visual/screenshots.ts"
+    "screenshots": "npx tsx tests/visual/screenshots.ts",
+    "icons": "npx tsx scripts/generate-icons.ts"
   },
   "dependencies": {
     "react": "^19.2.0",

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- GuessMe — investigation mark / dossier seal, large-format app icon -->
+  <!-- Obsidian background -->
+  <rect width="512" height="512" rx="96" fill="#070b0f"/>
+  <!-- Dossier seal outer ring -->
+  <circle cx="256" cy="256" r="224" fill="none" stroke="#34d399" stroke-width="8" stroke-opacity="0.35"/>
+  <!-- Magnifying glass: lens -->
+  <circle cx="208" cy="208" r="104" fill="none" stroke="#34d399" stroke-width="36"/>
+  <!-- Magnifying glass: handle -->
+  <line x1="288" y1="288" x2="392" y2="392" stroke="#34d399" stroke-width="36" stroke-linecap="round"/>
+</svg>
