@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import BrandMark from "./BrandMark";
 
 type Props = {
   onRestart?: () => void;
@@ -12,8 +13,11 @@ export default function Navbar({ onRestart, disabled = false }: Props) {
     <header className="topbar">
       <div className="topbarInner">
         <Link className="brand" to="/">
-          <span className="brandName">GuessMe</span>
-          <span className="brandSub" aria-hidden="true">Dossiê Digital</span>
+          <BrandMark size={28} className="brandMarkIcon" />
+          <span className="brandText">
+            <span className="brandName">GuessMe</span>
+            <span className="brandSub" aria-hidden="true">Dossiê Digital</span>
+          </span>
         </Link>
 
         <nav className="nav">
