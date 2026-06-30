@@ -8,16 +8,22 @@ import StatsCategoryPanel from "../components/StatsCategoryPanel";
 import StatsEvidencePanel from "../components/StatsEvidencePanel";
 import StatsCaseRanking from "../components/StatsCaseRanking";
 import StatsRecentActivity from "../components/StatsRecentActivity";
+import AgentDossierPanel from "../components/AgentDossierPanel";
 import { getCaseHistory } from "../services/caseHistoryStorage";
 import { deriveCaseStats } from "../helpers/caseStats";
+import { derivePlayerProgression } from "../helpers/progression";
 
 export default function Stats() {
   const stats = useMemo(() => {
     const history = getCaseHistory();
-    return { history, data: deriveCaseStats(history) };
+    return {
+      history,
+      data: deriveCaseStats(history),
+      progression: derivePlayerProgression(history),
+    };
   }, []);
 
-  const { history, data } = stats;
+  const { history, data, progression } = stats;
 
   const overviewMetrics = [
     {
@@ -59,9 +65,13 @@ export default function Stats() {
         </div>
 
         {history.length === 0 ? (
-          <StatsEmptyState />
+          <>
+            <AgentDossierPanel progression={progression} />
+            <StatsEmptyState />
+          </>
         ) : (
           <div className="statsDashboard" data-testid="stats-dashboard">
+            <AgentDossierPanel progression={progression} />
             <StatsOverviewGrid metrics={overviewMetrics} />
 
             <div className="statsPanelGrid">
