@@ -2016,3 +2016,236 @@ a:focus-visible{
   .statsOverviewGrid{ grid-template-columns: 1fr; }
   .statsRankGrid{ grid-template-columns: 1fr; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   AGENT DOSSIER / PROGRESSION
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Agent rank card ── */
+.agentDossierPanel{
+  margin-bottom: 0;
+}
+
+.agentRankCard{
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 0 14px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+
+.agentRankStamp{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 2px solid rgba(52,211,153,0.44);
+  border-radius: 4px;
+  padding: 8px 14px;
+  box-shadow: 0 0 20px rgba(52,211,153,0.14), inset 0 0 10px rgba(52,211,153,0.05);
+  text-shadow: 0 0 16px rgba(52,211,153,0.40);
+  flex-shrink: 0;
+  min-width: 110px;
+  text-align: center;
+}
+
+.agentRankMeta{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.agentRankLabel{
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.agentRankTitle{
+  margin: 0;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.2px;
+}
+
+.agentRankBadgeCount{
+  margin: 0;
+}
+
+/* ── Rank progress bar ── */
+.rankProgressWrap{
+  margin-bottom: 14px;
+}
+
+.rankProgressMeta{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.rankProgressLabel{ margin: 0; }
+.rankProgressCount{ margin: 0; flex-shrink: 0; }
+
+.rankProgressTrack{
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+
+.rankProgressFill{
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+  opacity: 0.80;
+  transition: width 0.4s ease;
+}
+
+.agentRankMaxed{
+  margin: 0 0 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.75;
+}
+
+/* ── Achievement grid ── */
+.achievementGrid{
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.achievementGroup{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.achievementGroupTitle{
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.achievementList{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+}
+
+/* ── Achievement card ── */
+.achievementCard{
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.018);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: relative;
+  overflow: hidden;
+  opacity: 0.55;
+  transition: opacity var(--t-base), border-color var(--t-base), background var(--t-base);
+}
+
+.achievementCard--unlocked{
+  opacity: 1;
+  border-color: rgba(52,211,153,0.26);
+  background: rgba(52,211,153,0.05);
+  box-shadow: inset 3px 0 0 rgba(52,211,153,0.50);
+}
+
+.achievementCardHeader{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.achievementStamp{
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--muted-dim);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.achievementStamp--unlocked{
+  color: var(--accent);
+}
+
+.achievementTitle{
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.1px;
+  line-height: 1.2;
+}
+
+.achievementDesc{
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* ── Achievement progress ── */
+.achievementProgressWrap{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.achievementProgressTrack{
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+
+.achievementProgressFill{
+  height: 100%;
+  border-radius: 999px;
+  background: var(--muted-dim);
+  transition: width 0.35s ease;
+}
+
+.achievementProgressCount{
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px){
+  .agentRankCard{ flex-direction: column; align-items: flex-start; gap: 12px; }
+  .agentRankStamp{ min-width: auto; }
+  .achievementList{ grid-template-columns: 1fr; }
+}
+@media (max-width: 480px){
+  .agentRankTitle{ font-size: 17px; }
+  .agentRankStamp{ font-size: 11px; padding: 6px 10px; letter-spacing: 0.16em; }
+}
+@media (max-width: 360px){
+  .achievementList{ grid-template-columns: 1fr; }
+  .agentRankCard{ gap: 10px; }
+}
+@media (prefers-reduced-motion: reduce){
+  .rankProgressFill, .achievementProgressFill{ transition: none; }
+}
