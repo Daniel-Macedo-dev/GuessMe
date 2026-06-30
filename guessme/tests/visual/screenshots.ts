@@ -129,7 +129,9 @@ type Route = {
   seed?: string;
 };
 
-const ROUTES: Route[] = [
+type OfflineRoute = Route & { simulateOffline?: boolean };
+
+const ROUTES: OfflineRoute[] = [
   // Static pages
   { name: "home",         path: "/" },
   { name: "how-it-works", path: "/how-it-works" },
@@ -148,6 +150,12 @@ const ROUTES: Route[] = [
 
   // Stats — eight cases across four categories (fully-populated dashboard)
   { name: "stats-rich",   path: "/stats", seed: SEED_8 },
+
+  // PWA offline state — home with offline banner visible
+  { name: "offline-banner", path: "/", simulateOffline: true },
+
+  // Standalone offline fallback page
+  { name: "offline-page", path: "/offline.html" },
 ];
 
 async function run() {
@@ -168,6 +176,12 @@ async function run() {
 
       await page.goto(`http://localhost:5173${route.path}`, { waitUntil: "networkidle" });
       await page.waitForTimeout(500);
+
+      if (route.simulateOffline) {
+        await page.context().setOffline(true);
+        await page.evaluate(() => window.dispatchEvent(new Event("offline")));
+        await page.waitForTimeout(200);
+      }
 
       const file = path.join(OUT, `${vp.name}--${route.name}.png`);
       await page.screenshot({ path: file, fullPage: true });
