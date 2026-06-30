@@ -42,11 +42,11 @@ npm run dev
 npm run screenshots
 ```
 
-Output is saved to `visual-screenshots/` which is gitignored. 35 PNGs are generated (7 routes × 5 viewports).
+Output is saved to `visual-screenshots/` which is gitignored. 45 PNGs are generated (9 routes × 5 viewports).
 
 ### Routes captured
 
-| Filename prefix | Route | Seed |
+| Filename prefix | Route | Seed / notes |
 |----------------|-------|------|
 | `home` | `/` | — |
 | `how-it-works` | `/how-it-works` | — |
@@ -55,6 +55,8 @@ Output is saved to `visual-screenshots/` which is gitignored. 35 PNGs are genera
 | `stats-empty` | `/stats` | — (empty state with Agent Dossier) |
 | `stats-progression` | `/stats` | 3 seeded cases (Analista rank, first achievements) |
 | `stats-rich` | `/stats` | 8 seeded cases across 4 categories (full dashboard) |
+| `offline-banner` | `/` | Network set offline — shows amber offline status banner |
+| `offline-page` | `/offline.html` | Standalone offline fallback shell |
 
 ### Viewports
 
@@ -92,11 +94,13 @@ If not set, defaults to `http://localhost:8080`.
 ```bash
 npm run dev            # start Vite dev server
 npm run build          # production build (outputs to dist/)
+npm run preview        # serve the production build locally (use for PWA testing)
 npm run lint           # ESLint check (zero warnings)
-npm run e2e            # Playwright — 244 tests, no backend required
+npm run e2e            # Playwright — 265 tests, no backend required
 npm run e2e:ui         # Playwright interactive UI mode
 npm run e2e:report     # open last Playwright HTML report
 npm run screenshots    # capture visual-screenshots/ (requires dev server)
+npm run icons          # regenerate PWA icon PNGs from public/icons/icon.svg
 ```
 
 ---
@@ -116,6 +120,8 @@ guessme/
 │   │   ├── VictoryModal.tsx    # Closed-case report modal
 │   │   ├── CaseReplayModal.tsx # Archived dossier transcript modal
 │   │   ├── AgentDossierPanel.tsx
+│   │   ├── OfflineBanner.tsx   # Fixed amber banner when navigator.onLine is false
+│   │   ├── InstallAppPrompt.tsx # Slide-up install card on beforeinstallprompt
 │   │   └── …
 │   ├── helpers/                # Pure derivation functions (no side effects)
 │   │   ├── deriveEvidence.ts   # verdict → Confirmado/Refutado/Inconclusivo
@@ -137,8 +143,19 @@ guessme/
 │       ├── guessme.ts          # Game, message, verdict, history types
 │       ├── stats.ts            # StatsData, category breakdown
 │       └── progression.ts      # AgentRank, Achievement, PlayerProgression
+├── public/
+│   ├── favicon.svg             # Casefile Noir icon — magnifying glass on obsidian
+│   ├── manifest.webmanifest    # Static manifest served in dev (plugin generates one for prod)
+│   ├── offline.html            # Standalone offline fallback shell (no external deps)
+│   └── icons/
+│       ├── icon.svg            # Source SVG at 512×512 coordinate space
+│       ├── icon-192.png        # PWA icon 192×192
+│       ├── icon-512.png        # PWA icon 512×512
+│       └── maskable-512.png    # PWA maskable icon (square bg, full safe-zone bleed)
+├── scripts/
+│   └── generate-icons.ts       # Playwright-based PNG generation (zero new deps)
 └── tests/
-    ├── e2e/                    # Nine Playwright spec files — 244 tests
+    ├── e2e/                    # Ten Playwright spec files — 265 tests
     └── visual/
         └── screenshots.ts      # Multi-viewport screenshot capture script
 ```
@@ -147,8 +164,9 @@ guessme/
 
 - **Zero CSS framework** — all styles in `index.css` with CSS custom properties. The Casefile Noir identity requires precise control of gradients, glows, and backdrop filters; utility classes would fight the design.
 - **Pure functional derivation** — stats, progression, and evidence are computed as pure functions of the history array. No secondary localStorage keys, no sync complexity, no reconciliation.
-- **API route isolation in tests** — all 244 Playwright tests mock API responses via `page.route()`. The suite runs with no backend and no Gemini key.
+- **API route isolation in tests** — all 265 Playwright tests mock API responses via `page.route()`. The suite runs with no backend and no Gemini key.
 - **Single localStorage key** — `guessme.caseHistory.v1` is the only persisted state. Clearing it resets history, stats, and progression simultaneously.
+- **`vite-plugin-pwa` over manual SW** — Vite's hashed asset filenames (`index-BnWCv19D.js`) can't be reliably listed in a hand-written service worker. The plugin generates a Workbox-based SW from the actual build manifest, guaranteeing correct precaching. SW is disabled in dev (`devOptions: { enabled: false }`) so Playwright's `page.route()` interceptors work without SW interference.
 
 ---
 
@@ -387,7 +405,7 @@ Classification priority: `message.verdict` (structured backend field) → text p
 
 ## E2E test coverage
 
-Playwright 1.61 — **244 tests** across nine spec files. All API calls are intercepted via `page.route()`. History, stats, and progression tests use `localStorage` seeding via `addInitScript`. No backend or Gemini key required.
+Playwright 1.61 — **265 tests** across ten spec files. All API calls are intercepted via `page.route()`. History, stats, and progression tests use `localStorage` seeding via `addInitScript`. No backend or Gemini key required.
 
 ```bash
 npx playwright install --with-deps chromium   # one-time setup
@@ -407,6 +425,63 @@ npm run e2e:report    # open HTML report
 | `portability.spec.ts` | Copy/JSON/SVG export; import valid/invalid/duplicate JSON; mobile overflow |
 | `stats.spec.ts` | Empty state, single/multi case totals, verdict/evidence/category panels, rankings, navigation, mobile |
 | `progression.spec.ts` | Recruta empty state, rank ladder, achievement unlocks, max rank, imported cases, mobile |
+| `pwa.spec.ts` | Manifest link, theme-color, apple-touch-icon, OG title, description, icon assets, offline fallback served, offline banner show/hide/role/overflow, install prompt show/dismiss/keyboard/role/overflow |
+
+---
+
+## PWA — installable app
+
+GuessMe ships as a Progressive Web App. On browsers that support installation (Chrome, Edge, Samsung Internet) a native install prompt is available. On Safari/iOS, "Add to Home Screen" from the share menu installs it.
+
+### Manifest and icons
+
+| File | Purpose |
+|------|---------|
+| `public/manifest.webmanifest` | Static manifest — served by Vite dev server; `vite-plugin-pwa` also emits one during `build` |
+| `public/icons/icon-192.png` | Required minimum size for Android install |
+| `public/icons/icon-512.png` | Large icon for splash screens and app drawers |
+| `public/icons/maskable-512.png` | Maskable variant — extends to screen edges on adaptive icon hosts |
+
+Regenerate the PNGs after editing `public/icons/icon.svg`:
+
+```bash
+npm run icons   # uses Playwright (already installed) — zero new dependencies
+```
+
+### In-app PWA UI
+
+| Component | Behaviour |
+|-----------|-----------|
+| `OfflineBanner` | Fixed amber bar at top of viewport. Appears when `navigator.onLine` is false or `offline` event fires. Disappears on `online`. `role="status"` for screen readers. |
+| `InstallAppPrompt` | Slide-up card at bottom-right. Appears on `beforeinstallprompt`. Dismiss button (`data-testid="install-prompt-dismiss"`) hides it for the session. |
+
+### Offline behaviour
+
+| Feature | Offline available? |
+|---------|-------------------|
+| Case history, replay, export | Yes — served from the precache or localStorage |
+| Statistics, progression, achievements | Yes — computed from localStorage |
+| Start new investigation / ask question / hint | No — requires connection to the backend API |
+| AI responses | No — requires Gemini API via backend |
+
+The offline fallback page (`public/offline.html`) explains what works locally and prompts the user to retry when back online. The service worker serves it as the navigation fallback for any unresolvable SPA route.
+
+### Testing the production PWA
+
+The service worker and full offline precache only activate in the production build:
+
+```bash
+npm run build     # build to dist/
+npm run preview   # serve dist/ on http://localhost:4173
+```
+
+Open DevTools → Application → Service Workers to confirm the SW is registered. Under Cache Storage you should see the Workbox precache with all hashed JS/CSS assets.
+
+To test the offline fallback: in DevTools → Network, tick "Offline", then navigate to a new route.
+
+### Verify manifest in DevTools
+
+Application → Manifest — should show the app name, colors, display mode (`standalone`), and all three icons.
 
 ---
 
@@ -534,6 +609,22 @@ npm run e2e:report    # open HTML report
 - [ ] History panel and cards render without horizontal overflow on 390 px
 - [ ] Export buttons in replay modal are visible and usable on 390 px without overflow
 - [ ] Import button in history panel is visible and usable on 390 px
+
+### PWA and offline
+- [ ] `<link rel="manifest">` is present in document `<head>`
+- [ ] `<meta name="theme-color">` is set to `#070b0f`
+- [ ] `/manifest.webmanifest` returns 200 with correct `name`, `icons`, and `display`
+- [ ] Icons at `/icons/icon-192.png`, `/icons/icon-512.png`, `/icons/maskable-512.png` return 200
+- [ ] `/offline.html` returns 200 and contains "Você está offline"
+- [ ] Offline banner is **not** visible when online
+- [ ] Offline banner **appears** when browser goes offline (amber bar, top of screen)
+- [ ] Offline banner **disappears** when browser returns online
+- [ ] Offline banner does not cause horizontal scroll at 390 px
+- [ ] Install prompt is **not** visible without `beforeinstallprompt` event
+- [ ] Install prompt appears after `beforeinstallprompt` fires and contains "Instalar GuessMe"
+- [ ] Dismiss button hides the install prompt
+- [ ] Production build (`npm run build && npm run preview`): service worker registers in DevTools
+- [ ] In DevTools Offline mode: navigation to `/` serves the cached shell; navigation to `/offline.html` serves the fallback
 
 ---
 
