@@ -2662,3 +2662,106 @@ a:focus-visible,
   .btn-primary:hover{ box-shadow: none; }
   .caseStamp--pulse::before{ animation: none; }
 }
+
+/* ── Offline banner ── */
+.offlineBanner{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+  background: rgba(251,191,36,0.12);
+  border-bottom: 1px solid rgba(251,191,36,0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 20px;
+  font-size: 13px;
+  color: #fbbf24;
+  animation: fadeIn 200ms ease-out;
+}
+.offlineBannerIcon{
+  font-size: 9px;
+  opacity: 0.75;
+  flex-shrink: 0;
+}
+.offlineBannerText strong{
+  font-weight: 700;
+}
+
+/* ── Install prompt ── */
+.installPrompt{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1050;
+  max-width: 320px;
+  background: rgba(16,24,36,0.96);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-float);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: slideUp 220ms ease-out;
+}
+@keyframes slideUp{
+  from{ opacity:0; transform:translateY(12px); }
+  to{   opacity:1; transform:translateY(0);     }
+}
+.installPromptLabel{
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  opacity: 0.55;
+  text-transform: uppercase;
+}
+.installPromptBody{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.installPromptText{
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+}
+.installPromptText span{
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.installPromptActions{
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.installPromptDismiss{
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  transition: color var(--t-base);
+}
+.installPromptDismiss:hover{ color: var(--text); }
+.installPromptInstall{
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+}
+@media (max-width: 480px){
+  .installPrompt{ left: 12px; right: 12px; bottom: 12px; max-width: none; }
+  .offlineBanner{ font-size: 12px; }
+}
