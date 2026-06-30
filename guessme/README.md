@@ -65,8 +65,64 @@ src/
   pages/        # Route-level pages (Home, Game, HowItWorks, Stats)
   services/     # api.ts (fetch wrapper), guessme.ts (API calls), caseHistoryStorage.ts
   styles/       # index.css (global styles)
-  types/        # TypeScript interfaces (guessme.ts, stats.ts)
+  types/        # TypeScript interfaces (guessme.ts, stats.ts, progression.ts)
 ```
+
+## Agent Rank and Achievements
+
+The `/stats` page includes a **Dossiê do Agente** (Agent Dossier) panel that tracks your progression as an investigator. All progression is calculated locally from your case history — no login, no sync, no server.
+
+### Agent Rank ladder
+
+| Rank | Cases required |
+|------|---------------|
+| Recruta | 0 |
+| Analista | 1 |
+| Investigador | 3 |
+| Detetive | 7 |
+| Arquivista | 15 |
+| Mestre do Dossiê | 25 |
+
+Rank advances automatically as you solve more cases. A progress bar shows how many cases remain to reach the next rank.
+
+### Achievements
+
+Achievements are grouped into five categories:
+
+| Category | Achievements |
+|----------|-------------|
+| **Casos** | Primeiro Caso (1 case), Sequência Inicial (3 cases), Arquivo Robusto (10 cases) |
+| **Eficiência** | Investigação Cirúrgica (solve in ≤5 questions), Sem Ajuda (solve without hints), Caçador de Pistas (10 total hints) |
+| **Evidências** | Especialista em Confirmações (20 confirmed), Cético Profissional (20 refuted), Teoria Aberta (20 inconclusive) |
+| **Categorias** | Multiverso (3 different categories) |
+| **Arquivo** | Arquivista Local (5 cases stored) |
+
+Locked achievements show progress bars where applicable. Unlocked achievements receive the Casefile Noir accent treatment (green inset border + stamp).
+
+### How progression is calculated
+
+- Derived entirely from `localStorage` case history — the same data used by the stats dashboard
+- Imported cases count toward rank and achievements identically to played cases
+- No XP, no leveling algorithms — rank and achievements are pure functions of the history array
+- Clearing history resets all progression to Recruta / all locked
+
+### Privacy
+
+**All progression is derived locally from your case history.** Nothing is stored separately. Nothing is sent to a server. No account required.
+
+### Where it lives
+
+| File | Role |
+|------|------|
+| `src/types/progression.ts` | `AgentRank`, `Achievement`, `PlayerProgression` types |
+| `src/helpers/progression.ts` | `deriveAgentRank`, `deriveAchievements`, `derivePlayerProgression` |
+| `src/components/AgentDossierPanel.tsx` | Container panel |
+| `src/components/AgentRankCard.tsx` | Current rank display with stamp |
+| `src/components/RankProgressBar.tsx` | Progress bar toward next rank |
+| `src/components/AchievementGrid.tsx` | Grouped achievement grid |
+| `src/components/AchievementCard.tsx` | Individual achievement card (locked / unlocked states) |
+
+---
 
 ## Personal Statistics Dashboard
 
@@ -288,7 +344,7 @@ The backend enforces per-session limits. The frontend handles them transparently
 
 ## E2E tests
 
-Playwright 1.61 covers **215 tests** across eight spec files. All API calls are intercepted with `page.route()` — no backend required. History and stats tests use `localStorage` seeding via `addInitScript`.
+Playwright 1.61 covers **244 tests** across nine spec files. All API calls are intercepted with `page.route()` — no backend required. History, stats, and progression tests use `localStorage` seeding via `addInitScript`.
 
 ### Setup
 
@@ -311,6 +367,7 @@ npm run e2e:report    # open last HTML report
 | `history.spec.ts` | History empty state; seeded cards (name/work/counts); victory saves case; duplicate-save prevention; reload persistence; replay modal (timeline, verdict badges, evidence snapshot, winning question, keyboard/button close); delete one case; clear all; corrupted storage fallback; game flow not broken; mobile layout at 390 px |
 | `portability.spec.ts` | Replay export buttons visible/keyboard reachable; copy summary (clipboard, text content); JSON download (filename, schemaVersion, fields); SVG share card (filename, CASO ENCERRADO, branding); import valid JSON (wrapped + bare, card appears, replay works, localStorage persistence); import invalid JSON (parse error, missing fields, no card); duplicate import prevention (renamed message, two cards); mobile 390 px and 360 px (no overflow) |
 | `stats.spec.ts` | Empty state (route, message, CTA, no dashboard); single case totals (cases/questions/hints/avg); multiple cases (totals, verdict panel, category bars, evidence panel, ranking cards — best and longest, recent activity list); navigation (Estatísticas link, active state, existing routes unaffected); import compatibility (missing fields, zero questions, corrupted storage); mobile 390 px and 360 px (no overflow) |
+| `progression.spec.ts` | Empty state (Recruta rank, all locked, progress bar 0/1); single case (Analista, Primeiro Caso unlocked); efficiency achievements (Cirúrgica, Sem Ajuda, per-condition); category achievement (Multiverso 3-category unlock); rank ladder (Investigador, Detetive, Mestre); max rank (no progress bar, maxed label); imported cases count; mobile 390 px and 360 px (no overflow) |
 
 ### Troubleshooting
 
@@ -388,6 +445,22 @@ npm run e2e:report    # open last HTML report
 - [ ] Importing a case with a duplicate ID assigns a new ID (does not silently overwrite)
 - [ ] An imported case opens correctly in the replay modal
 - [ ] Imported cases persist across page reload
+
+### Agent Rank and Achievements
+- [ ] Visiting `/stats` with no history shows the Dossiê do Agente panel with rank "Recruta"
+- [ ] Progress bar toward Analista is visible with 0 solved cases
+- [ ] After solving 1 case, rank advances to Analista
+- [ ] After solving 3 cases, rank advances to Investigador
+- [ ] Achievement grid shows five category sections
+- [ ] "Primeiro Caso" achievement unlocks after the first solved case
+- [ ] "Sem Ajuda" achievement unlocks when any case was solved with 0 hints
+- [ ] "Investigação Cirúrgica" unlocks when any case was solved in 5 or fewer questions
+- [ ] "Multiverso" unlocks when cases span 3 different categories
+- [ ] Locked achievements show a progress bar (where applicable)
+- [ ] At rank "Mestre do Dossiê" (25 cases), the progress bar is replaced with "Posto máximo atingido"
+- [ ] Imported cases count toward rank and achievements
+- [ ] Clearing history resets rank to Recruta and locks all achievements
+- [ ] Progression panel is visible at 390 px and 360 px without horizontal overflow
 
 ### Personal Statistics Dashboard
 - [ ] Clicking "Estatísticas" in the navbar navigates to `/stats`
