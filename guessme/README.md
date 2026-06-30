@@ -24,6 +24,28 @@ GuessMe uses a custom investigation/dossier theme called **Casefile Noir**. It a
 | Home step cards | Each card has a 3 px colored left border: green (01 Abertura), amber (02 Interrogação), slate (03 Encerramento) |
 | Error/warning boxes | Inset left-accent matching verdict color (red=error, amber=warning) |
 
+### Visual signature components
+
+| Component | Role |
+|-----------|------|
+| `BrandMark` | SVG dossier seal (two concentric circles + cardinal marks + GM logotype). Used in Navbar and Home hero. |
+| `CaseStamp` | Inline status badge — variants: `active`, `closed`, `classified`, `archived`, `intel`. Sizes: `sm`, `md`, `lg`. Optional `pulse` animation. |
+| `DossierSectionHeader` | Page section header with classification label, heading, and optional meta line. |
+
+### Dossier UI patterns
+
+| Pattern | Where |
+|---------|-------|
+| Classification strip (`RELATÓRIO DE CASO · ENCERRADO`) | VictoryModal header |
+| Archive label (`DOSSIÊ ARQUIVADO · ACESSO RESTRITO`) | CaseReplayModal header |
+| Transcript label (`TRANSCRIÇÃO DE INTERROGAÇÃO`) | Game chat panel |
+| Quick queries label (`CONSULTAS RÁPIDAS`) | Answer chips section |
+| Intelligence report label (`RELATÓRIO DE INTELIGÊNCIA · USO RESTRITO`) | Stats page header |
+| Protocol header (`DOSSIÊ OPERACIONAL · ACESSO RESTRITO`) | HowItWorks page |
+| Hero classification strip (`CONFIDENCIAL · PROTOCOLO DE INTERROGAÇÃO · IA-1`) | Home hero |
+| Telemetry bar (phase text) | GameStatsBar |
+| Footer ref (`GUESSME · DOSSIÊ DIGITAL · v2`) | Footer |
+
 ### Design token reference
 
 All visual values live in `:root {}` in `src/styles/index.css`:
@@ -31,6 +53,9 @@ All visual values live in `:root {}` in `src/styles/index.css`:
 ```
 --bg, --surface, --surface-raised, --surface-chat, --surface-menu
 --border, --border2, --border-glow
+--border-accent          /* green accent border: rgba(52,211,153,0.18) */
+--accent-faint           /* green fill ghost: rgba(52,211,153,0.06) */
+--surface-desk           /* backdrop tint: rgba(6,11,18,0.72) */
 --text, --muted, --muted-dim
 --accent, --accent-dim, --accent-evidence, --danger, --mystery, --intel
 --shadow, --shadow-glow, --shadow-float
@@ -477,6 +502,19 @@ npm run e2e:report    # open last HTML report
 - [ ] Recent activity lists the last 5 cases with category badges and dates
 - [ ] The dashboard does not call the backend at any point
 - [ ] Clearing history from `/game` resets the dashboard to empty state
+
+### Visual identity
+- [ ] Navbar shows the BrandMark SVG seal to the left of "GuessMe"
+- [ ] Home hero has classification strip ("CONFIDENCIAL · PROTOCOLO DE INTERROGAÇÃO · IA-1")
+- [ ] Home step cards display protocol numbers (01 / 02 / 03) in the top-right corner
+- [ ] Game chat panel shows "TRANSCRIÇÃO DE INTERROGAÇÃO" label above messages
+- [ ] Answer chips section shows "CONSULTAS RÁPIDAS" label
+- [ ] VictoryModal top reads "RELATÓRIO DE CASO · ENCERRADO" above the stamp
+- [ ] CaseReplayModal top reads "DOSSIÊ ARQUIVADO · ACESSO RESTRITO" above the stamp
+- [ ] Replay modal transcript section shows "TRANSCRIÇÃO" dossier label
+- [ ] Stats page shows "RELATÓRIO DE INTELIGÊNCIA · USO RESTRITO" in the header
+- [ ] Footer shows "GUESSME · DOSSIÊ DIGITAL · v2" reference on desktop
+- [ ] Modals appear above all other page content (overlay z-index)
 
 ### Mobile (≤ 640 px)
 - [ ] Chat area is readable without scrolling past the input row
