@@ -83,6 +83,11 @@ export default function Game() {
           <section className="panel chatPanelWide">
             <GameStatsBar questionsCount={questionsCount} />
 
+            <div className="transcriptLabel" aria-hidden="true">
+              <span className="transcriptLabelText">TRANSCRIÇÃO DE INTERROGAÇÃO</span>
+              <span className="transcriptLabelLine" />
+            </div>
+
             <div className="chatScroll" ref={chatScrollRef} aria-live="polite" data-testid="chat-scroll">
               {messages.map((m) => (
                 <MessageBubble key={m.id} sender={m.sender} text={m.text} kind={m.kind} verdict={m.verdict} />
@@ -113,15 +118,21 @@ export default function Game() {
             ) : null}
 
             {!winner ? (
-              <AnswerChips disabled={!canAsk} onPick={sendQuestion} />
+              <div className="querySection">
+                <span className="queryLabel" aria-hidden="true">CONSULTAS RÁPIDAS</span>
+                <AnswerChips disabled={!canAsk} onPick={sendQuestion} />
+              </div>
             ) : null}
 
-            <QuestionInput
-              disabled={!canAsk}
-              loading={loading}
-              placeholder={inputPlaceholder}
-              onSend={sendQuestion}
-            />
+            <div className="queryInputSection">
+              <span className="queryLabel queryInputLabel" aria-hidden="true">NOVA PERGUNTA</span>
+              <QuestionInput
+                disabled={!canAsk}
+                loading={loading}
+                placeholder={inputPlaceholder}
+                onSend={sendQuestion}
+              />
+            </div>
           </section>
 
           <EvidenceNotebook

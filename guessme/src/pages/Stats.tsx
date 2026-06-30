@@ -55,6 +55,7 @@ export default function Stats() {
       <Navbar />
       <main className="main statsMain" data-testid="stats-page">
         <div className="statsPageHeader">
+          <span className="statsReportClass" aria-hidden="true">RELATÓRIO DE INTELIGÊNCIA · USO RESTRITO</span>
           <div className="statsPageStamp caseSolvedStamp">Painel de investigação</div>
           <h1 className="statsPageTitle">Estatísticas pessoais</h1>
           {history.length > 0 && (
