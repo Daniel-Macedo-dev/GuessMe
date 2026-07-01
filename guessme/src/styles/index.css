@@ -2633,6 +2633,12 @@ a:focus-visible,
   border-color: var(--border-glow);
 }
 
+/* ── Modal entrance with motion tokens ── */
+.modalOverlay{ animation: fadeIn 160ms var(--motion-ease-out); }
+.modal{ animation: popIn 220ms var(--motion-ease); }
+.victoryModal{ animation: popIn 280ms var(--motion-ease); }
+.installPrompt{ animation: slideUp 220ms var(--motion-ease-out); }
+
 /* ── Evidence notebook dossier pin feel ── */
 .notebook{
   border-left: 2px solid rgba(52,211,153,0.14);
