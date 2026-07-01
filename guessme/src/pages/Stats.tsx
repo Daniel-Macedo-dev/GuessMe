@@ -31,22 +31,26 @@ export default function Stats() {
       value: data.totalCases,
       testId: "stats-total-cases",
       accent: "green" as const,
+      icon: "case-file" as const,
     },
     {
       label: "Perguntas feitas",
       value: data.totalQuestions,
       testId: "stats-total-questions",
+      icon: "magnifier" as const,
     },
     {
       label: "Pistas usadas",
       value: data.totalHints,
       testId: "stats-total-hints",
+      icon: "clue" as const,
     },
     {
       label: "Média de perguntas",
       value: data.totalCases > 0 ? data.averageQuestions : "—",
       sub: "por caso",
       testId: "stats-avg-questions",
+      icon: "stats" as const,
     },
   ];
 

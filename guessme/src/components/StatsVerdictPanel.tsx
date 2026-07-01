@@ -1,5 +1,6 @@
 import type { VerdictStatsSummary } from "../types/stats";
 import StatsBarList from "./StatsBarList";
+import DossierIcon from "./DossierIcon";
 
 type Props = {
   verdicts: VerdictStatsSummary;
@@ -16,7 +17,10 @@ export default function StatsVerdictPanel({ verdicts }: Props) {
 
   return (
     <section className="statsPanel panel" aria-labelledby="stats-verdict-title" data-testid="stats-verdict-panel">
-      <h3 id="stats-verdict-title" className="statsPanelTitle">Distribuição de veredictos</h3>
+      <div className="panelSectionHeader">
+        <DossierIcon name="evidence" size={14} aria-hidden={true} className="dossierIcon--muted" />
+        <h3 id="stats-verdict-title" className="statsPanelTitle panelSectionTitle">Distribuição de veredictos</h3>
+      </div>
       <p className="statsMetricNote muted small">
         Total de respostas: <strong>{verdicts.total}</strong>
       </p>
