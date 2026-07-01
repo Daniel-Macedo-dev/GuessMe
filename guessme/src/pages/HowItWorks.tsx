@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import DossierIcon from "../components/DossierIcon";
 
 export default function HowItWorks() {
   return (
@@ -19,7 +20,9 @@ export default function HowItWorks() {
 
           <div className="manualSteps">
             <div className="manualStep">
-              <div className="stepNumber">01</div>
+              <div className="manualStepIcon manualStepIcon--green" aria-hidden="true">
+                <DossierIcon name="case-file" size={16} aria-hidden={true} />
+              </div>
               <div className="stepContent">
                 <h3 className="stepTitle">Abrir o caso</h3>
                 <p className="muted">
@@ -30,7 +33,9 @@ export default function HowItWorks() {
             </div>
 
             <div className="manualStep">
-              <div className="stepNumber">02</div>
+              <div className="manualStepIcon manualStepIcon--amber" aria-hidden="true">
+                <DossierIcon name="magnifier" size={16} aria-hidden={true} />
+              </div>
               <div className="stepContent">
                 <h3 className="stepTitle">Formular perguntas</h3>
                 <p className="muted">
@@ -41,7 +46,9 @@ export default function HowItWorks() {
             </div>
 
             <div className="manualStep">
-              <div className="stepNumber">03</div>
+              <div className="manualStepIcon manualStepIcon--green" aria-hidden="true">
+                <DossierIcon name="evidence" size={16} aria-hidden={true} />
+              </div>
               <div className="stepContent">
                 <h3 className="stepTitle">Ler as evidências</h3>
                 <div className="evidenceLegend">
@@ -57,7 +64,9 @@ export default function HowItWorks() {
             </div>
 
             <div className="manualStep">
-              <div className="stepNumber">04</div>
+              <div className="manualStepIcon manualStepIcon--cyan" aria-hidden="true">
+                <DossierIcon name="clue" size={16} aria-hidden={true} />
+              </div>
               <div className="stepContent">
                 <h3 className="stepTitle">Solicitar intel</h3>
                 <p className="muted">
@@ -68,7 +77,9 @@ export default function HowItWorks() {
             </div>
 
             <div className="manualStep">
-              <div className="stepNumber">05</div>
+              <div className="manualStepIcon manualStepIcon--red" aria-hidden="true">
+                <DossierIcon name="lock" size={16} aria-hidden={true} />
+              </div>
               <div className="stepContent">
                 <h3 className="stepTitle">Revelar o suspeito</h3>
                 <p className="muted">
