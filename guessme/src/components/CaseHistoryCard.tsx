@@ -1,5 +1,6 @@
 import { memo } from "react";
 import type { CaseHistoryEntry } from "../types/guessme";
+import DossierIcon from "./DossierIcon";
 
 type Props = {
   entry: CaseHistoryEntry;
@@ -57,11 +58,12 @@ function CaseHistoryCard({ entry, onReplay, onDelete }: Props) {
 
       <div className="historyCardActions">
         <button
-          className="btn btn-primary historyActionBtn"
+          className="btn btn-primary historyActionBtn historyReplayBtn"
           onClick={() => onReplay(entry)}
           data-testid="history-replay-btn"
           aria-label={`Rever caso: ${entry.characterName}`}
         >
+          <DossierIcon name="replay" size={13} aria-hidden={true} />
           Rever caso
         </button>
         <button

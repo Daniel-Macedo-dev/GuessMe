@@ -3,6 +3,7 @@ import type { CaseHistoryEntry } from "../types/guessme";
 import CaseHistoryCard from "./CaseHistoryCard";
 import CaseReplayModal from "./CaseReplayModal";
 import { parseCaseExportJson, CaseImportError } from "../helpers/caseImport";
+import DossierIcon from "./DossierIcon";
 
 type ImportStatus =
   | { kind: "idle" }
@@ -78,7 +79,10 @@ export default function CaseHistoryPanel({
       data-testid="history-panel"
     >
       <div className="historyPanelHeader">
-        <h3 className="historyPanelTitle">Histórico de Casos</h3>
+        <div className="panelSectionHeader" style={{ marginBottom: 0 }}>
+          <DossierIcon name="archive" size={13} aria-hidden={true} className="dossierIcon--muted" />
+          <h3 className="historyPanelTitle panelSectionTitle">Histórico de Casos</h3>
+        </div>
         <div className="historyPanelActions">
           <button
             className="btn historyActionBtn historyImportBtn"
@@ -86,6 +90,7 @@ export default function CaseHistoryPanel({
             data-testid="history-import-btn"
             aria-label="Importar caso a partir de arquivo JSON"
           >
+            <DossierIcon name="import" size={13} aria-hidden={true} />
             Importar caso
           </button>
           <input
@@ -127,6 +132,9 @@ export default function CaseHistoryPanel({
 
       {history.length === 0 ? (
         <div className="historyEmpty" role="status" data-testid="history-empty">
+          <div className="emptyIllustration historyEmptyIllustration emptyIllustration--slate" aria-hidden="true">
+            <DossierIcon name="archive" size={28} aria-hidden={true} className="dossierIcon--muted" />
+          </div>
           <p className="muted small">Nenhum caso arquivado ainda.</p>
         </div>
       ) : (
