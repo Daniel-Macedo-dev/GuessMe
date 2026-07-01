@@ -49,6 +49,12 @@
   /* ── Transitions ── */
   --t-fast: 100ms ease;
   --t-base: 160ms ease;
+  --t-slow: 260ms ease;
+
+  /* ── Motion easing ── */
+  --motion-ease:     cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --motion-glow:     0 0 18px rgba(52,211,153,0.22);
 
   /* ── Additional dossier tokens ── */
   --accent-faint:   rgba(52,211,153,0.06);
