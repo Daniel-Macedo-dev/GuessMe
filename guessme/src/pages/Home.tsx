@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import BrandMark from "../components/BrandMark";
+import DossierIcon from "../components/DossierIcon";
 
 export default function Home() {
   return (
@@ -51,6 +52,9 @@ export default function Home() {
           <div className="heroGrid">
             <div className="card heroProtocolCard">
               <div className="heroProtocolNum" aria-hidden="true">01</div>
+              <div className="stepIconWrap stepIconWrap--green" aria-hidden="true">
+                <DossierIcon name="case-file" size={18} aria-hidden={true} />
+              </div>
               <div className="cardStep">Abertura</div>
               <h2 className="cardTitle">Caso registrado</h2>
               <div className="cardText">
@@ -60,6 +64,9 @@ export default function Home() {
             </div>
             <div className="card heroProtocolCard">
               <div className="heroProtocolNum" aria-hidden="true">02</div>
+              <div className="stepIconWrap stepIconWrap--amber" aria-hidden="true">
+                <DossierIcon name="magnifier" size={18} aria-hidden={true} />
+              </div>
               <div className="cardStep">Interrogação</div>
               <h2 className="cardTitle">Evidências coletadas</h2>
               <div className="cardText">
@@ -69,6 +76,9 @@ export default function Home() {
             </div>
             <div className="card heroProtocolCard">
               <div className="heroProtocolNum" aria-hidden="true">03</div>
+              <div className="stepIconWrap stepIconWrap--slate" aria-hidden="true">
+                <DossierIcon name="archive" size={18} aria-hidden={true} />
+              </div>
               <div className="cardStep">Encerramento</div>
               <h2 className="cardTitle">Dossiê revelado</h2>
               <div className="cardText">
