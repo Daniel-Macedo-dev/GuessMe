@@ -2802,7 +2802,7 @@ a:focus-visible,
   justify-content: center;
   width: 36px;
   height: 36px;
-  border-radius: 10px;
+  border-radius: var(--radius-inner);
   border: 1px solid var(--border);
   background: rgba(255,255,255,0.03);
   flex-shrink: 0;
@@ -2832,7 +2832,7 @@ a:focus-visible,
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: 9px;
+  border-radius: var(--radius-inner);
   border: 1px solid var(--border);
   background: rgba(255,255,255,0.03);
   flex-shrink: 0;
@@ -2913,7 +2913,7 @@ a:focus-visible,
 /* ── Offline banner icon ── */
 .offlineBannerSvgIcon{
   flex-shrink: 0;
-  color: #fbbf24;
+  color: var(--accent-evidence);
   opacity: 0.85;
 }
 
@@ -2947,6 +2947,11 @@ a:focus-visible,
   letter-spacing: 0.10em;
   font-family: var(--font-mono);
   color: var(--muted);
+}
+
+/* Reset margin when panelSectionHeader is a flex child (e.g. nbHeader) */
+.nbHeader .panelSectionHeader{
+  margin-bottom: 0;
 }
 
 /* ── Mobile scaling ── */
