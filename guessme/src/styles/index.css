@@ -2745,6 +2745,13 @@ a:focus-visible,
   .card, .historyCard{ transform: none !important; transition: background var(--t-base), border-color var(--t-base) !important; }
   .btn-primary:hover{ box-shadow: none; }
   .caseStamp--pulse::before{ animation: none; }
+  /* Investigation motion */
+  .investigationDot{ animation: none; opacity: 0.70; }
+  .msgRow{ animation: none; }
+  .nbSection, .nbEntry{ animation: none; }
+  .hero, .statsMain, .gamePageGrid{ animation: none; }
+  .modalOverlay, .modal, .victoryModal{ animation: none; }
+  .installPrompt{ animation: none; }
 }
 
 /* ── Offline banner ── */
