@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import DossierIcon from "./DossierIcon";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -43,6 +44,9 @@ export default function InstallAppPrompt() {
     >
       <div className="installPromptLabel" aria-hidden="true">DOSSIÊ DIGITAL · INSTALAR</div>
       <div className="installPromptBody">
+        <div className="installPromptIconWrap" aria-hidden="true">
+          <DossierIcon name="install" size={20} aria-hidden={true} />
+        </div>
         <div className="installPromptText">
           <span id="install-prompt-title">Instalar GuessMe</span>
           <span>Acesso rápido como aplicativo nativo</span>
