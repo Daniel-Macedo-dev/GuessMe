@@ -2665,6 +2665,10 @@ a:focus-visible,
   border-radius: 999px;
 }
 
+/* ── Evidence notebook entry feedback ── */
+.nbSection{ animation: panelIn 180ms var(--motion-ease-out); }
+.nbEntry{ animation: msgIn 120ms var(--motion-ease-out); }
+
 /* ── History card hover ── */
 .historyCard:hover{
   transform: translateY(-1px);
