@@ -2594,6 +2594,34 @@ a:focus-visible{
   opacity: 0.40;
 }
 
+/* ── Chip active press state ── */
+.chip{
+  transition: color var(--t-fast), border-color var(--t-fast), background var(--t-fast),
+              transform var(--t-fast), box-shadow var(--t-fast), opacity var(--t-fast);
+}
+.chip:active{ transform: scale(0.97); opacity: 0.85; }
+
+/* ── Disabled button: suppress hover effects ── */
+.btn:disabled:hover{
+  background: rgba(255,255,255,0.04);
+  border-color: var(--border2);
+  box-shadow: none;
+  transform: none;
+  filter: none;
+}
+.btn-primary:disabled:hover{
+  background: rgba(52,211,153,0.11);
+  border-color: rgba(52,211,153,0.45);
+  box-shadow: 0 0 18px rgba(52,211,153,0.10), inset 0 1px 0 rgba(52,211,153,0.12);
+}
+
+/* ── Enhanced input focus glow ── */
+.input:focus-visible{
+  border-color: rgba(52,211,153,0.45);
+  box-shadow: 0 0 0 3px rgba(52,211,153,0.12), inset 0 1px 3px rgba(0,0,0,0.15);
+  outline: none;
+}
+
 /* ── Improved focus ring across all interactive ── */
 .btn:focus-visible,
 .chip:focus-visible,
