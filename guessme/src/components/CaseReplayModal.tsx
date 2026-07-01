@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import DossierIcon from "./DossierIcon";
 import type { CaseEvidenceEntry, CaseHistoryEntry, CaseIntelEntry } from "../types/guessme";
 import MessageBubble from "./MessageBubble";
 import {
@@ -302,6 +303,7 @@ export default function CaseReplayModal({ entry, onClose }: Props) {
               data-testid="replay-copy-btn"
               aria-label="Copiar resumo do caso como Markdown"
             >
+              <DossierIcon name="share" size={13} aria-hidden={true} />
               Copiar resumo
             </button>
             <button
@@ -310,6 +312,7 @@ export default function CaseReplayModal({ entry, onClose }: Props) {
               data-testid="replay-download-json-btn"
               aria-label="Baixar caso como arquivo JSON"
             >
+              <DossierIcon name="export" size={13} aria-hidden={true} />
               Baixar JSON
             </button>
             <button
@@ -318,10 +321,12 @@ export default function CaseReplayModal({ entry, onClose }: Props) {
               data-testid="replay-download-svg-btn"
               aria-label="Baixar card visual do caso"
             >
+              <DossierIcon name="export" size={13} aria-hidden={true} />
               Baixar card
             </button>
           </div>
           <button className="btn btn-primary" onClick={onClose}>
+            <DossierIcon name="archive" size={13} aria-hidden={true} />
             Fechar
           </button>
         </div>
