@@ -1,4 +1,5 @@
 import CategorySelect from "./CategorySelect";
+import DossierIcon from "./DossierIcon";
 
 type Props = {
   onRestart: () => void;
@@ -54,10 +55,12 @@ export default function GameHeader({
           aria-busy={hintLoading ? "true" : undefined}
           aria-label={hintLoading ? "Solicitando pista…" : "Solicitar pista"}
         >
+          <DossierIcon name="clue" size={13} aria-hidden={true} />
           {hintLoading ? "Buscando pista…" : "Solicitar pista"}
         </button>
 
         <button className="btn btn-primary" onClick={onRestart}>
+          <DossierIcon name="case-file" size={13} aria-hidden={true} />
           Novo caso
         </button>
       </div>
