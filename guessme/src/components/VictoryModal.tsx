@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { WinnerData } from "../types/guessme";
 import PersonagemCard from "./PersonagemCard";
+import DossierIcon from "./DossierIcon";
 
 type Props = {
   winner: WinnerData | null;
@@ -62,6 +63,7 @@ export default function VictoryModal({ winner, onRestart }: Props) {
 
         <div className="victoryActions">
           <button ref={restartBtnRef} className="btn btn-primary" onClick={onRestart}>
+            <DossierIcon name="case-file" size={13} aria-hidden={true} />
             Novo caso
           </button>
         </div>
