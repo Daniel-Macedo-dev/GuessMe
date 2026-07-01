@@ -1,4 +1,5 @@
 import type { Evidence, EvidenceEntry, IntelEntry, SolvedSummary } from "../helpers/deriveEvidence";
+import DossierIcon from "./DossierIcon";
 
 type Props = {
   evidence: Evidence;
@@ -67,7 +68,10 @@ export default function EvidenceNotebook({ evidence, solved, questionsCount }: P
   return (
     <aside className="notebook panel" aria-label="Caderno de Evidências" data-testid="evidence-notebook">
       <div className="nbHeader">
-        <h3 className="nbTitle">Caderno de Evidências</h3>
+        <div className="panelSectionHeader">
+          <DossierIcon name="evidence" size={14} aria-hidden={true} className="dossierIcon--muted" />
+          <h3 className="nbTitle panelSectionTitle">Caderno de Evidências</h3>
+        </div>
         {!isEmpty && (
           <span className="nbMeta muted">{questionsCount} interrogação{questionsCount !== 1 ? "ões" : ""}</span>
         )}
@@ -75,6 +79,9 @@ export default function EvidenceNotebook({ evidence, solved, questionsCount }: P
 
       {isEmpty && (
         <div className="nbEmpty" role="status" data-testid="evidence-empty">
+          <div className="emptyIllustration nbEmptyIllustration" aria-hidden="true">
+            <DossierIcon name="magnifier" size={28} aria-hidden={true} className="dossierIcon--accent" />
+          </div>
           <p className="muted small">
             Sem evidências ainda.<br />
             Faça perguntas para acumular pistas.
