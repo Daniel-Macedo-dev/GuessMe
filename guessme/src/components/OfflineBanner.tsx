@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import DossierIcon from "./DossierIcon";
 
 export default function OfflineBanner() {
   const [offline, setOffline] = useState(!navigator.onLine);
@@ -18,7 +19,7 @@ export default function OfflineBanner() {
 
   return (
     <div className="offlineBanner" role="status" aria-live="polite" data-testid="offline-banner">
-      <span className="offlineBannerIcon" aria-hidden="true">○</span>
+      <DossierIcon name="offline" size={16} aria-hidden={true} className="offlineBannerSvgIcon" />
       <span className="offlineBannerText">
         <strong>Offline</strong> — histórico local disponível · perguntas à IA exigem conexão
       </span>
