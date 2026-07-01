@@ -39,6 +39,7 @@ export default function InstallAppPrompt() {
     <div
       className="installPrompt"
       role="dialog"
+      aria-modal="true"
       aria-labelledby="install-prompt-title"
       data-testid="install-prompt"
     >
