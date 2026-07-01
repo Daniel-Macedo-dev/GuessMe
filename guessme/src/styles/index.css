@@ -2765,3 +2765,196 @@ a:focus-visible,
   .installPrompt{ left: 12px; right: 12px; bottom: 12px; max-width: none; }
   .offlineBanner{ font-size: 12px; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   DOSSIER ICON SYSTEM
+   ══════════════════════════════════════════════════════════ */
+
+.dossierIcon{
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+/* ── Icon accent variants ── */
+.dossierIcon--accent { color: var(--accent); }
+.dossierIcon--amber  { color: var(--accent-evidence); }
+.dossierIcon--danger { color: var(--danger); }
+.dossierIcon--muted  { color: var(--muted); }
+.dossierIcon--intel  { color: var(--intel); }
+
+/* ── Icon + text buttons ── */
+.btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn .dossierIcon{
+  opacity: 0.80;
+  flex-shrink: 0;
+}
+
+/* ── Icon in step cards (home protocol steps) ── */
+.stepIconWrap{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  flex-shrink: 0;
+  margin-bottom: 10px;
+}
+
+.stepIconWrap--green{
+  border-color: rgba(52,211,153,0.28);
+  background: rgba(52,211,153,0.07);
+  color: var(--accent);
+}
+.stepIconWrap--amber{
+  border-color: rgba(251,191,36,0.28);
+  background: rgba(251,191,36,0.07);
+  color: var(--accent-evidence);
+}
+.stepIconWrap--slate{
+  border-color: rgba(148,163,184,0.22);
+  background: rgba(148,163,184,0.05);
+  color: var(--mystery);
+}
+
+/* ── Protocol step icon (HowItWorks) ── */
+.manualStepIcon{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--muted);
+}
+
+.manualStepIcon--green { border-color: rgba(52,211,153,0.28); background: rgba(52,211,153,0.06); color: var(--accent); }
+.manualStepIcon--amber { border-color: rgba(251,191,36,0.28); background: rgba(251,191,36,0.06); color: var(--accent-evidence); }
+.manualStepIcon--cyan  { border-color: rgba(34,211,238,0.22); background: rgba(34,211,238,0.05); color: var(--intel); }
+.manualStepIcon--red   { border-color: rgba(248,113,113,0.22); background: rgba(248,113,113,0.05); color: var(--danger); }
+
+/* ══════════════════════════════════════════════════════════
+   ILLUSTRATED EMPTY STATES
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Shared empty state illustration shell ── */
+.emptyIllustration{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.025);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.emptyIllustration::before{
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(52,211,153,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.emptyIllustration--amber::before{
+  background: radial-gradient(circle at 50% 50%, rgba(251,191,36,0.10) 0%, transparent 70%);
+}
+
+.emptyIllustration--slate::before{
+  background: radial-gradient(circle at 50% 50%, rgba(148,163,184,0.08) 0%, transparent 70%);
+}
+
+/* ── Notebook empty state ── */
+.nbEmptyIllustration{
+  margin: 12px auto 8px;
+}
+
+/* ── History empty state ── */
+.historyEmptyIllustration{
+  margin: 8px auto 10px;
+}
+
+/* ── Stats empty state illustration ── */
+.statsEmptyIllustration{
+  margin-bottom: 4px;
+}
+
+/* ── Metric card icon row ── */
+.statsMetricIcon{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  color: var(--muted);
+  opacity: 0.60;
+}
+
+.statsMetricCard--green .statsMetricIcon { color: var(--accent); }
+.statsMetricCard--amber .statsMetricIcon { color: var(--accent-evidence); }
+.statsMetricCard--red   .statsMetricIcon { color: var(--danger); }
+.statsMetricCard--slate .statsMetricIcon { color: var(--mystery); }
+
+/* ── Offline banner icon ── */
+.offlineBannerSvgIcon{
+  flex-shrink: 0;
+  color: #fbbf24;
+  opacity: 0.85;
+}
+
+/* ── Install prompt icon ── */
+.installPromptIconWrap{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--border-accent);
+  background: rgba(52,211,153,0.07);
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+/* ── Panel section header with icon ── */
+.panelSectionHeader{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.panelSectionHeader .panelSectionTitle{
+  margin: 0;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  font-family: var(--font-mono);
+  color: var(--muted);
+}
+
+/* ── Mobile scaling ── */
+@media (max-width: 480px){
+  .emptyIllustration{ width: 52px; height: 52px; border-radius: 16px; }
+  .stepIconWrap{ width: 30px; height: 30px; }
+  .manualStepIcon{ width: 28px; height: 28px; }
+}
+@media (max-width: 360px){
+  .emptyIllustration{ width: 44px; height: 44px; }
+}
