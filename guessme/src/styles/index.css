@@ -2644,6 +2644,15 @@ a:focus-visible,
   border-left: 2px solid rgba(52,211,153,0.14);
 }
 
+/* ── Section entrance reveal ── */
+@keyframes panelIn{
+  from{ transform: translateY(6px); opacity: 0; }
+  to{   transform: translateY(0);   opacity: 1; }
+}
+.hero{ animation: panelIn 320ms var(--motion-ease-out); }
+.statsMain{ animation: panelIn 260ms var(--motion-ease-out); }
+.gamePageGrid{ animation: panelIn 200ms var(--motion-ease-out); }
+
 /* ── Stats panel top indicator ── */
 .statsPanel::before{
   content: '';
