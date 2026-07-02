@@ -3054,3 +3054,394 @@ a:focus-visible,
 @media (max-width: 360px){
   .emptyIllustration{ width: 44px; height: 44px; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   CASE STATUS BADGE STRIP
+   ══════════════════════════════════════════════════════════ */
+
+.caseStatusStrip{
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  white-space: nowrap;
+  vertical-align: middle;
+  margin-left: 10px;
+  transition: color var(--t-base), border-color var(--t-base), box-shadow var(--t-base);
+}
+
+.caseStatusStrip--active,
+.caseStatusStrip--analyzing,
+.caseStatusStrip--opening{
+  color: var(--accent);
+  border-color: rgba(52,211,153,0.38);
+  box-shadow: 0 0 10px rgba(52,211,153,0.12);
+}
+
+.caseStatusStrip--active::before,
+.caseStatusStrip--analyzing::before,
+.caseStatusStrip--opening::before{
+  content: "●";
+  font-size: 7px;
+  animation: pulse 2.4s ease-in-out infinite;
+  margin-right: 1px;
+}
+
+.caseStatusStrip--clue{
+  color: var(--accent-evidence);
+  border-color: rgba(251,191,36,0.38);
+  box-shadow: 0 0 10px rgba(251,191,36,0.10);
+}
+
+.caseStatusStrip--clue::before{
+  content: "●";
+  font-size: 7px;
+  animation: pulse 2.4s ease-in-out infinite;
+  margin-right: 1px;
+}
+
+.caseStatusStrip--solved{
+  color: var(--accent);
+  border-color: rgba(52,211,153,0.30);
+  box-shadow: none;
+}
+
+.caseStatusStrip--error{
+  color: var(--danger);
+  border-color: rgba(248,113,113,0.35);
+}
+
+.caseStatusStrip--idle{
+  color: var(--muted-dim);
+  border-color: var(--border);
+}
+
+/* ── GameHeader title row ── */
+.gameHeaderTitleRow{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   TRANSCRIPT DIVIDERS
+   ══════════════════════════════════════════════════════════ */
+
+.transcriptDivider{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 8px;
+}
+
+.transcriptDividerLine{
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  opacity: 0.5;
+}
+
+.transcriptDividerLabel{
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid;
+}
+
+.transcriptDivider--open .transcriptDividerLabel{
+  color: var(--accent);
+  border-color: rgba(52,211,153,0.30);
+  background: rgba(52,211,153,0.06);
+}
+.transcriptDivider--open .transcriptDividerLine{
+  background: linear-gradient(90deg, transparent, rgba(52,211,153,0.28), transparent);
+  opacity: 1;
+}
+
+.transcriptDivider--clue .transcriptDividerLabel{
+  color: var(--accent-evidence);
+  border-color: rgba(251,191,36,0.30);
+  background: rgba(251,191,36,0.06);
+}
+.transcriptDivider--clue .transcriptDividerLine{
+  background: linear-gradient(90deg, transparent, rgba(251,191,36,0.25), transparent);
+  opacity: 1;
+}
+
+.transcriptDivider--verdict .transcriptDividerLabel{
+  color: var(--accent);
+  border-color: rgba(52,211,153,0.40);
+  background: rgba(52,211,153,0.08);
+  box-shadow: 0 0 12px rgba(52,211,153,0.14);
+}
+.transcriptDivider--verdict .transcriptDividerLine{
+  background: linear-gradient(90deg, transparent, rgba(52,211,153,0.35), transparent);
+  opacity: 1;
+}
+
+.transcriptDivider--system .transcriptDividerLabel{
+  color: var(--muted-dim);
+  border-color: var(--border);
+  background: transparent;
+}
+
+/* First divider in a fresh transcript: less top spacing */
+.chatScroll > div:first-child > .transcriptDivider{
+  margin-top: 4px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   MESSAGE BUBBLE ENHANCEMENTS
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Message meta row (sender + verdict badge) ── */
+.msgMeta{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+/* ── Sender icon inside label ── */
+.msgSenderIcon{
+  margin-right: 3px;
+  opacity: 0.75;
+  vertical-align: -1px;
+}
+
+/* ── Verdict badge pill ── */
+.msgVerdictBadge{
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+
+.msgVerdictBadge--sim{
+  color: var(--accent);
+  border-color: rgba(52,211,153,0.40);
+  background: rgba(52,211,153,0.10);
+}
+
+.msgVerdictBadge--nao{
+  color: var(--danger);
+  border-color: rgba(248,113,113,0.38);
+  background: rgba(248,113,113,0.09);
+}
+
+.msgVerdictBadge--talvez{
+  color: var(--accent-evidence);
+  border-color: rgba(251,191,36,0.36);
+  background: rgba(251,191,36,0.08);
+}
+
+/* ══════════════════════════════════════════════════════════
+   GAME STATS BAR ENHANCEMENTS
+   ══════════════════════════════════════════════════════════ */
+
+.statGroup{
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.statLabelIcon{
+  margin-right: 3px;
+  opacity: 0.65;
+  vertical-align: -1px;
+}
+
+.statValueHints{
+  color: var(--accent-evidence);
+}
+
+.statTelemetry{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  text-align: right;
+}
+
+.statTelemetryLabel{
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  color: var(--muted-dim);
+  opacity: 0.55;
+}
+
+/* ══════════════════════════════════════════════════════════
+   ERROR / WARNING BOX ENHANCEMENTS
+   ══════════════════════════════════════════════════════════ */
+
+.errorBox{
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.errorBoxContent{
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+}
+
+.errorBoxIcon{
+  color: var(--danger);
+  opacity: 0.80;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.errorBoxText{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.errorBoxLabel{
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--danger);
+  opacity: 0.70;
+}
+
+.warningBox{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.warningBoxIcon{
+  color: var(--accent-evidence);
+  opacity: 0.80;
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════════════════════
+   CHAT SCROLL ATMOSPHERE
+   ══════════════════════════════════════════════════════════ */
+
+.chatScroll{
+  position: relative;
+}
+
+/* Subtle scanline overlay — purely decorative, does not intercept clicks */
+.chatScroll::after{
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 3px,
+    rgba(0,0,0,0.018) 3px,
+    rgba(0,0,0,0.018) 4px
+  );
+  pointer-events: none;
+  border-radius: var(--radius-sm);
+  z-index: 0;
+}
+
+/* Ensure message content sits above scanline */
+.chatScroll > *{
+  position: relative;
+  z-index: 1;
+}
+
+/* Bottom fade — gives terminal document feel */
+.chatScrollFade{
+  position: sticky;
+  bottom: 0;
+  height: 28px;
+  background: linear-gradient(0deg, var(--surface-chat) 0%, transparent 100%);
+  pointer-events: none;
+  margin-top: -28px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   MOBILE HARDENING — CASE STATUS SYSTEM
+   ══════════════════════════════════════════════════════════ */
+
+@media (max-width: 640px){
+  .caseStatusStrip{
+    font-size: 8px;
+    padding: 2px 6px;
+    letter-spacing: 0.10em;
+  }
+  .gameHeaderTitleRow{
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+  .caseStatusStrip{
+    margin-left: 0;
+  }
+  .transcriptDivider{
+    margin: 10px 0 6px;
+  }
+  .transcriptDividerLabel{
+    font-size: 7px;
+    letter-spacing: 0.14em;
+  }
+  .statGroup{
+    gap: 14px;
+  }
+  .statTelemetry{
+    display: none;
+  }
+}
+
+@media (max-width: 480px){
+  .caseStatusStrip{
+    font-size: 7px;
+    padding: 2px 5px;
+  }
+  .msgVerdictBadge{
+    font-size: 7px;
+  }
+}
+
+@media (max-width: 400px){
+  .statGroup{ gap: 10px; }
+  .transcriptDividerLabel{ font-size: 6px; letter-spacing: 0.10em; }
+}
+
+/* Reduced motion: suppress transcript divider line gradients */
+@media (prefers-reduced-motion: reduce){
+  .caseStatusStrip--active::before,
+  .caseStatusStrip--analyzing::before,
+  .caseStatusStrip--opening::before,
+  .caseStatusStrip--clue::before{
+    animation: none;
+    opacity: 0.70;
+  }
+}
