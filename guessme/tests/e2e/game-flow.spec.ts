@@ -24,9 +24,11 @@ test.describe("Game boot", () => {
     await expect(chat).toContainText("Pode fazer sua primeira pergunta!");
   });
 
-  test("shows case status badge Caso Aberto", async ({ page }) => {
+  test("shows active investigation status badge after boot", async ({ page }) => {
     await page.goto("/game");
-    await expect(page.getByText("Caso Aberto")).toBeVisible();
+    await expect(page.getByTestId("chat-scroll")).toContainText("primeira pergunta");
+    // Status settles to active once loading is false and messages exist
+    await expect(page.locator(".caseStatusStrip--active")).toBeVisible({ timeout: 8000 });
   });
 
   test("shows investigation phase label when no questions asked", async ({ page }) => {
@@ -214,7 +216,7 @@ test.describe("AI answer states", () => {
     await page.getByRole("button", { name: "Enviar" }).click();
     await expect(chat).toContainText("Sim");
     // Stats bar shows 1 interrogação, phase label changes
-    await expect(page.locator(".statValue")).toContainText("1");
+    await expect(page.getByTestId("questions-count")).toContainText("1");
   });
 });
 
@@ -331,5 +333,53 @@ test.describe("Victory flow", () => {
     await expect(
       page.getByRole("heading", { name: /Investigação/ }),
     ).toBeVisible();
+  });
+
+  test("shows solved status badge variant after victory", async ({ page }) => {
+    await mockAskWin(page);
+    await page.goto("/game");
+    await expect(page.getByTestId("chat-scroll")).toContainText("primeira pergunta");
+    await page.getByRole("textbox", { name: "Pergunta para a investigação" }).fill("É o Naruto?");
+    await page.getByRole("button", { name: "Enviar" }).click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    // The solved badge class is present in the header even while modal is open
+    await expect(page.locator(".caseStatusStrip--solved")).toBeAttached();
+  });
+});
+
+// ─── Visual status system ──────────────────────────────────────────────────────
+
+test.describe("Visual status system", () => {
+  test("transcript opening divider visible after case starts", async ({ page }) => {
+    await page.goto("/game");
+    await expect(page.getByTestId("chat-scroll")).toContainText("primeira pergunta");
+    await expect(page.locator(".transcriptDivider--open")).toBeVisible();
+  });
+
+  test("hint transcript divider visible after hint received", async ({ page }) => {
+    await mockHint(page);
+    await page.goto("/game");
+    await expect(page.getByTestId("chat-scroll")).toContainText("primeira pergunta");
+    await page.getByRole("button", { name: /Solicitar pista/ }).click();
+    await expect(page.getByTestId("chat-scroll")).toContainText("habilidades sobrenaturais");
+    await expect(page.locator(".transcriptDivider--clue")).toBeVisible();
+  });
+
+  test("hint count increments after hint received", async ({ page }) => {
+    await mockHint(page);
+    await page.goto("/game");
+    await expect(page.getByTestId("chat-scroll")).toContainText("primeira pergunta");
+    await page.getByRole("button", { name: /Solicitar pista/ }).click();
+    await expect(page.getByTestId("chat-scroll")).toContainText("habilidades sobrenaturais");
+    await expect(page.getByTestId("hints-count")).toContainText("1");
+  });
+
+  test("no horizontal overflow on mobile viewport after status changes", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/game");
+    await expect(page.getByTestId("chat-scroll")).toContainText("primeira pergunta");
+    const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
+    const viewWidth = await page.evaluate(() => window.innerWidth);
+    expect(bodyWidth).toBeLessThanOrEqual(viewWidth);
   });
 });
