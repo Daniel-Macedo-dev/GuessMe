@@ -16,22 +16,22 @@ function investigationPhase(count: number): string {
 export default function GameStatsBar({ questionsCount, hintsCount }: Props) {
   return (
     <div className="statsBar">
-      <div className="statGroup">
+      <dl className="statGroup">
         <div className="stat">
-          <span className="statLabel">
+          <dt className="statLabel">
             <DossierIcon name="magnifier" size={9} aria-hidden={true} className="statLabelIcon" />
             Interrogações
-          </span>
-          <span className="statValue" data-testid="questions-count">{questionsCount}</span>
+          </dt>
+          <dd className="statValue" data-testid="questions-count">{questionsCount}</dd>
         </div>
         <div className="stat">
-          <span className="statLabel">
+          <dt className="statLabel">
             <DossierIcon name="clue" size={9} aria-hidden={true} className="statLabelIcon" />
             Pistas
-          </span>
-          <span className="statValue statValueHints" data-testid="hints-count">{hintsCount}</span>
+          </dt>
+          <dd className="statValue statValueHints" data-testid="hints-count">{hintsCount}</dd>
         </div>
-      </div>
+      </dl>
       <div className="statTelemetry">
         <span className="statTelemetryLabel" aria-hidden="true">STATUS</span>
         <span className="statPhase muted">{investigationPhase(questionsCount)}</span>

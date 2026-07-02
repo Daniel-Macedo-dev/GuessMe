@@ -23,6 +23,7 @@ export default function CaseStatusBadge({ status }: Props) {
   return (
     <span
       className={`caseStatusStrip caseStatusStrip--${status}`}
+      role="img"
       aria-label={`Status do caso: ${label.toLowerCase()}`}
     >
       <DossierIcon name={iconName} size={10} aria-hidden={true} />

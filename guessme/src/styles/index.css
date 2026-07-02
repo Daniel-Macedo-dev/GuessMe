@@ -457,9 +457,9 @@ a:focus-visible{
   background: rgba(248,113,113,0.07);
   box-shadow: inset 3px 0 0 rgba(248,113,113,0.55);
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
   flex-wrap: wrap;
   font-size: 14px;
 }
@@ -3088,7 +3088,8 @@ a:focus-visible,
 
 .caseStatusStrip--active::before,
 .caseStatusStrip--analyzing::before,
-.caseStatusStrip--opening::before{
+.caseStatusStrip--opening::before,
+.caseStatusStrip--clue::before{
   content: "●";
   font-size: 7px;
   animation: pulse 2.4s ease-in-out infinite;
@@ -3099,13 +3100,6 @@ a:focus-visible,
   color: var(--accent-evidence);
   border-color: rgba(251,191,36,0.38);
   box-shadow: 0 0 10px rgba(251,191,36,0.10);
-}
-
-.caseStatusStrip--clue::before{
-  content: "●";
-  font-size: 7px;
-  animation: pulse 2.4s ease-in-out infinite;
-  margin-right: 1px;
 }
 
 .caseStatusStrip--solved{
@@ -3264,7 +3258,9 @@ a:focus-visible,
   display: flex;
   gap: 20px;
   align-items: center;
+  margin: 0;
 }
+.statGroup dd{ margin: 0; }
 
 .statLabelIcon{
   margin-right: 3px;
@@ -3296,12 +3292,6 @@ a:focus-visible,
 /* ══════════════════════════════════════════════════════════
    ERROR / WARNING BOX ENHANCEMENTS
    ══════════════════════════════════════════════════════════ */
-
-.errorBox{
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-}
 
 .errorBoxContent{
   display: flex;
@@ -3397,13 +3387,11 @@ a:focus-visible,
     font-size: 8px;
     padding: 2px 6px;
     letter-spacing: 0.10em;
+    margin-left: 0;
   }
   .gameHeaderTitleRow{
     flex-wrap: wrap;
     row-gap: 6px;
-  }
-  .caseStatusStrip{
-    margin-left: 0;
   }
   .transcriptDivider{
     margin: 10px 0 6px;

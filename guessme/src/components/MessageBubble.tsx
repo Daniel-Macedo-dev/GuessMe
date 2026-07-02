@@ -1,3 +1,4 @@
+import { memo } from "react";
 import DossierIcon from "./DossierIcon";
 import type { AnswerVerdict, MessageKind } from "../types/guessme";
 
@@ -46,7 +47,7 @@ const ANSWER_STATE_CLASS: Record<NonNullable<AnswerState>, string> = {
   talvez: "bubbleTalvez",
 };
 
-export default function MessageBubble({ sender, text, kind, verdict }: Props) {
+function MessageBubble({ sender, text, kind, verdict }: Props) {
   const isUser = sender === "Você";
   const isHint = kind === "hint";
   const isError = kind === "error";
@@ -88,3 +89,5 @@ export default function MessageBubble({ sender, text, kind, verdict }: Props) {
     </div>
   );
 }
+
+export default memo(MessageBubble);
