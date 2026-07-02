@@ -1,5 +1,7 @@
 import CategorySelect from "./CategorySelect";
 import DossierIcon from "./DossierIcon";
+import CaseStatusBadge from "./CaseStatusBadge";
+import type { CaseVisualStatus } from "../helpers/caseVisualStatus";
 
 type Props = {
   onRestart: () => void;
@@ -7,6 +9,7 @@ type Props = {
   hintLoading?: boolean;
   hintDisabled?: boolean;
   solved?: boolean;
+  caseStatus: CaseVisualStatus;
 
   categories: string[];
   category: string;
@@ -19,6 +22,7 @@ export default function GameHeader({
   hintLoading,
   hintDisabled,
   solved = false,
+  caseStatus,
   categories,
   category,
   onChangeCategory,
@@ -28,14 +32,16 @@ export default function GameHeader({
   return (
     <div className="gameHeader">
       <div className="gameHeaderLeft">
-        <h2 className="h2">
-          {solved ? "Investigação Concluída" : "Investigação Ativa"}
-          <span className={`caseStatusBadge${solved ? " caseStatusBadgeSolved" : ""}`}>
-            {solved ? "Caso Encerrado" : "Caso Aberto"}
-          </span>
-        </h2>
+        <div className="gameHeaderTitleRow">
+          <h2 className="h2">
+            {solved ? "Investigação Concluída" : "Investigação Ativa"}
+          </h2>
+          <CaseStatusBadge status={caseStatus} />
+        </div>
         <p className="muted gameSubtitle">
-          Interrogue. Acumule evidências. Revele o suspeito.
+          {solved
+            ? "Suspeito identificado — caso arquivado."
+            : "Interrogue. Acumule evidências. Revele o suspeito."}
         </p>
       </div>
 
