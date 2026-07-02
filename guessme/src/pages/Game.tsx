@@ -4,15 +4,18 @@ import Footer from "../components/Footer";
 import GameHeader from "../components/GameHeader";
 import GameStatsBar from "../components/GameStatsBar";
 import MessageBubble from "../components/MessageBubble";
+import TranscriptDivider from "../components/TranscriptDivider";
 import AnswerChips from "../components/AnswerChips";
 import QuestionInput from "../components/QuestionInput";
 import VictoryModal from "../components/VictoryModal";
 import LoadingSpinner from "../components/LoadingSpinner";
 import EvidenceNotebook from "../components/EvidenceNotebook";
 import CaseHistoryPanel from "../components/CaseHistoryPanel";
+import DossierIcon from "../components/DossierIcon";
 import { useGame } from "../hooks/useGame";
 import { useCaseHistory } from "../hooks/useCaseHistory";
 import { deriveEvidence, deriveSolvedSummary } from "../helpers/deriveEvidence";
+import { deriveCaseStatus } from "../helpers/caseVisualStatus";
 
 export default function Game() {
   const {
@@ -53,6 +56,9 @@ export default function Game() {
   const evidence = deriveEvidence(messages);
   const solved = deriveSolvedSummary(winner);
 
+  const caseStatus = deriveCaseStatus({ messages, loading, hintLoading, winner, error });
+  const hintsCount = messages.filter((m) => m.kind === "hint").length;
+
   const inputPlaceholder = !canAsk
     ? sessionExpired
       ? "Sessão expirada — clique em Novo caso"
@@ -74,6 +80,7 @@ export default function Game() {
           hintLoading={hintLoading}
           hintDisabled={sessionExpired || loading}
           solved={Boolean(winner)}
+          caseStatus={caseStatus}
           categories={categories}
           category={category}
           onChangeCategory={changeCategory}
@@ -81,7 +88,7 @@ export default function Game() {
 
         <div className="gamePageGrid">
           <section className="panel chatPanelWide">
-            <GameStatsBar questionsCount={questionsCount} />
+            <GameStatsBar questionsCount={questionsCount} hintsCount={hintsCount} />
 
             <div className="transcriptLabel" aria-hidden="true">
               <span className="transcriptLabelText">TRANSCRIÇÃO DE INTERROGAÇÃO</span>
@@ -89,15 +96,42 @@ export default function Game() {
             </div>
 
             <div className="chatScroll" ref={chatScrollRef} aria-live="polite" data-testid="chat-scroll">
-              {messages.map((m) => (
-                <MessageBubble key={m.id} sender={m.sender} text={m.text} kind={m.kind} verdict={m.verdict} />
-              ))}
+              {messages.map((m, i) => {
+                const prevKind = i > 0 ? messages[i - 1].kind : null;
+                const isLastMsg = i === messages.length - 1;
+
+                return (
+                  <div key={m.id}>
+                    {i === 0 && (
+                      <TranscriptDivider label="ABERTURA DO CASO" variant="open" />
+                    )}
+                    {m.kind === "hint" && prevKind !== "hint" && (
+                      <TranscriptDivider label="PISTA DO SISTEMA" variant="clue" />
+                    )}
+                    {winner && isLastMsg && m.kind === "ai" && (
+                      <TranscriptDivider label="VEREDITO FINAL" variant="verdict" />
+                    )}
+                    <MessageBubble
+                      sender={m.sender}
+                      text={m.text}
+                      kind={m.kind}
+                      verdict={m.verdict}
+                    />
+                  </div>
+                );
+              })}
               {loading ? <LoadingSpinner /> : null}
             </div>
 
             {error ? (
               <div className="errorBox" role="alert" data-testid="error-box">
-                <span>{error}</span>
+                <div className="errorBoxContent">
+                  <DossierIcon name="warning" size={14} aria-hidden={true} className="errorBoxIcon" />
+                  <div className="errorBoxText">
+                    <span className="errorBoxLabel">FALHA NO DOSSIÊ</span>
+                    <span>{error}</span>
+                  </div>
+                </div>
                 {sessionExpired && (
                   <button className="btn btn-primary errorRestartBtn" onClick={restart}>
                     Novo caso
@@ -113,6 +147,7 @@ export default function Game() {
 
             {limitMessage ? (
               <div className="warningBox" role="alert" data-testid="warning-box">
+                <DossierIcon name="warning" size={13} aria-hidden={true} className="warningBoxIcon" />
                 <span>{limitMessage}</span>
               </div>
             ) : null}
