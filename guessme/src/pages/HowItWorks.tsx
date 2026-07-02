@@ -12,7 +12,10 @@ export default function HowItWorks() {
         <section className="panel pagePanel">
           <div className="protocolHeader">
             <span className="protocolClassLabel">DOSSIÊ OPERACIONAL · ACESSO RESTRITO</span>
-            <h2 className="h2">Manual do Agente</h2>
+            <div className="protocolHeaderTitle">
+              <span className="caseStamp caseStamp--classified caseStamp--sm">Manual do Agente</span>
+              <h2 className="h2">Protocolo de Interrogação</h2>
+            </div>
             <p className="muted pageLead">Cinco etapas para fechar qualquer caso.</p>
           </div>
 

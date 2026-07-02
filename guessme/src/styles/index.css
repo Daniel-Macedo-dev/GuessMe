@@ -2319,6 +2319,13 @@ a:focus-visible{
 .protocolHeader{
   margin-bottom: 6px;
 }
+.protocolHeaderTitle{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 8px 0 4px;
+}
 .protocolClassLabel{
   display: block;
   font-family: var(--font-mono);
