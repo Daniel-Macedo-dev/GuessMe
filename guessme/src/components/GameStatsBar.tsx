@@ -1,5 +1,8 @@
+import DossierIcon from "./DossierIcon";
+
 type Props = {
   questionsCount: number;
+  hintsCount: number;
 };
 
 function investigationPhase(count: number): string {
@@ -10,12 +13,24 @@ function investigationPhase(count: number): string {
   return "Fase crítica — aja antes que o caso esfrie";
 }
 
-export default function GameStatsBar({ questionsCount }: Props) {
+export default function GameStatsBar({ questionsCount, hintsCount }: Props) {
   return (
     <div className="statsBar">
-      <div className="stat">
-        <span className="statLabel">Interrogações</span>
-        <span className="statValue" data-testid="questions-count">{questionsCount}</span>
+      <div className="statGroup">
+        <div className="stat">
+          <span className="statLabel">
+            <DossierIcon name="magnifier" size={9} aria-hidden={true} className="statLabelIcon" />
+            Interrogações
+          </span>
+          <span className="statValue" data-testid="questions-count">{questionsCount}</span>
+        </div>
+        <div className="stat">
+          <span className="statLabel">
+            <DossierIcon name="clue" size={9} aria-hidden={true} className="statLabelIcon" />
+            Pistas
+          </span>
+          <span className="statValue statValueHints" data-testid="hints-count">{hintsCount}</span>
+        </div>
       </div>
       <div className="statTelemetry">
         <span className="statTelemetryLabel" aria-hidden="true">STATUS</span>
