@@ -14,7 +14,7 @@ export default function HowItWorks() {
             <span className="protocolClassLabel">DOSSIÊ OPERACIONAL · ACESSO RESTRITO</span>
             <div className="protocolHeaderTitle">
               <span className="caseStamp caseStamp--classified caseStamp--sm">Manual do Agente</span>
-              <h2 className="h2">Protocolo de Interrogação</h2>
+              <h1 className="h2">Protocolo de Interrogação</h1>
             </div>
             <p className="muted pageLead">Cinco etapas para fechar qualquer caso.</p>
           </div>
@@ -27,7 +27,7 @@ export default function HowItWorks() {
                 <DossierIcon name="case-file" size={16} aria-hidden={true} />
               </div>
               <div className="stepContent">
-                <h3 className="stepTitle">Abrir o caso</h3>
+                <h2 className="stepTitle">Abrir o caso</h2>
                 <p className="muted">
                   Escolha um domínio — Anime, Games, Filmes ou Geral. A IA sorteia um
                   personagem e o caso começa imediatamente. Você não sabe a identidade.
@@ -40,7 +40,7 @@ export default function HowItWorks() {
                 <DossierIcon name="magnifier" size={16} aria-hidden={true} />
               </div>
               <div className="stepContent">
-                <h3 className="stepTitle">Formular perguntas</h3>
+                <h2 className="stepTitle">Formular perguntas</h2>
                 <p className="muted">
                   Faça perguntas que aceitem Sim ou Não. Comece amplo: "É humano?",
                   "É de anime?". Depois estreite: "É villain?", "Tem poderes?".
@@ -53,7 +53,7 @@ export default function HowItWorks() {
                 <DossierIcon name="evidence" size={16} aria-hidden={true} />
               </div>
               <div className="stepContent">
-                <h3 className="stepTitle">Ler as evidências</h3>
+                <h2 className="stepTitle">Ler as evidências</h2>
                 <div className="evidenceLegend">
                   <span className="evidenceTag evidenceSim">Sim — confirmado</span>
                   <span className="evidenceTag evidenceNao">Não — descartado</span>
@@ -71,7 +71,7 @@ export default function HowItWorks() {
                 <DossierIcon name="clue" size={16} aria-hidden={true} />
               </div>
               <div className="stepContent">
-                <h3 className="stepTitle">Solicitar intel</h3>
+                <h2 className="stepTitle">Solicitar intel</h2>
                 <p className="muted">
                   Se a investigação travar, peça uma pista. A pista revela uma
                   característica sem encerrar o caso — use com moderação.
@@ -84,7 +84,7 @@ export default function HowItWorks() {
                 <DossierIcon name="lock" size={16} aria-hidden={true} />
               </div>
               <div className="stepContent">
-                <h3 className="stepTitle">Revelar o suspeito</h3>
+                <h2 className="stepTitle">Revelar o suspeito</h2>
                 <p className="muted">
                   Quando tiver certeza, confronte pelo nome: "É o Naruto?". Se correto,
                   o caso é encerrado e o dossiê completo é revelado.

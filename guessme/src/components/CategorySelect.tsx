@@ -34,14 +34,20 @@ export default function CategorySelect({ value, options, onChange, disabled, lab
       if (!rootRef.current) return;
       if (!rootRef.current.contains(e.target as Node)) setOpen(false);
     }
-    function onEsc(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setOpen(false);
+      } else if (e.key === "Tab" && menuRef.current) {
+        if (!menuRef.current.contains(document.activeElement)) {
+          setOpen(false);
+        }
+      }
     }
     document.addEventListener("mousedown", onDocClick);
-    document.addEventListener("keydown", onEsc);
+    document.addEventListener("keydown", onKeyDown);
     return () => {
       document.removeEventListener("mousedown", onDocClick);
-      document.removeEventListener("keydown", onEsc);
+      document.removeEventListener("keydown", onKeyDown);
     };
   }, []);
 
