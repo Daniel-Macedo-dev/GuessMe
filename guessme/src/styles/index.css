@@ -1542,7 +1542,7 @@ a:focus-visible{
   padding: 6px 14px;
   border-radius: var(--radius-sm);
   border: 1px solid;
-  animation: fadeIn 0.15s ease;
+  animation: statusIn 0.15s ease;
 }
 .replayExportStatusOk{
   color: var(--accent);
@@ -1555,7 +1555,7 @@ a:focus-visible{
   background: rgba(248,113,113,0.06);
 }
 
-@keyframes fadeIn{
+@keyframes statusIn{
   from{ opacity: 0; transform: translateY(4px); }
   to{ opacity: 1; transform: translateY(0); }
 }
@@ -1598,7 +1598,7 @@ a:focus-visible{
   margin-bottom: 10px;
   border-radius: var(--radius-sm);
   border: 1px solid;
-  animation: fadeIn 0.15s ease;
+  animation: statusIn 0.15s ease;
 }
 .historyImportStatusOk{
   color: var(--accent);
