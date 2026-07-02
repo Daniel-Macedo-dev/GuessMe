@@ -125,6 +125,7 @@ guessme/
 │   │   └── …
 │   ├── helpers/                # Pure derivation functions (no side effects)
 │   │   ├── deriveEvidence.ts   # verdict → Confirmado/Refutado/Inconclusivo
+│   │   ├── caseVisualStatus.ts # game state → CaseVisualStatus (7 variants)
 │   │   ├── caseStats.ts        # CaseHistoryEntry[] → StatsData
 │   │   ├── progression.ts      # CaseHistoryEntry[] → PlayerProgression
 │   │   └── caseExport.ts
@@ -196,6 +197,8 @@ GuessMe uses a custom investigation/dossier design system called **Casefile Noir
 |-----------|------|
 | `BrandMark` | SVG dossier seal (two concentric circles + cardinal marks + GM logotype). Used in Navbar and Home hero. |
 | `CaseStamp` | Inline status badge — variants: `active`, `closed`, `classified`, `archived`, `intel`. Sizes: `sm`, `md`, `lg`. Optional `pulse` animation. |
+| `CaseStatusBadge` | Live case status strip derived from game state — 7 variants: idle, opening, active, analyzing, clue, solved, error. Shows DossierIcon + Portuguese label. |
+| `TranscriptDivider` | Visual section marker inside the chat area — variants: `open` (ABERTURA DO CASO), `clue` (PISTA DO SISTEMA), `verdict` (VEREDITO FINAL), `system`. Decorative (`aria-hidden`). |
 | `DossierSectionHeader` | Page section header with classification label, heading, and optional meta line. |
 
 ### Dossier UI patterns
@@ -209,7 +212,11 @@ GuessMe uses a custom investigation/dossier design system called **Casefile Noir
 | Intelligence report label (`RELATÓRIO DE INTELIGÊNCIA · USO RESTRITO`) | Stats page header |
 | Protocol header (`DOSSIÊ OPERACIONAL · ACESSO RESTRITO`) | HowItWorks page |
 | Hero classification strip (`CONFIDENCIAL · PROTOCOLO DE INTERROGAÇÃO · IA-1`) | Home hero |
-| Telemetry bar (phase text) | GameStatsBar |
+| Telemetry bar (phase text + hint counter) | GameStatsBar |
+| Case status strip (INVESTIGAÇÃO ATIVA / ANALISANDO RESPOSTA / …) | GameHeader via CaseStatusBadge |
+| Transcript section dividers (ABERTURA DO CASO / PISTA DO SISTEMA / VEREDITO FINAL) | Chat area in Game.tsx |
+| Verdict badge pill (SIM / NÃO / TALVEZ) | MessageBubble |
+| Dossier error label (FALHA NO DOSSIÊ) | Game.tsx error box |
 | Footer ref (`GUESSME · DOSSIÊ DIGITAL · v2`) | Footer |
 
 ### Design token reference
@@ -405,7 +412,7 @@ Classification priority: `message.verdict` (structured backend field) → text p
 
 ## E2E test coverage
 
-Playwright 1.61 — **265 tests** across ten spec files. All API calls are intercepted via `page.route()`. History, stats, and progression tests use `localStorage` seeding via `addInitScript`. No backend or Gemini key required.
+Playwright 1.61 — **270 tests** across ten spec files. All API calls are intercepted via `page.route()`. History, stats, and progression tests use `localStorage` seeding via `addInitScript`. No backend or Gemini key required.
 
 ```bash
 npx playwright install --with-deps chromium   # one-time setup
@@ -417,7 +424,7 @@ npm run e2e:report    # open HTML report
 | Spec | Coverage |
 |------|----------|
 | `routes.spec.ts` | Route rendering, navigation links, SPA deep links, unknown route redirect |
-| `game-flow.spec.ts` | Boot, category select, question input (empty/overlong/Enter), answer bubbles, hint flow, victory modal |
+| `game-flow.spec.ts` | Boot, category select, question input (empty/overlong/Enter), answer bubbles, hint flow, victory modal, case status badge, transcript dividers, hint counter, mobile overflow |
 | `error-states.spec.ts` | Backend unavailable, cooldown, max questions/hints, stale session, Gemini error |
 | `mobile.spec.ts` | Overflow-free layout at 390 px and 360 px |
 | `notebook.spec.ts` | Notebook presence, empty/confirmed/refuted/inconclusive/intel states, verdict classification, mobile |
@@ -593,6 +600,16 @@ Application → Manifest — should show the app name, colors, display mode (`st
 - [ ] Navbar shows the BrandMark SVG seal to the left of "GuessMe"
 - [ ] Home hero has classification strip ("CONFIDENCIAL · PROTOCOLO DE INTERROGAÇÃO · IA-1")
 - [ ] Home step cards display protocol numbers (01 / 02 / 03) in the top-right corner
+- [ ] Game header shows an active status badge (INVESTIGAÇÃO ATIVA) once a case is running
+- [ ] Status badge changes to ANALISANDO RESPOSTA while an API request is in flight
+- [ ] Status badge changes to PISTA EM ANÁLISE while a hint request is in flight
+- [ ] Status badge changes to CASO ENCERRADO after a case is solved
+- [ ] Chat transcript shows "ABERTURA DO CASO" divider before the opening AI message
+- [ ] Hint messages are preceded by a "PISTA DO SISTEMA" divider
+- [ ] After a win, the final AI message is preceded by a "VEREDITO FINAL" divider
+- [ ] AI verdict bubble shows a SIM / NÃO / TALVEZ mini badge alongside the sender label
+- [ ] Error box shows "FALHA NO DOSSIÊ" dossier label with warning icon
+- [ ] Stats bar shows separate Interrogações and Pistas counters with icons
 - [ ] Game chat panel shows "TRANSCRIÇÃO DE INTERROGAÇÃO" label above messages
 - [ ] Answer chips section shows "CONSULTAS RÁPIDAS" label
 - [ ] VictoryModal top reads "RELATÓRIO DE CASO · ENCERRADO" above the stamp
