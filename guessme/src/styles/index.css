@@ -126,12 +126,6 @@ b{ font-weight: 800; }
   justify-content: space-between;
   gap: 12px;
 }
-.brand{
-  display: flex;
-  flex-direction: column;
-  gap: 0px;
-  text-decoration: none;
-}
 .brandName{
   font-weight: 900;
   font-size: 17px;
@@ -744,42 +738,6 @@ a:focus-visible{
   flex-wrap: wrap;
 }
 
-/* Select */
-.selectWrap{
-  position: relative;
-}
-
-.select{
-  height: 42px;
-  padding: 0 12px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.03);
-  color: var(--text);
-  cursor: pointer;
-}
-
-.select:focus-visible{
-  outline: none;
-  box-shadow: 0 0 0 0.22rem rgba(16,185,129,0.20);
-  border-color: rgba(16,185,129,0.35);
-}
-.madeByLink{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding: 10px 16px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.04);
-  font-weight: 900;
-  letter-spacing: .2px;
-}
-
-.madeByLink:hover{
-  background: rgba(255,255,255,0.06);
-  border-color: rgba(255,255,255,0.16);
-}
 /* ── Game header ── */
 .gameSubtitle{
   margin: 4px 0 0;
@@ -787,46 +745,6 @@ a:focus-visible{
   font-size: 13px;
   font-family: var(--font-mono);
   letter-spacing: 0.02em;
-}
-
-/* ===== Select dark (sem dropdown branco gigante) ===== */
-.inputSelect{
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-  border: 1px solid rgba(255,255,255,0.12);
-
-  padding-right: 42px; /* espaço pro "caret" */
-  cursor: pointer;
-}
-
-/* seta do select (caret) */
-.inputSelect{
-  background-image:
-    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)),
-    radial-gradient(circle at 50% 45%, rgba(255,255,255,0.0) 0 8px, rgba(255,255,255,0.0) 9px),
-    linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.75) 50%),
-    linear-gradient(135deg, rgba(255,255,255,0.75) 50%, transparent 50%);
-  background-repeat: no-repeat;
-  background-position:
-    0 0,
-    100% 50%,
-    calc(100% - 18px) 55%,
-    calc(100% - 12px) 55%;
-  background-size:
-    100% 100%,
-    1px 1px,
-    6px 6px,
-    6px 6px;
-}
-
-/* opções do dropdown: mantém dark */
-.inputSelect option{
-  background: #0b0f14;
-  color: rgba(255,255,255,0.92);
 }
 
 /* ===== Footer link (clicável mas não "botão") ===== */
@@ -1019,39 +937,6 @@ a:focus-visible{
   color: var(--muted);
 }
 
-.caseStatusBadge{
-  display: inline-block;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent);
-  border: 1px solid rgba(52,211,153,0.38);
-  border-radius: 4px;
-  padding: 2px 8px;
-  margin-left: 10px;
-  vertical-align: middle;
-  box-shadow: 0 0 10px rgba(52,211,153,0.14);
-}
-
-.caseStatusBadge::before{
-  content: "● ";
-  font-size: 8px;
-  animation: pulse 2.4s ease-in-out infinite;
-}
-
-.caseStatusBadgeSolved{
-  color: var(--muted);
-  border-color: var(--border2);
-  box-shadow: none;
-}
-
-.caseStatusBadgeSolved::before{
-  content: "◼ ";
-  animation: none;
-}
-
 .caseSolvedStamp{
   display: inline-block;
   font-family: var(--font-mono);
@@ -1097,10 +982,6 @@ a:focus-visible{
 }
 
 /* ── HowItWorks: Agent Manual ── */
-.pageHeader{
-  margin-bottom: 6px;
-}
-
 .pageLead{
   margin: 6px 0 0;
   font-size: 15px;
@@ -1121,17 +1002,6 @@ a:focus-visible{
 
 .manualStep:last-child{
   border-bottom: none;
-}
-
-.stepNumber{
-  font-family: var(--font-mono);
-  font-size: 22px;
-  font-weight: 900;
-  color: var(--accent);
-  opacity: 0.38;
-  min-width: 28px;
-  line-height: 1;
-  padding-top: 2px;
 }
 
 .stepContent{
@@ -2369,33 +2239,6 @@ a:focus-visible{
   content: "● ";
   font-size: 7px;
   animation: pulse 2.4s ease-in-out infinite;
-}
-
-/* ── Dossier section header primitive ── */
-.dossierSectionHeader{
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 14px;
-}
-.dossierSectionLabel{
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--accent);
-  opacity: 0.72;
-}
-.dossierSectionTitle{
-  margin: 0;
-  font-size: 22px;
-  font-weight: 900;
-  letter-spacing: -0.2px;
-}
-.dossierSectionMeta{
-  margin: 0;
-  font-family: var(--font-mono);
 }
 
 /* ── Home hero: classification strip ── */
