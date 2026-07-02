@@ -1,3 +1,4 @@
+import DossierIcon from "./DossierIcon";
 import type { AnswerVerdict, MessageKind } from "../types/guessme";
 
 type Props = {
@@ -27,9 +28,21 @@ const SENDER_LABELS: Record<string, string> = {
   error: "Sistema",
 };
 
+const VERDICT_BADGE: Record<NonNullable<AnswerState>, string> = {
+  sim:    "SIM",
+  nao:    "NÃO",
+  talvez: "TALVEZ",
+};
+
+const VERDICT_BADGE_CLASS: Record<NonNullable<AnswerState>, string> = {
+  sim:    "msgVerdictBadge msgVerdictBadge--sim",
+  nao:    "msgVerdictBadge msgVerdictBadge--nao",
+  talvez: "msgVerdictBadge msgVerdictBadge--talvez",
+};
+
 const ANSWER_STATE_CLASS: Record<NonNullable<AnswerState>, string> = {
-  sim: "bubbleSim",
-  nao: "bubbleNao",
+  sim:    "bubbleSim",
+  nao:    "bubbleNao",
   talvez: "bubbleTalvez",
 };
 
@@ -54,7 +67,22 @@ export default function MessageBubble({ sender, text, kind, verdict }: Props) {
   return (
     <div className={`msgRow ${isUser ? "user" : "ai"}`}>
       <div className={bubbleClass}>
-        <div className="sender">{displaySender}</div>
+        <div className="msgMeta">
+          <span className="sender">
+            {isHint && (
+              <DossierIcon name="clue" size={9} aria-hidden={true} className="msgSenderIcon" />
+            )}
+            {isError && (
+              <DossierIcon name="warning" size={9} aria-hidden={true} className="msgSenderIcon" />
+            )}
+            {displaySender}
+          </span>
+          {answerState && (
+            <span className={VERDICT_BADGE_CLASS[answerState]} aria-hidden="true">
+              {VERDICT_BADGE[answerState]}
+            </span>
+          )}
+        </div>
         <div className="text">{text}</div>
       </div>
     </div>
