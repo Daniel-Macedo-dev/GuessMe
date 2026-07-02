@@ -1640,12 +1640,6 @@ a:focus-visible{
 .statsPageHeader{
   margin-bottom: 22px;
 }
-.statsPageStamp{
-  font-size: 11px;
-  color: var(--accent);
-  letter-spacing: 0.16em;
-  margin-bottom: 6px;
-}
 .statsPageTitle{
   margin: 0 0 4px;
   font-size: 26px;

@@ -1,5 +1,6 @@
 import type { CategoryStats } from "../types/stats";
 import StatsBarList from "./StatsBarList";
+import DossierIcon from "./DossierIcon";
 
 type Props = {
   categories: CategoryStats[];
@@ -19,7 +20,10 @@ export default function StatsCategoryPanel({ categories }: Props) {
 
   return (
     <section className="statsPanel panel" aria-labelledby="stats-cat-title" data-testid="stats-category-panel">
-      <h3 id="stats-cat-title" className="statsPanelTitle">Categorias investigadas</h3>
+      <div className="panelSectionHeader">
+        <DossierIcon name="archive" size={14} aria-hidden={true} className="dossierIcon--muted" />
+        <h3 id="stats-cat-title" className="statsPanelTitle panelSectionTitle">Categorias investigadas</h3>
+      </div>
       <StatsBarList items={items} testId="stats-category-bars" />
     </section>
   );
