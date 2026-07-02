@@ -380,6 +380,7 @@ b{ font-weight: 800; }
   border: 1px solid rgba(52,211,153,0.14);
   background: var(--surface-chat);
   box-shadow: inset 0 2px 16px rgba(0,0,0,0.28);
+  position: relative;
 }
 
 .msgRow{ display:flex; margin: 10px 0; }
@@ -1077,6 +1078,7 @@ b{ font-weight: 800; }
   top: 70px;
   max-height: calc(100vh - 90px);
   overflow-y: auto;
+  border-left: 2px solid rgba(52,211,153,0.14);
 }
 
 .nbHeader{
@@ -1291,11 +1293,12 @@ b{ font-weight: 800; }
   background: rgba(255,255,255,0.026);
   position: relative;
   overflow: hidden;
-  transition: background var(--t-base), border-color var(--t-base);
+  transition: background var(--t-base), border-color var(--t-base), transform var(--t-base);
 }
 .historyCard:hover{
   background: rgba(255,255,255,0.040);
   border-color: var(--border2);
+  transform: translateY(-1px);
 }
 .historyCard::before{
   content: '';
@@ -2449,11 +2452,6 @@ a:focus-visible,
 .victoryModal{ animation: popIn 280ms var(--motion-ease); }
 .installPrompt{ animation: slideUp 220ms var(--motion-ease-out); }
 
-/* ── Evidence notebook dossier pin feel ── */
-.notebook{
-  border-left: 2px solid rgba(52,211,153,0.14);
-}
-
 /* ── Section entrance reveal ── */
 @keyframes panelIn{
   from{ transform: translateY(6px); opacity: 0; }
@@ -2478,12 +2476,6 @@ a:focus-visible,
 /* ── Evidence notebook entry feedback ── */
 .nbSection{ animation: panelIn 180ms var(--motion-ease-out); }
 .nbEntry{ animation: msgIn 120ms var(--motion-ease-out); }
-
-/* ── History card hover ── */
-.historyCard:hover{
-  transform: translateY(-1px);
-}
-.historyCard{ transition: background var(--t-base), border-color var(--t-base), transform var(--t-base); }
 
 /* ── Victory modal — closed case report ── */
 .victoryReportLabel{
@@ -3150,10 +3142,6 @@ a:focus-visible,
 /* ══════════════════════════════════════════════════════════
    CHAT SCROLL ATMOSPHERE
    ══════════════════════════════════════════════════════════ */
-
-.chatScroll{
-  position: relative;
-}
 
 /* Subtle scanline overlay — purely decorative, does not intercept clicks */
 .chatScroll::after{
