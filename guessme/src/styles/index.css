@@ -59,6 +59,7 @@
   /* ── Additional dossier tokens ── */
   --accent-faint:   rgba(52,211,153,0.06);
   --surface-desk:   rgba(6,11,18,0.72);
+  --surface-solid:  #0b141c;
   --border-accent:  rgba(52,211,153,0.18);
 }
 
@@ -1091,7 +1092,7 @@ b{ font-weight: 800; }
 }
 .manualSteps .manualStepIcon{
   /* Opaque: masks the route line running behind the icons */
-  background-color: #0b141c;
+  background-color: var(--surface-solid);
   background-image: none;
   position: relative;
   z-index: 1;
@@ -2470,7 +2471,7 @@ b{ font-weight: 800; }
 }
 .heroProtocolCard .stepIconWrap{
   /* Opaque: masks the procedural connector line running behind the icons */
-  background-color: #0b141c;
+  background-color: var(--surface-solid);
   background-image: none;
   position: relative;
   z-index: 1;
