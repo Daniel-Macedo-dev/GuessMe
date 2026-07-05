@@ -71,7 +71,7 @@ export default function EvidenceNotebook({ evidence, solved, questionsCount }: P
       <div className="nbHeader">
         <PanelSectionHeader icon="evidence" title="Caderno de Evidências" flush />
         {!isEmpty && (
-          <span className="nbMeta muted">{questionsCount} interrogação{questionsCount !== 1 ? "ões" : ""}</span>
+          <span className="nbMeta muted">{questionsCount} {questionsCount === 1 ? "interrogação" : "interrogações"}</span>
         )}
       </div>
 

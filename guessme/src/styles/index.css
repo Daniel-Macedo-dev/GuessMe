@@ -477,10 +477,17 @@ b{ font-weight: 800; }
   height: 52vh;
   min-height: 360px;
   overflow: auto;
-  padding: 12px;
+  padding: 12px 12px 12px 42px;
   border-radius: var(--radius-sm);
   border: 1px solid rgba(52,211,153,0.14);
-  background: var(--surface-chat);
+  /* Interrogation-paper margin rule pinned to the sheet, not the scroll content */
+  background:
+    linear-gradient(90deg,
+      transparent 28px,
+      rgba(248,113,113,0.15) 28px,
+      rgba(248,113,113,0.15) 29px,
+      transparent 29px)
+    var(--surface-chat);
   box-shadow: inset 0 2px 16px rgba(0,0,0,0.28);
   position: relative;
 }
@@ -516,6 +523,7 @@ b{ font-weight: 800; }
 .inputRow{ display:flex; gap: 10px; }
 .input{
   flex: 1;
+  min-width: 0; /* allow shrinking inside flex rows on narrow screens */
   height: 44px;
   padding: 0 16px;
   border-radius: var(--radius-pill);
@@ -654,7 +662,19 @@ b{ font-weight: 800; }
   .chatScroll{ height: 48vh; }
 }
 @media (max-width: 640px){
-  .chatScroll{ height: 42vh; min-height: 240px; }
+  .chatScroll{
+    height: 42vh;
+    min-height: 240px;
+    padding-left: 12px;
+    background: var(--surface-chat); /* drop margin rule on narrow screens */
+  }
+  .queryDesk{ padding: 10px 10px 12px; }
+  .notebook{
+    padding-left: 16px;
+    background-image: linear-gradient(145deg, var(--surface-raised) 0%, var(--surface) 100%);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
   .main{ padding: 14px 10px; }
   .hero{ padding: 22px 18px; }
   .heroTitle{ font-size: 34px; }
@@ -1175,15 +1195,25 @@ b{ font-weight: 800; }
   align-items: start;
   margin-top: 14px;
 }
+.gamePageGrid > *{
+  min-width: 0; /* keep intrinsic content from widening the columns */
+}
 
 /* ===== Evidence Notebook ===== */
 .notebook{
-  padding: 16px;
+  padding: 16px 16px 16px 32px;
   position: sticky;
   top: 70px;
   max-height: calc(100vh - 90px);
   overflow-y: auto;
   border-left: 2px solid rgba(52,211,153,0.14);
+  /* Spiral-binding strip: punched holes along the bound edge */
+  background-image:
+    radial-gradient(circle 2.5px at 10px 13px, rgba(2,6,10,0.92) 2.4px, rgba(255,255,255,0.055) 2.9px, transparent 3.4px),
+    linear-gradient(90deg, rgba(52,211,153,0.055) 0px, rgba(52,211,153,0.055) 20px, rgba(255,255,255,0.045) 20px, rgba(255,255,255,0.045) 21px, transparent 21px),
+    linear-gradient(145deg, var(--surface-raised) 0%, var(--surface) 100%);
+  background-size: 20px 26px, 100% 100%, 100% 100%;
+  background-repeat: repeat-y, no-repeat, no-repeat;
 }
 
 .nbHeader{
@@ -2425,9 +2455,21 @@ b{ font-weight: 800; }
   background: linear-gradient(90deg, var(--border) 0%, transparent 100%);
 }
 
+/* ── Game desk: inset query zone ── */
+.queryDesk{
+  margin-top: 12px;
+  padding: 12px 14px 14px;
+  border-radius: var(--radius-inner);
+  border: 1px solid var(--border);
+  background: var(--surface-desk);
+  box-shadow: inset 0 1px 8px rgba(0,0,0,0.22);
+}
+.queryDesk .chips{ margin-bottom: 10px; }
+.queryDesk .inputArea{ margin-top: 0; }
+
 /* ── Game desk: query section labels ── */
 .querySection{
-  margin-top: 8px;
+  margin-top: 0;
 }
 .queryLabel{
   display: block;

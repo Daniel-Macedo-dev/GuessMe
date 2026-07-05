@@ -152,21 +152,23 @@ export default function Game() {
               </div>
             ) : null}
 
-            {!winner ? (
-              <div className="querySection">
-                <span className="queryLabel" aria-hidden="true">CONSULTAS RÁPIDAS</span>
-                <AnswerChips disabled={!canAsk} onPick={sendQuestion} />
-              </div>
-            ) : null}
+            <div className="queryDesk">
+              {!winner ? (
+                <div className="querySection">
+                  <span className="queryLabel" aria-hidden="true">CONSULTAS RÁPIDAS</span>
+                  <AnswerChips disabled={!canAsk} onPick={sendQuestion} />
+                </div>
+              ) : null}
 
-            <div className="queryInputSection">
-              <span className="queryLabel queryInputLabel" aria-hidden="true">NOVA PERGUNTA</span>
-              <QuestionInput
-                disabled={!canAsk}
-                loading={loading}
-                placeholder={inputPlaceholder}
-                onSend={sendQuestion}
-              />
+              <div className="queryInputSection">
+                <span className="queryLabel queryInputLabel" aria-hidden="true">NOVA PERGUNTA</span>
+                <QuestionInput
+                  disabled={!canAsk}
+                  loading={loading}
+                  placeholder={inputPlaceholder}
+                  onSend={sendQuestion}
+                />
+              </div>
             </div>
           </section>
 
