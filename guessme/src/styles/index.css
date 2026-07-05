@@ -1617,16 +1617,22 @@ b{ font-weight: 800; }
 
 .replayStats{
   display: flex;
-  gap: 16px;
   flex-wrap: wrap;
-  padding: 10px 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-inner);
+  background: var(--surface-desk);
+  overflow: hidden;
 }
 
 .replayStat{
   font-size: 14px;
+  flex: 1 1 auto;
+  padding: 8px 14px;
+  border-left: 1px solid var(--border);
+  white-space: nowrap;
 }
+.replayStat:first-child{ border-left: none; }
 
 .replayBody{
   display: grid;
@@ -2696,6 +2702,13 @@ a:focus-visible,
   background: var(--border-accent);
   margin: 12px 0;
 }
+.victoryFooterRef{
+  justify-content: center;
+  margin-top: 16px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.victoryFooterRef > span{ opacity: 0.45; }
 .victoryModal{
   border-color: var(--border-accent);
 }
@@ -2776,11 +2789,7 @@ a:focus-visible,
   color: var(--accent-evidence);
   animation: fadeIn 200ms ease-out;
 }
-.offlineBannerIcon{
-  font-size: 9px;
-  opacity: 0.75;
-  flex-shrink: 0;
-}
+.offlineBanner .caseStamp{ flex-shrink: 0; }
 .offlineBannerText strong{
   font-weight: 700;
 }
@@ -2801,6 +2810,8 @@ a:focus-visible,
   flex-direction: column;
   gap: 10px;
   animation: slideUp 220ms ease-out;
+  /* Dossier cut corner, matching the case file motif */
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
 }
 @keyframes slideUp{
   from{ opacity:0; transform:translateY(12px); }

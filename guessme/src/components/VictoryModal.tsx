@@ -67,6 +67,12 @@ export default function VictoryModal({ winner, onRestart }: Props) {
             Novo caso
           </button>
         </div>
+
+        <div className="dossierEyebrow victoryFooterRef" aria-hidden="true">
+          <span>RELATÓRIO DE ENCERRAMENTO</span>
+          <span className="dossierEyebrowDot" />
+          <span>ARQUIVADO LOCALMENTE</span>
+        </div>
       </div>
     </div>
   );

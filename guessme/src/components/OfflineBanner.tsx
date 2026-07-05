@@ -20,8 +20,9 @@ export default function OfflineBanner() {
   return (
     <div className="offlineBanner" role="status" aria-live="polite" data-testid="offline-banner">
       <DossierIcon name="offline" size={16} aria-hidden={true} className="offlineBannerSvgIcon" />
+      <span className="caseStamp caseStamp--classified caseStamp--sm" aria-hidden="true">Offline</span>
       <span className="offlineBannerText">
-        <strong>Offline</strong> — histórico local disponível · perguntas à IA exigem conexão
+        <strong>Conexão perdida</strong> — histórico local disponível · perguntas à IA exigem conexão
       </span>
     </div>
   );
