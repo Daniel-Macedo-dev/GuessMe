@@ -669,12 +669,6 @@ b{ font-weight: 800; }
     background: var(--surface-chat); /* drop margin rule on narrow screens */
   }
   .queryDesk{ padding: 10px 10px 12px; }
-  .notebook{
-    padding-left: 16px;
-    background-image: linear-gradient(145deg, var(--surface-raised) 0%, var(--surface) 100%);
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-  }
   .main{ padding: 14px 10px; }
   .hero{ padding: 22px 18px; }
   .heroTitle{ font-size: 34px; }
@@ -1786,6 +1780,14 @@ b{ font-weight: 800; }
 @media (max-width: 640px){
   .historyCardStats{ gap: 8px; }
   .historyCardActions{ gap: 6px; }
+}
+@media (max-width: 480px){
+  .historyCardStats{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 10px;
+  }
+  .historyStat{ flex-direction: row; align-items: baseline; gap: 6px; }
 }
 @media (max-width: 400px){
   .historyCardActions{ flex-direction: column; }
