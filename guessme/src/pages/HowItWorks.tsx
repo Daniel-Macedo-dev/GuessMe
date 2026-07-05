@@ -31,7 +31,7 @@ export default function HowItWorks() {
                 <DossierIcon name="case-file" size={16} aria-hidden={true} />
               </div>
               <div className="stepContent">
-                <span className="manualStepIndex" aria-hidden="true">Etapa 01 / 05</span>
+                <span className="manualStepIndex">Etapa 01 / 05</span>
                 <h2 className="stepTitle">Abrir o caso</h2>
                 <p className="muted">
                   Escolha um domínio — Anime, Games, Filmes ou Geral. A IA sorteia um
@@ -45,7 +45,7 @@ export default function HowItWorks() {
                 <DossierIcon name="magnifier" size={16} aria-hidden={true} />
               </div>
               <div className="stepContent">
-                <span className="manualStepIndex" aria-hidden="true">Etapa 02 / 05</span>
+                <span className="manualStepIndex">Etapa 02 / 05</span>
                 <h2 className="stepTitle">Formular perguntas</h2>
                 <p className="muted">
                   Faça perguntas que aceitem Sim ou Não. Comece amplo: "É humano?",
@@ -59,7 +59,7 @@ export default function HowItWorks() {
                 <DossierIcon name="evidence" size={16} aria-hidden={true} />
               </div>
               <div className="stepContent">
-                <span className="manualStepIndex" aria-hidden="true">Etapa 03 / 05</span>
+                <span className="manualStepIndex">Etapa 03 / 05</span>
                 <h2 className="stepTitle">Ler as evidências</h2>
                 <div className="evidenceLegend">
                   <span className="evidenceTag evidenceSim">Sim — confirmado</span>
@@ -78,7 +78,7 @@ export default function HowItWorks() {
                 <DossierIcon name="clue" size={16} aria-hidden={true} />
               </div>
               <div className="stepContent">
-                <span className="manualStepIndex" aria-hidden="true">Etapa 04 / 05</span>
+                <span className="manualStepIndex">Etapa 04 / 05</span>
                 <h2 className="stepTitle">Solicitar intel</h2>
                 <p className="muted">
                   Se a investigação travar, peça uma pista. A pista revela uma
@@ -92,7 +92,7 @@ export default function HowItWorks() {
                 <DossierIcon name="lock" size={16} aria-hidden={true} />
               </div>
               <div className="stepContent">
-                <span className="manualStepIndex" aria-hidden="true">Etapa 05 / 05</span>
+                <span className="manualStepIndex">Etapa 05 / 05</span>
                 <h2 className="stepTitle">Revelar o suspeito</h2>
                 <p className="muted">
                   Quando tiver certeza, confronte pelo nome: "É o Naruto?". Se correto,

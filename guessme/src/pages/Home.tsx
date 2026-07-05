@@ -52,7 +52,7 @@ export default function Home() {
               </div>
             </div>
 
-            <aside className="heroCaseFile" aria-hidden="true">
+            <div className="heroCaseFile" aria-hidden="true">
               <div className="heroCaseFileHeader">
                 <span className="heroCaseFileLabel">Ficha do caso</span>
                 <span className="caseStamp caseStamp--classified caseStamp--sm">Selado</span>
@@ -86,7 +86,7 @@ export default function Home() {
                 <span className="heroCaseFilePulse" />
                 Sistema pronto para interrogatório
               </div>
-            </aside>
+            </div>
           </div>
 
           <div className="heroGrid">
