@@ -123,10 +123,35 @@ const SEED_8 = JSON.stringify([
 /** Three cases seeded into game localStorage to show populated case history below game UI */
 const SEED_GAME_HISTORY = SEED_3;
 
+/**
+ * Active investigation transcript seeded into guessme:state:v5 — renders the full
+ * workstation (dividers, verdict badges, populated notebook) without a backend.
+ */
+const SEED_GAME_ACTIVE = JSON.stringify({
+  sessionId: "shot-session-001",
+  category: "Anime",
+  questionsCount: 5,
+  winner: null,
+  messages: [
+    { id: "m1", sender: "AI", text: "Caso aberto. Já escolhi um personagem — pode interrogar.", ts: 1, kind: "ai" },
+    { id: "m2", sender: "Você", text: "É humano?", ts: 2, kind: "user" },
+    { id: "m3", sender: "AI", text: "Sim.", ts: 3, kind: "ai", verdict: "YES" },
+    { id: "m4", sender: "Você", text: "É vilão?", ts: 4, kind: "user" },
+    { id: "m5", sender: "AI", text: "Não.", ts: 5, kind: "ai", verdict: "NO" },
+    { id: "m6", sender: "Você", text: "Opera nas sombras?", ts: 6, kind: "user" },
+    { id: "m7", sender: "AI", text: "Talvez. Depende do arco da história.", ts: 7, kind: "ai", verdict: "MAYBE" },
+    { id: "m8", sender: "AI", text: "Pista: o suspeito é conhecido por um lema sobre nunca desistir.", ts: 8, kind: "hint" },
+    { id: "m9", sender: "Você", text: "Tem poderes?", ts: 9, kind: "user" },
+    { id: "m10", sender: "AI", text: "Sim, habilidades sobrenaturais confirmadas.", ts: 10, kind: "ai", verdict: "YES" },
+  ],
+});
+
 type Route = {
   name: string;
   path: string;
   seed?: string;
+  gameSeed?: string;
+  waitUntil?: "networkidle" | "load";
 };
 
 type OfflineRoute = Route & { simulateOffline?: boolean };
@@ -142,6 +167,9 @@ const ROUTES: OfflineRoute[] = [
   // Game — with populated case history panel below the investigation UI
   { name: "game-history", path: "/game", seed: SEED_GAME_HISTORY },
 
+  // Game — active investigation with rich transcript and populated notebook
+  { name: "game-active",  path: "/game", gameSeed: SEED_GAME_ACTIVE },
+
   // Stats — empty (no cases)
   { name: "stats-empty",  path: "/stats" },
 
@@ -154,12 +182,13 @@ const ROUTES: OfflineRoute[] = [
   // PWA offline state — home with offline banner visible
   { name: "offline-banner", path: "/", simulateOffline: true },
 
-  // Standalone offline fallback page
-  { name: "offline-page", path: "/offline.html" },
+  // Standalone offline fallback page — static file: networkidle can hang in dev, use load
+  { name: "offline-page", path: "/offline.html", waitUntil: "load" },
 ];
 
 async function run() {
   const browser = await chromium.launch();
+  const failures: string[] = [];
 
   for (const vp of VIEWPORTS) {
     const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
@@ -167,34 +196,55 @@ async function run() {
     for (const route of ROUTES) {
       const page = await ctx.newPage();
 
-      if (route.seed) {
-        await page.addInitScript(
-          (data: string) => localStorage.setItem("guessme.caseHistory.v1", data),
-          route.seed,
-        );
+      try {
+        if (route.seed) {
+          await page.addInitScript(
+            (data: string) => localStorage.setItem("guessme.caseHistory.v1", data),
+            route.seed,
+          );
+        }
+        if (route.gameSeed) {
+          await page.addInitScript(
+            (data: string) => localStorage.setItem("guessme:state:v5", data),
+            route.gameSeed,
+          );
+        }
+
+        await page.goto(`http://localhost:5173${route.path}`, {
+          waitUntil: route.waitUntil ?? "networkidle",
+          timeout: 20000,
+        });
+        await page.waitForTimeout(500);
+
+        if (route.simulateOffline) {
+          await page.context().setOffline(true);
+          await page.evaluate(() => window.dispatchEvent(new Event("offline")));
+          await page.waitForTimeout(200);
+        }
+
+        const file = path.join(OUT, `${vp.name}--${route.name}.png`);
+        await page.screenshot({ path: file, fullPage: true });
+        console.log(`✓ ${file}`);
+      } catch (e) {
+        // Isolate per-route failures so one flaky page never kills the whole matrix.
+        failures.push(`${vp.name}--${route.name}`);
+        console.error(`✗ ${vp.name}--${route.name}: ${e instanceof Error ? e.message.split("\n")[0] : e}`);
+      } finally {
+        // Contexts are shared across routes — always restore connectivity.
+        if (route.simulateOffline) await ctx.setOffline(false);
+        await page.close();
       }
-
-      await page.goto(`http://localhost:5173${route.path}`, { waitUntil: "networkidle" });
-      await page.waitForTimeout(500);
-
-      if (route.simulateOffline) {
-        await page.context().setOffline(true);
-        await page.evaluate(() => window.dispatchEvent(new Event("offline")));
-        await page.waitForTimeout(200);
-      }
-
-      const file = path.join(OUT, `${vp.name}--${route.name}.png`);
-      await page.screenshot({ path: file, fullPage: true });
-      console.log(`✓ ${file}`);
-      await page.close();
     }
 
     await ctx.close();
   }
 
   await browser.close();
-  console.log(`\nDone — ${ROUTES.length} routes × ${VIEWPORTS.length} viewports = ${ROUTES.length * VIEWPORTS.length} screenshots`);
+  const total = ROUTES.length * VIEWPORTS.length;
+  console.log(`\nDone — ${total - failures.length}/${total} screenshots captured (${ROUTES.length} routes × ${VIEWPORTS.length} viewports)`);
+  if (failures.length > 0) console.log(`Failed: ${failures.join(", ")}`);
   console.log(`Output: visual-screenshots/ (gitignored)`);
+  if (failures.length > 0) process.exit(1);
 }
 
 run().catch((e) => { console.error(e); process.exit(1); });
