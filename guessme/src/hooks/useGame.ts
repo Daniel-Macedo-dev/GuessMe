@@ -120,7 +120,15 @@ export function useGame() {
   }, []);
 
   // ===== persist =====
+  // Skip the very first run: it fires in the same effect flush as the load
+  // effect, before restored state is rendered, and would clobber stored
+  // progress with the initial empty state (visible under StrictMode remounts).
+  const persistReadyRef = useRef(false);
   useEffect(() => {
+    if (!persistReadyRef.current) {
+      persistReadyRef.current = true;
+      return;
+    }
     safeSave({ messages, questionsCount, winner, category, sessionId });
   }, [messages, questionsCount, winner, category, sessionId]);
 
