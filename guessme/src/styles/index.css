@@ -1801,6 +1801,43 @@ b{ font-weight: 800; }
   letter-spacing: -0.3px;
 }
 
+/* ── Report metadata band ── */
+.statsReportBand{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-top: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-inner);
+  background: var(--surface-desk);
+  overflow: hidden;
+}
+.statsReportField{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 16px;
+  border-left: 1px solid var(--border);
+  flex: 1 1 auto;
+}
+.statsReportField:first-child{ border-left: none; }
+.statsReportFieldLabel{
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+}
+.statsReportFieldValue{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
 /* ── Dashboard shell ── */
 .statsDashboard{
   display: flex;
@@ -1812,19 +1849,23 @@ b{ font-weight: 800; }
 .statsOverviewGrid{
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-desk);
+  overflow: hidden;
 }
 
 .statsMetricCard{
   padding: 16px 18px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.026);
+  background: transparent;
   display: flex;
   flex-direction: column;
   gap: 4px;
   position: relative;
   overflow: hidden;
+  /* Ledger hairlines between cells, on any wrap layout */
+  box-shadow: -1px -1px 0 0 var(--border);
 }
 .statsMetricCard::before{
   content: '';
@@ -1974,6 +2015,7 @@ b{ font-weight: 800; }
   display: flex;
   flex-direction: column;
   gap: 0;
+  counter-reset: recentRow;
 }
 .statsRecentItem{
   display: flex;
@@ -1983,6 +2025,16 @@ b{ font-weight: 800; }
   padding: 10px 0;
   border-bottom: 1px solid var(--border);
   flex-wrap: wrap;
+}
+.statsRecentItem::before{
+  counter-increment: recentRow;
+  content: counter(recentRow, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted-dim);
+  opacity: 0.6;
+  flex-shrink: 0;
 }
 .statsRecentItem:last-child{ border-bottom: none; }
 .statsRecentMeta{
@@ -2062,7 +2114,8 @@ b{ font-weight: 800; }
   .statsRankGrid{ grid-template-columns: 1fr; }
 }
 @media (max-width: 480px){
-  .statsOverviewGrid{ grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .statsOverviewGrid{ grid-template-columns: repeat(2, 1fr); }
+  .statsReportField{ padding: 7px 12px; }
   .statsMetricValue{ font-size: 22px; }
   .statsMetricCard{ padding: 12px 14px; }
   .statsRecentInfo{ gap: 6px; }
@@ -2603,16 +2656,22 @@ a:focus-visible,
 .statsMain{ animation: panelIn 260ms var(--motion-ease-out); }
 .gamePageGrid{ animation: panelIn 200ms var(--motion-ease-out); }
 
-/* ── Stats panel top indicator ── */
+/* ── Stats panels: report section index ── */
+.statsMain{ counter-reset: statsSection; }
+.statsPanel{ counter-increment: statsSection; }
 .statsPanel::before{
-  content: '';
+  content: "Seção " counter(statsSection, decimal-leading-zero);
   display: block;
-  width: 28px;
-  height: 2px;
-  background: var(--accent);
-  opacity: 0.40;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.55;
   margin-bottom: 10px;
-  border-radius: 999px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
 }
 
 /* ── Evidence notebook entry feedback ── */

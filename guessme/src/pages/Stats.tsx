@@ -71,6 +71,24 @@ export default function Stats() {
               {data.uniqueCharacters} personagem{data.uniqueCharacters !== 1 ? "s" : ""} identificado{data.uniqueCharacters !== 1 ? "s" : ""} em {data.totalCases} caso{data.totalCases !== 1 ? "s" : ""}
             </p>
           )}
+          <div className="statsReportBand" aria-hidden="true">
+            <span className="statsReportField">
+              <span className="statsReportFieldLabel">Classificação</span>
+              <span className="statsReportFieldValue">Restrita</span>
+            </span>
+            <span className="statsReportField">
+              <span className="statsReportFieldLabel">Fonte</span>
+              <span className="statsReportFieldValue">Arquivo local</span>
+            </span>
+            <span className="statsReportField">
+              <span className="statsReportFieldLabel">Período</span>
+              <span className="statsReportFieldValue">Integral</span>
+            </span>
+            <span className="statsReportField">
+              <span className="statsReportFieldLabel">Casos</span>
+              <span className="statsReportFieldValue">{data.totalCases}</span>
+            </span>
+          </div>
         </div>
 
         {history.length === 0 ? (
