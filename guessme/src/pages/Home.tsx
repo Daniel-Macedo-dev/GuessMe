@@ -19,38 +19,78 @@ export default function Home() {
             <span>IA-1</span>
           </div>
 
-          <div className="heroSealRow">
-            <BrandMark size={52} className="heroSealMark" />
-          </div>
+          <div className="heroLayout">
+            <div className="heroMain">
+              <div className="heroSealRow">
+                <BrandMark size={52} className="heroSealMark" />
+              </div>
 
-          <div className="heroBadge">Jogo de Investigação</div>
+              <div className="heroBadge">Jogo de Investigação</div>
 
-          <h1 className="heroTitle">Desvende a identidade</h1>
+              <h1 className="heroTitle">Desvende a identidade</h1>
 
-          <p className="heroText">
-            A IA escolheu um personagem. Você não sabe quem é. Interrogue com
-            perguntas fechadas, acumule evidências e revele o suspeito.
-          </p>
+              <p className="heroText">
+                A IA escolheu um personagem. Você não sabe quem é. Interrogue com
+                perguntas fechadas, acumule evidências e revele o suspeito.
+              </p>
 
-          <div className="heroActions">
-            <Link className="btn btn-primary" to="/game">
-              Abrir caso
-            </Link>
-            <Link className="btn" to="/how-it-works">
-              Manual do agente
-            </Link>
-          </div>
+              <div className="heroActions">
+                <Link className="btn btn-primary btn--lg" to="/game">
+                  Abrir caso
+                </Link>
+                <Link className="btn" to="/how-it-works">
+                  Manual do agente
+                </Link>
+              </div>
 
-          <div className="dossierEyebrow heroMeta" aria-hidden="true">
-            <span>SISTEMA v2</span>
-            <span className="heroMetaDot">·</span>
-            <span>DOSSIÊ DIGITAL</span>
-            <span className="heroMetaDot">·</span>
-            <span>ANÁLISE LOCAL</span>
+              <div className="dossierEyebrow heroMeta" aria-hidden="true">
+                <span>SISTEMA v2</span>
+                <span className="heroMetaDot">·</span>
+                <span>DOSSIÊ DIGITAL</span>
+                <span className="heroMetaDot">·</span>
+                <span>ANÁLISE LOCAL</span>
+              </div>
+            </div>
+
+            <aside className="heroCaseFile" aria-hidden="true">
+              <div className="heroCaseFileHeader">
+                <span className="heroCaseFileLabel">Ficha do caso</span>
+                <span className="caseStamp caseStamp--classified caseStamp--sm">Selado</span>
+              </div>
+              <div className="caseField">
+                <span className="caseFieldLabel">Nº do caso</span>
+                <span className="caseFieldLeader" />
+                <span className="caseFieldValue">GM-0001/IA</span>
+              </div>
+              <div className="caseField">
+                <span className="caseFieldLabel">Alvo</span>
+                <span className="caseFieldLeader" />
+                <span className="caseFieldValue">Não identificado</span>
+              </div>
+              <div className="caseField">
+                <span className="caseFieldLabel">Método</span>
+                <span className="caseFieldLeader" />
+                <span className="caseFieldValue">Perguntas fechadas</span>
+              </div>
+              <div className="caseField">
+                <span className="caseFieldLabel">Evidências</span>
+                <span className="caseFieldLeader" />
+                <span className="caseFieldValue">Arquivo local</span>
+              </div>
+              <div className="caseField">
+                <span className="caseFieldLabel">Status</span>
+                <span className="caseFieldLeader" />
+                <span className="caseFieldValue caseFieldValue--accent">Aguardando abertura</span>
+              </div>
+              <div className="heroCaseFileFooter">
+                <span className="heroCaseFilePulse" />
+                Sistema pronto para interrogatório
+              </div>
+            </aside>
           </div>
 
           <div className="heroGrid">
-            <div className="card heroProtocolCard">
+            <div className="heroProtocolCard">
               <div className="heroProtocolNum" aria-hidden="true">01</div>
               <div className="stepIconWrap stepIconWrap--green" aria-hidden="true">
                 <DossierIcon name="case-file" size={18} aria-hidden={true} />
@@ -62,7 +102,7 @@ export default function Home() {
                 quem é o suspeito.
               </div>
             </div>
-            <div className="card heroProtocolCard">
+            <div className="heroProtocolCard">
               <div className="heroProtocolNum" aria-hidden="true">02</div>
               <div className="stepIconWrap stepIconWrap--amber" aria-hidden="true">
                 <DossierIcon name="magnifier" size={18} aria-hidden={true} />
@@ -74,7 +114,7 @@ export default function Home() {
                 restringe o cerco.
               </div>
             </div>
-            <div className="card heroProtocolCard">
+            <div className="heroProtocolCard">
               <div className="heroProtocolNum" aria-hidden="true">03</div>
               <div className="stepIconWrap stepIconWrap--slate" aria-hidden="true">
                 <DossierIcon name="archive" size={18} aria-hidden={true} />
