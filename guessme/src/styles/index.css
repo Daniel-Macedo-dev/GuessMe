@@ -1114,6 +1114,49 @@ b{ font-weight: 800; }
 .manualSteps{
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+/* Procedural route line connecting the step icons */
+.manualSteps::before{
+  content: '';
+  position: absolute;
+  left: 16px;
+  top: 34px;
+  bottom: 34px;
+  width: 1px;
+  background: linear-gradient(180deg,
+    rgba(52,211,153,0.22) 0%,
+    rgba(255,255,255,0.08) 55%,
+    transparent 100%);
+  pointer-events: none;
+}
+.manualSteps .manualStepIcon{
+  /* Opaque: masks the route line running behind the icons */
+  background-color: #0b141c;
+  background-image: none;
+  position: relative;
+  z-index: 1;
+}
+
+.manualStepIndex{
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+  margin-bottom: 4px;
+}
+
+.manualPageFooter{
+  justify-content: center;
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.manualPageFooter > span{
+  opacity: 0.5;
 }
 
 .manualStep{
@@ -1185,6 +1228,7 @@ b{ font-weight: 800; }
 /* Responsive: tighter on narrow screens */
 @media (max-width: 480px){
   .manualStep{ gap: 12px; padding: 14px 0; }
+  .manualSteps::before{ left: 14px; }
 }
 
 /* ===== Two-column game page layout ===== */
