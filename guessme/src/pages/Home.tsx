@@ -4,6 +4,14 @@ import Footer from "../components/Footer";
 import BrandMark from "../components/BrandMark";
 import DossierIcon from "../components/DossierIcon";
 
+const CASE_FILE_FIELDS = [
+  { label: "Nº do caso", value: "GM-0001/IA" },
+  { label: "Alvo", value: "Não identificado" },
+  { label: "Método", value: "Perguntas fechadas" },
+  { label: "Evidências", value: "Arquivo local" },
+  { label: "Status", value: "Aguardando abertura", accent: true },
+];
+
 export default function Home() {
   return (
     <div className="shell">
@@ -57,31 +65,15 @@ export default function Home() {
                 <span className="heroCaseFileLabel">Ficha do caso</span>
                 <span className="caseStamp caseStamp--classified caseStamp--sm">Selado</span>
               </div>
-              <div className="caseField">
-                <span className="caseFieldLabel">Nº do caso</span>
-                <span className="caseFieldLeader" />
-                <span className="caseFieldValue">GM-0001/IA</span>
-              </div>
-              <div className="caseField">
-                <span className="caseFieldLabel">Alvo</span>
-                <span className="caseFieldLeader" />
-                <span className="caseFieldValue">Não identificado</span>
-              </div>
-              <div className="caseField">
-                <span className="caseFieldLabel">Método</span>
-                <span className="caseFieldLeader" />
-                <span className="caseFieldValue">Perguntas fechadas</span>
-              </div>
-              <div className="caseField">
-                <span className="caseFieldLabel">Evidências</span>
-                <span className="caseFieldLeader" />
-                <span className="caseFieldValue">Arquivo local</span>
-              </div>
-              <div className="caseField">
-                <span className="caseFieldLabel">Status</span>
-                <span className="caseFieldLeader" />
-                <span className="caseFieldValue caseFieldValue--accent">Aguardando abertura</span>
-              </div>
+              {CASE_FILE_FIELDS.map((f) => (
+                <div className="caseField" key={f.label}>
+                  <span className="caseFieldLabel">{f.label}</span>
+                  <span className="caseFieldLeader" />
+                  <span className={`caseFieldValue${f.accent ? " caseFieldValue--accent" : ""}`}>
+                    {f.value}
+                  </span>
+                </div>
+              ))}
               <div className="heroCaseFileFooter">
                 <span className="heroCaseFilePulse" />
                 Sistema pronto para interrogatório

@@ -72,22 +72,17 @@ export default function Stats() {
             </p>
           )}
           <div className="statsReportBand" aria-hidden="true">
-            <span className="statsReportField">
-              <span className="statsReportFieldLabel">Classificação</span>
-              <span className="statsReportFieldValue">Restrita</span>
-            </span>
-            <span className="statsReportField">
-              <span className="statsReportFieldLabel">Fonte</span>
-              <span className="statsReportFieldValue">Arquivo local</span>
-            </span>
-            <span className="statsReportField">
-              <span className="statsReportFieldLabel">Período</span>
-              <span className="statsReportFieldValue">Integral</span>
-            </span>
-            <span className="statsReportField">
-              <span className="statsReportFieldLabel">Casos</span>
-              <span className="statsReportFieldValue">{data.totalCases}</span>
-            </span>
+            {[
+              { label: "Classificação", value: "Restrita" },
+              { label: "Fonte", value: "Arquivo local" },
+              { label: "Período", value: "Integral" },
+              { label: "Casos", value: data.totalCases },
+            ].map((f) => (
+              <span className="statsReportField" key={f.label}>
+                <span className="statsReportFieldLabel">{f.label}</span>
+                <span className="statsReportFieldValue">{f.value}</span>
+              </span>
+            ))}
           </div>
         </div>
 
