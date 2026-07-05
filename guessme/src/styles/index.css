@@ -86,6 +86,7 @@ b{ font-weight: 800; }
 
 .panel{
   background: linear-gradient(145deg, var(--surface-raised) 0%, var(--surface) 100%);
+  transition: box-shadow var(--t-base);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -142,7 +143,6 @@ b{ font-weight: 800; }
   opacity: 0.72;
   line-height: 1;
 }
-.by{ font-weight: 700; font-size: 12px; color: var(--muted); margin-left: 8px; }
 
 .nav{ display:flex; gap: 6px; }
 .navLink{
@@ -469,6 +469,7 @@ b{ font-weight: 800; }
   color: var(--text);
   border-color: rgba(52,211,153,0.25);
   background: rgba(52,211,153,0.05);
+  box-shadow: 0 0 14px rgba(52,211,153,0.10);
   filter: none;
 }
 .chip:disabled{ opacity:.45; cursor:not-allowed; }
@@ -575,16 +576,10 @@ b{ font-weight: 800; }
   color: var(--accent-evidence);
 }
 
+
+
 /* ── Loading ── */
 .loadingRow{ display:flex; gap: 10px; align-items:center; margin-top: 10px; }
-.spinner{
-  width: 14px; height: 14px;
-  border-radius: var(--radius-pill);
-  border: 2px solid rgba(52,211,153,0.22);
-  border-top-color: rgba(52,211,153,0.85);
-  animation: spin .8s linear infinite;
-}
-@keyframes spin{ to{ transform: rotate(360deg); } }
 
 /* ── Investigation pulse ── */
 @keyframes evidencePulse{
@@ -628,30 +623,10 @@ b{ font-weight: 800; }
   box-shadow: var(--shadow-float), 0 0 0 1px rgba(52,211,153,0.06);
   animation: popIn 220ms var(--motion-ease);
 }
-.modalHeader{ margin-bottom: 12px; }
 @keyframes fadeIn{ from{opacity:0} to{opacity:1} }
 @keyframes popIn{ from{transform:scale(.97);opacity:0} to{transform:scale(1);opacity:1} }
 
-/* Character card */
-.characterCard{
-  display:flex;
-  gap: 12px;
-  padding: 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.03);
-  margin: 12px 0;
-}
-.characterImgWrap{
-  width: 84px; height: 84px;
-  border-radius: 14px;
-  overflow:hidden;
-  border: 1px solid var(--border);
-  background: rgba(0,0,0,0.25);
-  flex: 0 0 auto;
-}
-.characterImg{ width:100%; height:100%; object-fit: cover; }
-.characterName{ font-size: 18px; font-weight: 900; }
+
 
 /* ── Responsive ── */
 @media (max-width: 980px){
@@ -724,10 +699,6 @@ b{ font-weight: 800; }
   align-items: center;
   gap: 6px;
   margin-bottom: 14px;
-}
-
-.victoryTitle{
-  margin: 0;
 }
 
 .victorySubtitle{
@@ -848,13 +819,7 @@ b{ font-weight: 800; }
     transform: translateX(-50%) translateY(120px) rotate(220deg);
   }
 }
-/* Header actions (categoria + botões) */
-.headerActions{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
+
 
 /* ── Game header ── */
 .gameSubtitle{
@@ -2595,15 +2560,7 @@ b{ font-weight: 800; }
 }
 
 
-/* ── Improved panel hover ── */
-.panel{
-  transition: box-shadow var(--t-base);
-}
 
-/* ── Chip hover glow ── */
-.chip:hover{
-  box-shadow: 0 0 14px rgba(52,211,153,0.10);
-}
 
 /* ── Footer dossier mark ── */
 .footerRef{
@@ -2979,9 +2936,6 @@ a:focus-visible,
   pointer-events: none;
 }
 
-.emptyIllustration--amber::before{
-  background: radial-gradient(circle at 50% 50%, rgba(251,191,36,0.10) 0%, transparent 70%);
-}
 
 .emptyIllustration--slate::before{
   background: radial-gradient(circle at 50% 50%, rgba(148,163,184,0.08) 0%, transparent 70%);
@@ -3380,15 +3334,7 @@ a:focus-visible,
   z-index: 1;
 }
 
-/* Bottom fade — gives terminal document feel */
-.chatScrollFade{
-  position: sticky;
-  bottom: 0;
-  height: 28px;
-  background: linear-gradient(0deg, var(--surface-chat) 0%, transparent 100%);
-  pointer-events: none;
-  margin-top: -28px;
-}
+
 
 /* ══════════════════════════════════════════════════════════
    MOBILE HARDENING — CASE STATUS SYSTEM
