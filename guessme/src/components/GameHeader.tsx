@@ -32,6 +32,13 @@ export default function GameHeader({
   return (
     <div className="gameHeader">
       <div className="gameHeaderLeft">
+        <div className="dossierEyebrow gameEyebrow" aria-hidden="true">
+          <span>REGISTRO DE INTERROGAÇÃO</span>
+          <span className="dossierEyebrowDot" />
+          <span>ACESSO RESTRITO</span>
+          <span className="dossierEyebrowDot" />
+          <span>IA-1</span>
+        </div>
         <div className="gameHeaderTitleRow">
           <h2 className="h2">
             {solved ? "Investigação Concluída" : "Investigação Ativa"}

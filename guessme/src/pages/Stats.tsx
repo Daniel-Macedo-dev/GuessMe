@@ -59,7 +59,11 @@ export default function Stats() {
       <Navbar />
       <main className="main statsMain" data-testid="stats-page">
         <div className="statsPageHeader">
-          <span className="statsReportClass" aria-hidden="true">RELATÓRIO DE INTELIGÊNCIA · USO RESTRITO</span>
+          <div className="dossierEyebrow statsEyebrow" aria-hidden="true">
+            <span>RELATÓRIO DE INTELIGÊNCIA</span>
+            <span className="dossierEyebrowDot" />
+            <span>USO RESTRITO</span>
+          </div>
           <div className="caseStamp caseStamp--active caseStamp--sm">Painel de investigação</div>
           <h1 className="statsPageTitle">Estatísticas pessoais</h1>
           {history.length > 0 && (

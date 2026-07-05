@@ -2205,31 +2205,36 @@ b{ font-weight: 800; }
   animation: pulse 2.4s ease-in-out infinite;
 }
 
-/* ── Home hero: classification strip ── */
-.heroClassification{
+/* ── Dossier eyebrow: shared classification line primitive ── */
+.dossierEyebrow{
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 20px;
   flex-wrap: wrap;
-}
-.heroClassLabel{
   font-family: var(--font-mono);
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.20em;
   text-transform: uppercase;
   color: var(--muted-dim);
+}
+.dossierEyebrow > span{
   opacity: 0.75;
 }
-.heroClassDot{
+.dossierEyebrowDot{
   width: 3px;
   height: 3px;
   border-radius: 50%;
   background: var(--muted-dim);
-  opacity: 0.45;
+  opacity: 0.45 !important;
   flex-shrink: 0;
 }
+
+/* Route-specific eyebrow spacing */
+.heroClassification{ margin-bottom: 20px; }
+.protocolEyebrow{ margin-bottom: 8px; }
+.statsEyebrow{ margin-bottom: 10px; opacity: 0.85; }
+.gameEyebrow{ margin-bottom: 4px; }
 
 /* ── Home hero: seal ── */
 .heroSealRow{
@@ -2240,22 +2245,13 @@ b{ font-weight: 800; }
   opacity: 0.85;
 }
 
-/* ── Home hero: metadata strip ── */
+/* ── Home hero: metadata strip (dimmer eyebrow variant) ── */
 .heroMeta{
-  display: flex;
-  align-items: center;
   gap: 10px;
   margin-top: 18px;
   margin-bottom: 22px;
-  flex-wrap: wrap;
 }
-.heroMeta span{
-  font-family: var(--font-mono);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.20em;
-  text-transform: uppercase;
-  color: var(--muted-dim);
+.heroMeta > span{
   opacity: 0.55;
 }
 .heroMetaDot{
@@ -2291,17 +2287,6 @@ b{ font-weight: 800; }
   gap: 10px;
   flex-wrap: wrap;
   margin: 8px 0 4px;
-}
-.protocolClassLabel{
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.20em;
-  text-transform: uppercase;
-  color: var(--muted-dim);
-  opacity: 0.65;
-  margin-bottom: 8px;
 }
 
 /* ── Game desk: transcript label ── */
@@ -2350,18 +2335,6 @@ b{ font-weight: 800; }
   margin-bottom: 4px;
 }
 
-/* ── Stats: intelligence report classification ── */
-.statsReportClass{
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.20em;
-  text-transform: uppercase;
-  color: var(--muted-dim);
-  opacity: 0.55;
-  margin-bottom: 10px;
-}
 
 /* ── Improved panel hover ── */
 .panel{
@@ -2500,14 +2473,13 @@ a:focus-visible,
   .heroSealMark{ opacity: 0.75; }
   .heroMeta{ gap: 8px; }
   .transcriptLabel{ margin-bottom: 6px; }
-  .statsReportClass{ font-size: 8px; }
 }
 @media (max-width: 480px){
   .brandMarkIcon{ display: none; }
   .heroSealRow{ margin-bottom: 10px; }
   .heroProtocolNum{ font-size: 18px; }
   .queryLabel{ font-size: 8px; }
-  .protocolClassLabel{ font-size: 8px; }
+  .dossierEyebrow{ font-size: 8px; }
   .footerRef{ display: none; }
 }
 @media (max-width: 360px){

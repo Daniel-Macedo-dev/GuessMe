@@ -11,12 +11,12 @@ export default function Home() {
       <main className="main mainCenter">
         <section className="panel hero">
 
-          <div className="heroClassification" aria-hidden="true">
-            <span className="heroClassLabel">CONFIDENCIAL</span>
-            <span className="heroClassDot" />
-            <span className="heroClassLabel">PROTOCOLO DE INTERROGAÇÃO</span>
-            <span className="heroClassDot" />
-            <span className="heroClassLabel">IA-1</span>
+          <div className="dossierEyebrow heroClassification" aria-hidden="true">
+            <span>CONFIDENCIAL</span>
+            <span className="dossierEyebrowDot" />
+            <span>PROTOCOLO DE INTERROGAÇÃO</span>
+            <span className="dossierEyebrowDot" />
+            <span>IA-1</span>
           </div>
 
           <div className="heroSealRow">
@@ -41,7 +41,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="heroMeta" aria-hidden="true">
+          <div className="dossierEyebrow heroMeta" aria-hidden="true">
             <span>SISTEMA v2</span>
             <span className="heroMetaDot">·</span>
             <span>DOSSIÊ DIGITAL</span>

@@ -11,7 +11,11 @@ export default function HowItWorks() {
       <main className="main">
         <section className="panel pagePanel">
           <div className="protocolHeader">
-            <span className="protocolClassLabel">DOSSIÊ OPERACIONAL · ACESSO RESTRITO</span>
+            <div className="dossierEyebrow protocolEyebrow" aria-hidden="true">
+              <span>DOSSIÊ OPERACIONAL</span>
+              <span className="dossierEyebrowDot" />
+              <span>ACESSO RESTRITO</span>
+            </div>
             <div className="protocolHeaderTitle">
               <span className="caseStamp caseStamp--classified caseStamp--sm">Manual do Agente</span>
               <h1 className="h2">Protocolo de Interrogação</h1>
