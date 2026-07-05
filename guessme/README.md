@@ -42,7 +42,7 @@ npm run dev
 npm run screenshots
 ```
 
-Output is saved to `visual-screenshots/` which is gitignored. 45 PNGs are generated (9 routes × 5 viewports).
+Output is saved to `visual-screenshots/` which is gitignored. 50 PNGs are generated (10 routes × 5 viewports), including a seeded active-investigation workstation scenario.
 
 ### Routes captured
 
@@ -199,7 +199,8 @@ GuessMe uses a custom investigation/dossier design system called **Casefile Noir
 | `CaseStamp` | Inline status badge — variants: `active`, `closed`, `classified`, `archived`, `intel`. Sizes: `sm`, `md`, `lg`. Optional `pulse` animation. |
 | `CaseStatusBadge` | Live case status strip derived from game state — 7 variants: idle, opening, active, analyzing, clue, solved, error. Shows DossierIcon + Portuguese label. |
 | `TranscriptDivider` | Visual section marker inside the chat area — variants: `open` (ABERTURA DO CASO), `clue` (PISTA DO SISTEMA), `verdict` (VEREDITO FINAL), `system`. Decorative (`aria-hidden`). |
-| `DossierSectionHeader` | Page section header with classification label, heading, and optional meta line. |
+| `PanelSectionHeader` | Shared icon + mono heading header used by the notebook, case history, and every stats panel. Supports heading level, `aria-labelledby` id, and a flush variant. |
+| `dossierEyebrow` (CSS primitive) | Classification line (`CONFIDENCIAL · … · IA-1`) shared by all four routes — one style, route-specific spacing modifiers. |
 
 ### Dossier UI patterns
 
@@ -219,6 +220,16 @@ GuessMe uses a custom investigation/dossier design system called **Casefile Noir
 | Dossier error label (FALHA NO DOSSIÊ) | Game.tsx error box |
 | Footer ref (`GUESSME · DOSSIÊ DIGITAL · v2`) | Footer |
 
+### Route-specific art direction
+
+| Route | Signature |
+|-------|-----------|
+| **Home** | Dossier cover: asymmetric hero with a sealed *Ficha do Caso* card (dotted-leader metadata fields, cut corner, pulse footer) beside the title block; protocol steps connected by a dashed evidence line through opaque icons |
+| **Game** | Interrogation workstation: classification eyebrow, transcript sheet with a red margin rule and indented bubbles, inset query desk surface, spiral-bound evidence notebook with punched-hole binding strip |
+| **How it works** | Field manual: vertical procedural route line through the step icons, `Etapa NN / 05` indexes, centered manual page-reference footer |
+| **Stats** | Intelligence briefing: report metadata band (classificação/fonte/período/casos), CSS-counter `Seção NN` indexes on every panel, KPI ledger strip with hairline cell dividers, numbered recent-activity ledger rows |
+| **Offline / PWA** | Same product voice: classified `OFFLINE` stamp banner, install prompt with the dossier cut-corner motif |
+
 ### Design token reference
 
 All values live in `:root {}` in `src/styles/index.css`:
@@ -229,6 +240,7 @@ All values live in `:root {}` in `src/styles/index.css`:
 --border-accent          /* green accent border: rgba(52,211,153,0.18) */
 --accent-faint           /* green fill ghost:   rgba(52,211,153,0.06) */
 --surface-desk           /* backdrop tint:      rgba(6,11,18,0.72)   */
+--surface-solid          /* opaque icon-mask surface: #0b141c        */
 --text, --muted, --muted-dim
 --accent, --accent-dim, --accent-evidence, --danger, --mystery, --intel
 --shadow, --shadow-glow, --shadow-float
