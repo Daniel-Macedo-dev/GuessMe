@@ -333,7 +333,12 @@ export function useGame() {
   }
 
   useEffect(() => {
-    return () => cancelInFlight();
+    return () => {
+      cancelInFlight();
+      // Allow a future mount to boot again: the cancelled request will never
+      // populate the transcript, so the started flag must not survive unmount.
+      startedRef.current = false;
+    };
   }, []);
 
   return {
