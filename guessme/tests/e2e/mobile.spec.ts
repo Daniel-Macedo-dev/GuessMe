@@ -94,7 +94,7 @@ test.describe("Mobile layout — Home and HowItWorks", () => {
       () => document.body.scrollWidth > document.body.clientWidth,
     );
     expect(overflow).toBe(false);
-    await expect(page.getByRole("heading", { name: "Manual do Agente" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Protocolo de Interrogação" })).toBeVisible();
   });
 
   test("how-it-works Abrir caso link is visible on mobile", async ({ page }) => {

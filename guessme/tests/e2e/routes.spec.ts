@@ -37,7 +37,7 @@ test.describe("Home page", () => {
 test.describe("HowItWorks page", () => {
   test("renders manual do agente heading", async ({ page }) => {
     await page.goto("/how-it-works");
-    await expect(page.getByRole("heading", { name: "Manual do Agente" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Protocolo de Interrogação" })).toBeVisible();
   });
 
   test("shows five numbered steps", async ({ page }) => {
@@ -109,7 +109,7 @@ test.describe("Navigation", () => {
     await page.goto("/");
     await page.getByRole("link", { name: "Como funciona" }).click();
     await expect(page).toHaveURL("/how-it-works");
-    await expect(page.getByRole("heading", { name: "Manual do Agente" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Protocolo de Interrogação" })).toBeVisible();
   });
 
   test("Navbar Jogo link goes to /game", async ({ page }) => {
@@ -140,7 +140,7 @@ test.describe("Navigation", () => {
 test.describe("SPA direct URL access", () => {
   test("opening /how-it-works directly renders page", async ({ page }) => {
     await page.goto("/how-it-works");
-    await expect(page.getByRole("heading", { name: "Manual do Agente" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Protocolo de Interrogação" })).toBeVisible();
   });
 
   test("opening /game directly renders game", async ({ page }) => {
