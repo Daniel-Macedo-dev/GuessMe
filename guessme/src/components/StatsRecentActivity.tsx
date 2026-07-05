@@ -1,5 +1,5 @@
 import type { CaseHistoryEntry } from "../types/guessme";
-import DossierIcon from "./DossierIcon";
+import PanelSectionHeader from "./PanelSectionHeader";
 
 type Props = {
   cases: CaseHistoryEntry[];
@@ -18,10 +18,7 @@ export default function StatsRecentActivity({ cases }: Props) {
 
   return (
     <section className="statsPanel panel" aria-labelledby="stats-recent-title" data-testid="stats-recent-panel">
-      <div className="panelSectionHeader">
-        <DossierIcon name="archive" size={14} aria-hidden={true} className="dossierIcon--muted" />
-        <h3 id="stats-recent-title" className="statsPanelTitle panelSectionTitle">Atividade recente</h3>
-      </div>
+      <PanelSectionHeader icon="archive" title="Atividade recente" id="stats-recent-title" />
       <ul className="statsRecentList" aria-label="Casos resolvidos recentemente">
         {cases.map((entry) => (
           <li key={entry.id} className="statsRecentItem" data-testid="stats-recent-item">

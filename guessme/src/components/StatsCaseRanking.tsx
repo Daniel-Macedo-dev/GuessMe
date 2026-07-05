@@ -1,5 +1,5 @@
 import type { CaseHistoryEntry } from "../types/guessme";
-import DossierIcon from "./DossierIcon";
+import PanelSectionHeader from "./PanelSectionHeader";
 
 type Props = {
   bestCase: CaseHistoryEntry | null;
@@ -36,10 +36,7 @@ export default function StatsCaseRanking({ bestCase, longestCase }: Props) {
 
   return (
     <section className="statsPanel panel" aria-labelledby="stats-ranking-title" data-testid="stats-ranking-panel">
-      <div className="panelSectionHeader">
-        <DossierIcon name="check" size={14} aria-hidden={true} className="dossierIcon--muted" />
-        <h3 id="stats-ranking-title" className="statsPanelTitle panelSectionTitle">Casos de destaque</h3>
-      </div>
+      <PanelSectionHeader icon="check" title="Casos de destaque" id="stats-ranking-title" />
       <div className="statsRankGrid">
         {bestCase && (
           <RankCard

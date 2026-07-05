@@ -4,6 +4,7 @@ import CaseHistoryCard from "./CaseHistoryCard";
 import CaseReplayModal from "./CaseReplayModal";
 import { parseCaseExportJson, CaseImportError } from "../helpers/caseImport";
 import DossierIcon from "./DossierIcon";
+import PanelSectionHeader from "./PanelSectionHeader";
 
 type ImportStatus =
   | { kind: "idle" }
@@ -79,10 +80,7 @@ export default function CaseHistoryPanel({
       data-testid="history-panel"
     >
       <div className="historyPanelHeader">
-        <div className="panelSectionHeader" style={{ marginBottom: 0 }}>
-          <DossierIcon name="archive" size={13} aria-hidden={true} className="dossierIcon--muted" />
-          <h3 className="historyPanelTitle panelSectionTitle">Histórico de Casos</h3>
-        </div>
+        <PanelSectionHeader icon="archive" title="Histórico de Casos" flush />
         <div className="historyPanelActions">
           <button
             className="btn historyActionBtn historyImportBtn"

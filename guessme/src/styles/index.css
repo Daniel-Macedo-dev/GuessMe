@@ -1089,16 +1089,6 @@ b{ font-weight: 800; }
   margin-bottom: 12px;
 }
 
-.nbTitle{
-  margin: 0;
-  font-size: 12px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.10em;
-  font-family: var(--font-mono);
-  color: var(--muted);
-}
-
 .nbMeta{
   font-size: 11px;
   font-family: var(--font-mono);
@@ -1248,16 +1238,6 @@ b{ font-weight: 800; }
   justify-content: space-between;
   gap: 10px;
   margin-bottom: 12px;
-}
-
-.historyPanelTitle{
-  margin: 0;
-  font-size: 11px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-family: var(--font-mono);
-  color: var(--muted);
 }
 
 .replaySectionTitle{
@@ -1700,15 +1680,6 @@ b{ font-weight: 800; }
 /* ── Generic panel ── */
 .statsPanel{
   padding: 16px 20px;
-}
-.statsPanelTitle{
-  margin: 0 0 12px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--muted);
 }
 .statsMetricNote{
   margin: -6px 0 10px;
@@ -2842,8 +2813,8 @@ a:focus-visible,
   color: var(--muted);
 }
 
-/* Reset margin when panelSectionHeader is a flex child (e.g. nbHeader) */
-.nbHeader .panelSectionHeader{
+/* Flush variant: no bottom margin when the header sits inside another flex row */
+.panelSectionHeader--flush{
   margin-bottom: 0;
 }
 

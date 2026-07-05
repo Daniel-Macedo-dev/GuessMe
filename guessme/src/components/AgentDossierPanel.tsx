@@ -2,7 +2,7 @@ import type { PlayerProgression } from "../types/progression";
 import AgentRankCard from "./AgentRankCard";
 import RankProgressBar from "./RankProgressBar";
 import AchievementGrid from "./AchievementGrid";
-import DossierIcon from "./DossierIcon";
+import PanelSectionHeader from "./PanelSectionHeader";
 
 type Props = {
   progression: PlayerProgression;
@@ -17,10 +17,7 @@ export default function AgentDossierPanel({ progression }: Props) {
       data-testid="agent-dossier-panel"
       aria-label="Dossiê do Agente"
     >
-      <div className="panelSectionHeader">
-        <DossierIcon name="agent" size={14} aria-hidden={true} className="dossierIcon--muted" />
-        <h2 className="statsPanelTitle panelSectionTitle">Dossiê do Agente</h2>
-      </div>
+      <PanelSectionHeader icon="agent" title="Dossiê do Agente" level={2} />
 
       <AgentRankCard
         rank={rank}

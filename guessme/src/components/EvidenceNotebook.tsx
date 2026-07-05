@@ -1,5 +1,6 @@
 import type { Evidence, EvidenceEntry, IntelEntry, SolvedSummary } from "../helpers/deriveEvidence";
 import DossierIcon from "./DossierIcon";
+import PanelSectionHeader from "./PanelSectionHeader";
 
 type Props = {
   evidence: Evidence;
@@ -68,10 +69,7 @@ export default function EvidenceNotebook({ evidence, solved, questionsCount }: P
   return (
     <aside className="notebook panel" aria-label="Caderno de Evidências" data-testid="evidence-notebook">
       <div className="nbHeader">
-        <div className="panelSectionHeader">
-          <DossierIcon name="evidence" size={14} aria-hidden={true} className="dossierIcon--muted" />
-          <h3 className="nbTitle panelSectionTitle">Caderno de Evidências</h3>
-        </div>
+        <PanelSectionHeader icon="evidence" title="Caderno de Evidências" flush />
         {!isEmpty && (
           <span className="nbMeta muted">{questionsCount} interrogação{questionsCount !== 1 ? "ões" : ""}</span>
         )}

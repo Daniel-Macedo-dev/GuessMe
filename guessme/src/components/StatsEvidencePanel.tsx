@@ -1,6 +1,6 @@
 import type { EvidenceStatsSummary } from "../types/stats";
 import StatsBarList from "./StatsBarList";
-import DossierIcon from "./DossierIcon";
+import PanelSectionHeader from "./PanelSectionHeader";
 
 type Props = {
   evidence: EvidenceStatsSummary;
@@ -17,10 +17,7 @@ export default function StatsEvidencePanel({ evidence }: Props) {
 
   return (
     <section className="statsPanel panel" aria-labelledby="stats-evidence-title" data-testid="stats-evidence-panel">
-      <div className="panelSectionHeader">
-        <DossierIcon name="clue" size={14} aria-hidden={true} className="dossierIcon--muted" />
-        <h3 id="stats-evidence-title" className="statsPanelTitle panelSectionTitle">Evidências coletadas</h3>
-      </div>
+      <PanelSectionHeader icon="clue" title="Evidências coletadas" id="stats-evidence-title" />
       <p className="statsMetricNote muted small">
         Total de entradas: <strong>{evidence.total}</strong>
       </p>
