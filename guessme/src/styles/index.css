@@ -2964,9 +2964,10 @@ a:focus-visible,
   background: radial-gradient(circle at 50% 50%, rgba(148,163,184,0.08) 0%, transparent 70%);
 }
 
-/* ── Notebook empty state ── */
-.nbEmptyIllustration{
-  margin: 12px auto 8px;
+/* ── Notebook empty state: evidence network awaiting entries ── */
+.nbEmptyScene{
+  width: 148px;
+  margin: 14px auto 10px;
 }
 
 /* ── History empty state ── */

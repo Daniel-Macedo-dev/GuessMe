@@ -1,5 +1,5 @@
 import type { Evidence, EvidenceEntry, IntelEntry, SolvedSummary } from "../helpers/deriveEvidence";
-import DossierIcon from "./DossierIcon";
+import EvidenceNetwork from "./EvidenceNetwork";
 import PanelSectionHeader from "./PanelSectionHeader";
 
 type Props = {
@@ -77,8 +77,8 @@ export default function EvidenceNotebook({ evidence, solved, questionsCount }: P
 
       {isEmpty && (
         <div className="nbEmpty" role="status" data-testid="evidence-empty">
-          <div className="emptyIllustration nbEmptyIllustration" aria-hidden="true">
-            <DossierIcon name="magnifier" size={28} aria-hidden={true} className="dossierIcon--accent" />
+          <div className="nbEmptyScene" aria-hidden="true">
+            <EvidenceNetwork variant="compact" />
           </div>
           <p className="muted small">
             Sem evidências ainda.<br />
