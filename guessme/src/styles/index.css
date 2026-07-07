@@ -746,6 +746,26 @@ b{ font-weight: 800; }
   }
   .queryDesk{ padding: 10px 10px 12px; }
   .main{ padding: 14px 10px; }
+  /* Compact document stacks: one under-sheet keeps the material identity
+     without crowding narrow margins */
+  .pagePanel{
+    box-shadow:
+      var(--shadow-document),
+      6px 6px 0 -1px var(--sheet-gap),
+      6px 6px 0 0 rgba(255,255,255,0.05);
+  }
+  .chatPanelWide{
+    box-shadow:
+      var(--shadow-document),
+      5px 6px 0 -1px var(--sheet-gap),
+      5px 6px 0 0 rgba(255,255,255,0.045);
+  }
+  .statsPanel{
+    box-shadow:
+      var(--shadow-document),
+      4px 5px 0 -1px var(--sheet-gap),
+      4px 5px 0 0 rgba(255,255,255,0.04);
+  }
   .hero{
     padding: 22px 18px;
     /* Compact stack: keep one under-sheet so the cover identity survives */
