@@ -68,8 +68,12 @@ function VariantGlyph({ variant }: { variant: Variant }) {
  * Official GuessMe document seal: concentric rings, radial ticks, cardinal
  * crosshair marks (echoing the brand mark) and a variant glyph + mono label.
  * Purely decorative: always aria-hidden.
+ *
+ * Below 64px the mono micro-labels degrade into unreadable texture, so
+ * compact renders drop the text and let rings + glyph carry the identity.
  */
 export default function CaseSeal({ variant = "closed", size = 96, className = "" }: Props) {
+  const compact = size < 64;
   return (
     <svg
       width={size}
@@ -97,13 +101,25 @@ export default function CaseSeal({ variant = "closed", size = 96, className = ""
       <line x1="1" y1="48" x2="7" y2="48" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.75" strokeLinecap="round" />
       <line x1="89" y1="48" x2="95" y2="48" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.75" strokeLinecap="round" />
 
-      {/* Header + variant label in mono */}
-      <text x="48" y="32" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontWeight="700" fontSize="6" letterSpacing="1.5" fill="currentColor" fillOpacity="0.80">
-        GUESSME
-      </text>
-      <text x="48" y="68" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontWeight="700" fontSize="5.5" letterSpacing="1" fill="currentColor" fillOpacity="0.70">
-        {VARIANT_LABEL[variant]}
-      </text>
+      {/* Header + variant label in mono (legible sizes only) */}
+      {!compact && (
+        <>
+          <text x="48" y="32" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontWeight="700" fontSize="6" letterSpacing="1.5" fill="currentColor" fillOpacity="0.80">
+            GUESSME
+          </text>
+          <text x="48" y="68" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontWeight="700" fontSize="5.5" letterSpacing="1" fill="currentColor" fillOpacity="0.70">
+            {VARIANT_LABEL[variant]}
+          </text>
+        </>
+      )}
+      {/* Compact stand-in: geometric ticks keep the band occupied where the
+          micro-labels would otherwise dissolve into noise */}
+      {compact && (
+        <g stroke="currentColor" strokeWidth="1" strokeOpacity="0.55" strokeLinecap="round">
+          <line x1="42" y1="30" x2="54" y2="30" />
+          <line x1="44" y1="66" x2="52" y2="66" />
+        </g>
+      )}
 
       <VariantGlyph variant={variant} />
     </svg>
