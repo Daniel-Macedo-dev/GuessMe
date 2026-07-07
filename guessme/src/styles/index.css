@@ -1383,32 +1383,37 @@ b{ font-weight: 800; }
   gap: 5px;
 }
 
-/* Section accent colors — left border + tinted bg */
+/* Section accent colors — left verdict rail + tinted bg, recessed into
+   the notebook page (shared inset depth via --nb-section-depth) */
+.nbSection{
+  --nb-section-depth: inset 0 1px 6px rgba(0,0,0,0.22);
+  box-shadow: var(--nb-section-depth);
+}
 .nbSectionSim{
   border-color: rgba(52,211,153,0.24);
   background: rgba(52,211,153,0.05);
-  box-shadow: inset 3px 0 0 rgba(52,211,153,0.55);
+  box-shadow: inset 3px 0 0 rgba(52,211,153,0.55), var(--nb-section-depth);
 }
 .nbSectionSim .nbSectionTitle{ color: var(--accent); }
 
 .nbSectionNao{
   border-color: rgba(248,113,113,0.22);
   background: rgba(248,113,113,0.04);
-  box-shadow: inset 3px 0 0 rgba(248,113,113,0.55);
+  box-shadow: inset 3px 0 0 rgba(248,113,113,0.55), var(--nb-section-depth);
 }
 .nbSectionNao .nbSectionTitle{ color: var(--danger); }
 
 .nbSectionTalvez{
   border-color: rgba(251,191,36,0.22);
   background: rgba(251,191,36,0.04);
-  box-shadow: inset 3px 0 0 rgba(251,191,36,0.55);
+  box-shadow: inset 3px 0 0 rgba(251,191,36,0.55), var(--nb-section-depth);
 }
 .nbSectionTalvez .nbSectionTitle{ color: var(--accent-evidence); }
 
 .nbSectionIntel{
   border-color: rgba(251,191,36,0.18);
   background: rgba(251,191,36,0.03);
-  box-shadow: inset 3px 0 0 rgba(251,191,36,0.40);
+  box-shadow: inset 3px 0 0 rgba(251,191,36,0.40), var(--nb-section-depth);
 }
 .nbSectionIntel .nbSectionTitle{ color: rgba(251,191,36,0.80); }
 
