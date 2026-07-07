@@ -48,9 +48,12 @@ function stopServer(child: ChildProcess | null): void {
 
 async function startServer(): Promise<ChildProcess> {
   console.log("No dev server on :5173 — starting one for this capture run…");
-  const child = spawn("npm", ["run", "dev"], {
+  // Spawn vite's JS entry directly with the current Node binary instead of
+  // going through `npm run dev`: on Windows the npm shell-wrapper chain
+  // breaks `taskkill /T` (an intermediate parent exits), leaking the server.
+  const viteBin = path.join(process.cwd(), "node_modules", "vite", "bin", "vite.js");
+  const child = spawn(process.execPath, [viteBin], {
     cwd: process.cwd(),
-    shell: process.platform === "win32",
     detached: process.platform !== "win32",
     stdio: "ignore",
   });
