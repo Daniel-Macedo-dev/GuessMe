@@ -146,12 +146,31 @@ const SEED_GAME_ACTIVE = JSON.stringify({
   ],
 });
 
+/** Solved case seeded into game state — opens the VictoryModal deterministically */
+const SEED_GAME_VICTORY = JSON.stringify({
+  sessionId: "shot-session-002",
+  category: "Anime",
+  questionsCount: 7,
+  winner: { name: "Naruto Uzumaki", work: "Naruto", image: "" },
+  messages: [
+    { id: "v1", sender: "AI", text: "Caso aberto. Já escolhi um personagem — pode interrogar.", ts: 1, kind: "ai" },
+    { id: "v2", sender: "Você", text: "É de anime?", ts: 2, kind: "user" },
+    { id: "v3", sender: "AI", text: "Sim.", ts: 3, kind: "ai", verdict: "YES" },
+    { id: "v4", sender: "Você", text: "É o Naruto?", ts: 4, kind: "user" },
+    { id: "v5", sender: "AI", text: "Sim! Identidade confirmada.", ts: 5, kind: "ai", verdict: "YES" },
+  ],
+});
+
 type Route = {
   name: string;
   path: string;
   seed?: string;
   gameSeed?: string;
   waitUntil?: "networkidle" | "load";
+  /** Post-load interaction to reach modal/system states */
+  action?: "open-replay" | "fire-install";
+  /** Fixed-position overlays repaint badly in fullPage captures — use viewport */
+  viewportOnly?: boolean;
 };
 
 type OfflineRoute = Route & { simulateOffline?: boolean };
@@ -179,6 +198,15 @@ const ROUTES: OfflineRoute[] = [
   // Stats — eight cases across four categories (fully-populated dashboard)
   { name: "stats-rich",   path: "/stats", seed: SEED_8 },
 
+  // Game — victory report modal (seeded solved case)
+  { name: "victory-report", path: "/game", gameSeed: SEED_GAME_VICTORY, viewportOnly: true },
+
+  // Game — archived case replay modal opened from seeded history
+  { name: "replay-report", path: "/game", seed: SEED_3, action: "open-replay", viewportOnly: true },
+
+  // Install prompt — synthetic beforeinstallprompt (same technique as pwa.spec.ts)
+  { name: "install-prompt", path: "/", action: "fire-install", viewportOnly: true },
+
   // PWA offline state — home with offline banner visible
   { name: "offline-banner", path: "/", simulateOffline: true },
 
@@ -197,18 +225,17 @@ async function run() {
       const page = await ctx.newPage();
 
       try {
-        if (route.seed) {
-          await page.addInitScript(
-            (data: string) => localStorage.setItem("guessme.caseHistory.v1", data),
-            route.seed,
-          );
-        }
-        if (route.gameSeed) {
-          await page.addInitScript(
-            (data: string) => localStorage.setItem("guessme:state:v5", data),
-            route.gameSeed,
-          );
-        }
+        // Contexts are shared across routes and localStorage persists per
+        // origin — always reset to exactly the state this route declares, so
+        // seeds from earlier routes can never leak into later captures.
+        await page.addInitScript(
+          (state: { seed: string | null; gameSeed: string | null }) => {
+            localStorage.clear();
+            if (state.seed) localStorage.setItem("guessme.caseHistory.v1", state.seed);
+            if (state.gameSeed) localStorage.setItem("guessme:state:v5", state.gameSeed);
+          },
+          { seed: route.seed ?? null, gameSeed: route.gameSeed ?? null },
+        );
 
         await page.goto(`http://localhost:5173${route.path}`, {
           waitUntil: route.waitUntil ?? "networkidle",
@@ -222,8 +249,27 @@ async function run() {
           await page.waitForTimeout(200);
         }
 
+        if (route.action === "open-replay") {
+          await page.getByTestId("history-replay-btn").first().click();
+          await page.getByTestId("replay-modal").waitFor({ state: "visible", timeout: 5000 });
+          await page.waitForTimeout(300);
+        }
+        if (route.action === "fire-install") {
+          await page.evaluate(() => {
+            const evt = new Event("beforeinstallprompt", { bubbles: true, cancelable: true }) as Event & {
+              prompt: () => Promise<void>;
+              userChoice: Promise<{ outcome: string }>;
+            };
+            evt.prompt = () => Promise.resolve();
+            evt.userChoice = Promise.resolve({ outcome: "dismissed" });
+            window.dispatchEvent(evt);
+          });
+          await page.getByTestId("install-prompt").waitFor({ state: "visible", timeout: 5000 });
+          await page.waitForTimeout(300);
+        }
+
         const file = path.join(OUT, `${vp.name}--${route.name}.png`);
-        await page.screenshot({ path: file, fullPage: true });
+        await page.screenshot({ path: file, fullPage: !route.viewportOnly });
         console.log(`✓ ${file}`);
       } catch (e) {
         // Isolate per-route failures so one flaky page never kills the whole matrix.
