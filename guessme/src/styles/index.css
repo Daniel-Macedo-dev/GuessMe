@@ -1980,6 +1980,8 @@ b{ font-weight: 800; }
   border-radius: var(--radius-inner);
   background: var(--surface-desk);
   overflow: hidden;
+  /* Metadata band stamped into the report header */
+  box-shadow: var(--shadow-inset);
 }
 .statsReportField{
   display: flex;
@@ -2023,6 +2025,8 @@ b{ font-weight: 800; }
   border-radius: var(--radius-sm);
   background: var(--surface-desk);
   overflow: hidden;
+  /* KPI ledger: recessed strip, not a raised card row */
+  box-shadow: var(--shadow-inset);
 }
 
 .statsMetricCard{
@@ -2066,8 +2070,13 @@ b{ font-weight: 800; }
 }
 
 /* ── Generic panel ── */
+/* Intelligence report sheet: lit primary document over the environment */
 .statsPanel{
   padding: 16px 20px;
+  box-shadow:
+    var(--shadow-document),
+    6px 7px 0 -1px var(--sheet-gap),
+    6px 7px 0 0 rgba(255,255,255,0.045);
 }
 .statsMetricNote{
   margin: -6px 0 10px;
@@ -2299,8 +2308,10 @@ b{ font-weight: 800; }
    ══════════════════════════════════════════════════════════ */
 
 /* ── Agent rank card ── */
+/* Personnel file: same report material, credential-green filing rail */
 .agentDossierPanel{
   margin-bottom: 0;
+  border-left: 2px solid rgba(52,211,153,0.22);
 }
 
 .agentRankCard{
