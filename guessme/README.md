@@ -26,6 +26,7 @@ Built as a portfolio project demonstrating: AI-powered game mechanics, handcraft
 | **Agent rank** | Six-tier progression ladder (Recruta → Mestre do Dossiê) derived from solved cases |
 | **Achievements** | 11 badges across 5 categories (Casos, Eficiência, Evidências, Categorias, Arquivo) |
 | **Casefile Noir theme** | Handcrafted investigation/dossier visual identity — zero CSS framework |
+| **Original visual assets** | Proprietary SVG linework scenes (evidence network, document seals, archive marks, protocol route map) — no icon or illustration libraries |
 | **Fully local** | No auth, no login, no data collection — everything computed from `localStorage` |
 
 ---
@@ -42,7 +43,7 @@ npm run dev
 npm run screenshots
 ```
 
-Output is saved to `visual-screenshots/` which is gitignored. 50 PNGs are generated (10 routes × 5 viewports), including a seeded active-investigation workstation scenario.
+Output is saved to `visual-screenshots/` which is gitignored. 65 PNGs are generated (13 routes × 5 viewports), including seeded workstation, modal-report, and install-prompt scenarios. Every route resets `localStorage` to exactly its declared seed, so captures are fully deterministic and order-independent.
 
 ### Routes captured
 
@@ -52,11 +53,17 @@ Output is saved to `visual-screenshots/` which is gitignored. 50 PNGs are genera
 | `how-it-works` | `/how-it-works` | — |
 | `game-empty` | `/game` | — (shows investigation interface) |
 | `game-history` | `/game` | 3 seeded cases (shows populated Histórico de Casos) |
+| `game-active` | `/game` | Seeded transcript (dividers, verdict badges, populated notebook) |
 | `stats-empty` | `/stats` | — (empty state with Agent Dossier) |
 | `stats-progression` | `/stats` | 3 seeded cases (Analista rank, first achievements) |
 | `stats-rich` | `/stats` | 8 seeded cases across 4 categories (full dashboard) |
+| `victory-report` | `/game` | Seeded solved case — VictoryModal with closure seal (viewport capture) |
+| `replay-report` | `/game` | Seeded history + opens replay modal with archive watermark (viewport capture) |
+| `install-prompt` | `/` | Synthetic `beforeinstallprompt` — same technique as the E2E suite (viewport capture) |
 | `offline-banner` | `/` | Network set offline — shows amber offline status banner |
 | `offline-page` | `/offline.html` | Standalone offline fallback shell |
+
+Modal and prompt routes capture the viewport instead of the full page because fixed-position overlays repaint incorrectly in Playwright fullPage mode.
 
 ### Viewports
 
@@ -96,7 +103,7 @@ npm run dev            # start Vite dev server
 npm run build          # production build (outputs to dist/)
 npm run preview        # serve the production build locally (use for PWA testing)
 npm run lint           # ESLint check (zero warnings)
-npm run e2e            # Playwright — 265 tests, no backend required
+npm run e2e            # Playwright — 283 tests, no backend required
 npm run e2e:ui         # Playwright interactive UI mode
 npm run e2e:report     # open last Playwright HTML report
 npm run screenshots    # capture visual-screenshots/ (requires dev server)
@@ -114,6 +121,10 @@ guessme/
 │   ├── app/                    # Entry point (main.tsx, router setup)
 │   ├── components/             # Shared UI components
 │   │   ├── BrandMark.tsx       # SVG dossier seal — used in Navbar and Home hero
+│   │   ├── EvidenceNetwork.tsx # Linework scene: evidence nodes → unidentified target
+│   │   ├── CaseSeal.tsx        # Official document seal (closed/archived/install/agent)
+│   │   ├── ArchiveMark.tsx     # Filing-cabinet scene for the empty archive
+│   │   ├── ProtocolRouteMap.tsx # Five-station route diagram for the field manual
 │   │   ├── CaseStamp.tsx       # Status badge primitive (active/closed/archived/…)
 │   │   ├── DossierSectionHeader.tsx
 │   │   ├── EvidenceNotebook.tsx
@@ -156,7 +167,7 @@ guessme/
 ├── scripts/
 │   └── generate-icons.ts       # Playwright-based PNG generation (zero new deps)
 └── tests/
-    ├── e2e/                    # Ten Playwright spec files — 265 tests
+    ├── e2e/                    # Eleven Playwright spec files — 283 tests
     └── visual/
         └── screenshots.ts      # Multi-viewport screenshot capture script
 ```
@@ -202,6 +213,26 @@ GuessMe uses a custom investigation/dossier design system called **Casefile Noir
 | `PanelSectionHeader` | Shared icon + mono heading header used by the notebook, case history, and every stats panel. Supports heading level, `aria-labelledby` id, and a flush variant. |
 | `dossierEyebrow` (CSS primitive) | Classification line (`CONFIDENCIAL · … · IA-1`) shared by all four routes — one style, route-specific spacing modifiers. |
 
+### Original visual asset system
+
+All scenes are handcrafted inline SVG — no icon packs, no stock illustrations, no runtime image dependencies. They share one linework grammar so every screen is recognizably the same product:
+
+- **Strokes** 1 / 1.5 px (0.75 for construction lines), round caps and joins
+- **Dash vocabulary** `2 4` for evidence links and seal rings, `5 6` for protocol lines, `3 3` for retrieved-document outlines
+- **Evidence nodes** r 2.5 dots with r 5.5 halo rings; the unidentified target is a crosshair-ticked ring with a mono `?`
+- **Corner registration ticks** and JetBrains Mono micro-labels (coordinates, `IA-1`, `GM-0001`) frame each scene
+- **Color** via `currentColor` + design tokens (`.visualScene` defaults to evidence green; `--slate`/`--amber`/`--muted` variants)
+- **Semantics** every scene hardcodes `aria-hidden="true" focusable="false"` — decoration never reaches the accessibility tree
+
+| Asset | Scenes it draws |
+|-------|-----------------|
+| `EvidenceNetwork` | Home case-file cover (hero variant); notebook and stats empty states (compact variant) |
+| `CaseSeal` | Victory closure seal, replay archive watermark, install package seal, agent credential mark |
+| `ArchiveMark` | Case history empty state (filing cabinet with retrieved dossier) |
+| `ProtocolRouteMap` | Field manual header (five-station protocol line mirroring Etapa 01–05) |
+
+The standalone `offline.html` shell mirrors the seal grammar with a suspended-channel seal (broken-signal glyph in clue amber), hand-inlined because the static fallback cannot import app components.
+
 ### Dossier UI patterns
 
 | Pattern | Where |
@@ -224,11 +255,13 @@ GuessMe uses a custom investigation/dossier design system called **Casefile Noir
 
 | Route | Signature |
 |-------|-----------|
-| **Home** | Dossier cover: asymmetric hero with a sealed *Ficha do Caso* card (dotted-leader metadata fields, cut corner, pulse footer) beside the title block; protocol steps connected by a dashed evidence line through opaque icons |
-| **Game** | Interrogation workstation: classification eyebrow, transcript sheet with a red margin rule and indented bubbles, inset query desk surface, spiral-bound evidence notebook with punched-hole binding strip |
-| **How it works** | Field manual: vertical procedural route line through the step icons, `Etapa NN / 05` indexes, centered manual page-reference footer |
-| **Stats** | Intelligence briefing: report metadata band (classificação/fonte/período/casos), CSS-counter `Seção NN` indexes on every panel, KPI ledger strip with hairline cell dividers, numbered recent-activity ledger rows |
-| **Offline / PWA** | Same product voice: classified `OFFLINE` stamp banner, install prompt with the dossier cut-corner motif |
+| **Home** | Dossier cover: asymmetric hero with a sealed *Ficha do Caso* card carrying the evidence-network scene (unidentified `?` target bound to the `Alvo: Não identificado` field); protocol steps connected by a dashed evidence line — horizontal on desktop, vertical segments on stacked layouts |
+| **Game** | Interrogation workstation: classification eyebrow, transcript sheet with a red margin rule and indented bubbles, inset query desk surface, spiral-bound evidence notebook with punched-hole binding strip and an awaiting-evidence network scene when empty |
+| **Case history** | Closed archive: slate grammar distinct from active green — slate card spines, filing-tab edges, mono `REF` codes with stamped dates, `Arquivo` stamp, filing-cabinet empty scene |
+| **How it works** | Field manual: protocol route-map diagram in the header, vertical procedural route line through the step icons, `Etapa NN / 05` indexes, centered manual page-reference footer |
+| **Stats** | Intelligence briefing: report metadata band (classificação/fonte/período/casos), CSS-counter `Seção NN` indexes on every panel, KPI ledger strip with accent grammar (green cases / amber hints / slate average), agent credential seal on the rank card, slate unplotted-intelligence empty scene |
+| **Modals** | Official documents: closure seal above the `CASO ENCERRADO` stamp; slate archived-seal watermark behind the replay report |
+| **Offline / PWA** | Same product voice: classified `OFFLINE` stamp banner, install prompt with a system-issued package seal, suspended-channel seal on the offline shell |
 
 ### Design token reference
 
@@ -424,7 +457,7 @@ Classification priority: `message.verdict` (structured backend field) → text p
 
 ## E2E test coverage
 
-Playwright 1.61 — **270 tests** across ten spec files. All API calls are intercepted via `page.route()`. History, stats, and progression tests use `localStorage` seeding via `addInitScript`. No backend or Gemini key required.
+Playwright 1.61 — **283 tests** across eleven spec files. All API calls are intercepted via `page.route()`. History, stats, and progression tests use `localStorage` seeding via `addInitScript`. No backend or Gemini key required.
 
 ```bash
 npx playwright install --with-deps chromium   # one-time setup
@@ -445,6 +478,7 @@ npm run e2e:report    # open HTML report
 | `stats.spec.ts` | Empty state, single/multi case totals, verdict/evidence/category panels, rankings, navigation, mobile |
 | `progression.spec.ts` | Recruta empty state, rank ladder, achievement unlocks, max rank, imported cases, mobile |
 | `pwa.spec.ts` | Manifest link, theme-color, apple-touch-icon, OG title, description, icon assets, offline fallback served, offline banner show/hide/role/overflow, install prompt show/dismiss/keyboard/role/overflow |
+| `visual-scenes.spec.ts` | Original asset system safety: scenes/seals stay `aria-hidden`, watermark never intercepts clicks, victory dialog keeps its accessible name and focus, REF codes render, no overflow at 360 px |
 
 ---
 
