@@ -33,17 +33,15 @@ Built as a portfolio project demonstrating: AI-powered game mechanics, handcraft
 
 ## Screenshots
 
-Run this to generate screenshots of all routes at five viewport sizes:
+Generate screenshots of all routes at six viewport sizes with a single command:
 
 ```bash
-# Terminal 1 — start the dev server
-npm run dev
-
-# Terminal 2 — capture screenshots (requires dev server on port 5173)
 npm run screenshots
 ```
 
-Output is saved to `visual-screenshots/` which is gitignored. 65 PNGs are generated (13 routes × 5 viewports), including seeded workstation, modal-report, and install-prompt scenarios. Every route resets `localStorage` to exactly its declared seed, so captures are fully deterministic and order-independent.
+The script is self-contained: if nothing is listening on port 5173 it starts the Vite dev server, waits until it responds, captures, and shuts the server (and its process tree) down cleanly. An already-running dev server is reused and left running.
+
+Output is saved to `visual-screenshots/` which is gitignored. 78 PNGs are generated (13 routes × 6 viewports), including seeded workstation, modal-report, and install-prompt scenarios. Every route resets `localStorage` to exactly its declared seed, so captures are fully deterministic and order-independent.
 
 ### Routes captured
 
@@ -67,7 +65,7 @@ Modal and prompt routes capture the viewport instead of the full page because fi
 
 ### Viewports
 
-`desktop-1440` · `desktop-1366` · `tablet-768` · `mobile-390` · `mobile-360`
+`desktop-1440` · `desktop-1366` · `desktop-1024` · `tablet-768` · `mobile-390` · `mobile-360`
 
 ---
 
@@ -106,7 +104,7 @@ npm run lint           # ESLint check (zero warnings)
 npm run e2e            # Playwright — 283 tests, no backend required
 npm run e2e:ui         # Playwright interactive UI mode
 npm run e2e:report     # open last Playwright HTML report
-npm run screenshots    # capture visual-screenshots/ (requires dev server)
+npm run screenshots    # capture visual-screenshots/ (starts its own dev server if needed)
 npm run icons          # regenerate PWA icon PNGs from public/icons/icon.svg
 ```
 
@@ -201,6 +199,20 @@ GuessMe uses a custom investigation/dossier design system called **Casefile Noir
 | Case stamp | `CASO ENCERRADO` in mono with text-shadow and border glow |
 | Buttons (primary) | Green border + glow shadow, intensifies on hover |
 | Step cards | 3 px colored left border: green (01), amber (02), slate (03) |
+
+### Material hierarchy
+
+Surfaces are not interchangeable panels — each plays a physical role in the investigation workstation, expressed through structural (not decorative) shadows:
+
+| Layer | Surfaces | Treatment |
+|-------|----------|-----------|
+| Environment | `body` + per-route `.shell--*` atmosphere | Investigation grid, one local light source per route, shared edge vignette (`--env-vignette`) |
+| Document | Home case cover, active game dossier, manual page, stats report sheets | Lit top paper edge (`--edge-document`), `--shadow-document`, offset under-sheets rendered as zero-blur shadow layers (a *stack* of confidential sheets) |
+| Inset | Transcript, query desk, telemetry strip, KPI ledger, scene/diagram windows | Recessed via `--shadow-inset`; controls sit in darker wells inside the desk |
+| Archive | Case history panel, locked achievements, replay under-stack | Flat, dim `--surface-archive` with slate edges — retrieved records, not active work; cards lift on hover ("retrieved from the drawer") |
+| Official/system | Victory & replay modals, install prompt, offline shell | Raised report sheet over a sealed (green) or archival (slate) under-stack; darker overlay for archive retrieval |
+
+Under-sheet offsets shrink to a single sheet on narrow screens so the layered identity survives mobile stacking. Seal micro-labels (`GUESSME`, variant text) are dropped below 64 px render size, replaced by geometric ticks.
 
 ### Visual signature components
 
