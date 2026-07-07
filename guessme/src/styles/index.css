@@ -3392,3 +3392,26 @@ a:focus-visible,
     opacity: 0.70;
   }
 }
+
+/* ══════════════════════════════════════════════════════════
+   ORIGINAL VISUAL ASSET SYSTEM — LINEWORK SCENES
+   Shared grammar: strokes 1/1.5 (0.75 construction), round caps,
+   dashed links "2 4", protocol dashes "5 6", nodes r2.5 + halo,
+   corner registration ticks, mono micro-labels.
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Scene base: token-driven color, fluid scaling, never interactive ── */
+.visualScene{
+  display: block;
+  max-width: 100%;
+  height: auto;
+  color: var(--accent);
+  flex-shrink: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── Scene color variants ── */
+.visualScene--slate{ color: var(--mystery); }
+.visualScene--amber{ color: var(--accent-evidence); }
+.visualScene--muted{ color: var(--muted); }
