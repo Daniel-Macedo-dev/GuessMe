@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import BrandMark from "../components/BrandMark";
 import DossierIcon from "../components/DossierIcon";
+import EvidenceNetwork from "../components/EvidenceNetwork";
 
 const CASE_FILE_FIELDS = [
   { label: "Nº do caso", value: "GM-0001/IA" },
@@ -64,6 +65,9 @@ export default function Home() {
               <div className="heroCaseFileHeader">
                 <span className="heroCaseFileLabel">Ficha do caso</span>
                 <span className="caseStamp caseStamp--classified caseStamp--sm">Selado</span>
+              </div>
+              <div className="heroCaseFileScene">
+                <EvidenceNetwork variant="hero" />
               </div>
               {CASE_FILE_FIELDS.map((f) => (
                 <div className="caseField" key={f.label}>

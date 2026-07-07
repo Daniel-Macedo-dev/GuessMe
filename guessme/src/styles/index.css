@@ -325,6 +325,15 @@ b{ font-weight: 800; }
   color: var(--muted);
 }
 
+/* Case-opening scene framed inside the dossier cover */
+.heroCaseFileScene{
+  margin: 0 0 10px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-inner);
+  background: var(--surface-chat);
+}
+
 .caseField{
   display: flex;
   align-items: baseline;
