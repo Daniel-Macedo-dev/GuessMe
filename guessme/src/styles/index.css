@@ -3029,6 +3029,8 @@ a:focus-visible,
   font-size: 13px;
   color: var(--accent-evidence);
   animation: fadeIn 200ms ease-out;
+  /* Suspended-state strip floats above the workstation */
+  box-shadow: 0 4px 18px rgba(0,0,0,0.35);
 }
 .offlineBanner .caseStamp{ flex-shrink: 0; }
 .offlineBannerText strong{
@@ -3046,7 +3048,9 @@ a:focus-visible,
   border: 1px solid var(--border-accent);
   border-radius: var(--radius);
   padding: 14px 16px;
-  box-shadow: var(--shadow-float);
+  /* Issued package: lit top edge; clip-path would cut offset under-sheets,
+     so depth comes from the float shadow + inset edge instead */
+  box-shadow: var(--shadow-float), inset 0 1px 0 var(--edge-document);
   display: flex;
   flex-direction: column;
   gap: 10px;
