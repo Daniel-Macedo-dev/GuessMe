@@ -2548,6 +2548,11 @@ b{ font-weight: 800; }
 .protocolHeader{
   margin-bottom: 6px;
 }
+/* Route map mirroring the Etapa 01–05 sequence */
+.protocolRouteWrap{
+  max-width: 440px;
+  margin: 14px 0 0;
+}
 .protocolHeaderTitle{
   display: flex;
   align-items: center;

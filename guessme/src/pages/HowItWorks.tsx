@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import DossierIcon from "../components/DossierIcon";
+import ProtocolRouteMap from "../components/ProtocolRouteMap";
 
 export default function HowItWorks() {
   return (
@@ -21,6 +22,9 @@ export default function HowItWorks() {
               <h1 className="h2">Protocolo de Interrogação</h1>
             </div>
             <p className="muted pageLead">Cinco etapas para fechar qualquer caso.</p>
+            <div className="protocolRouteWrap">
+              <ProtocolRouteMap />
+            </div>
           </div>
 
           <div className="divider" />
