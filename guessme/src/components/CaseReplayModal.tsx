@@ -266,7 +266,7 @@ export default function CaseReplayModal({ entry, onClose }: Props) {
 
           {hasEvidence && (
             <div className="replayEvidence" data-testid="replay-evidence-snapshot">
-              <div className="replayDossierLabel" aria-hidden="true">EVIDÊNCIAS</div>
+              <div className="replayDossierLabel" aria-hidden="true">ANEXOS DO DOSSIÊ</div>
               <h4 className="replaySectionTitle">Evidências</h4>
               <EvidenceSection
                 title="Confirmado"
