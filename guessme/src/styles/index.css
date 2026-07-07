@@ -1539,12 +1539,22 @@ b{ font-weight: 800; }
   background: rgba(255,255,255,0.026);
   position: relative;
   overflow: hidden;
-  transition: background var(--t-base), border-color var(--t-base), transform var(--t-base);
+  transition: background var(--t-base), border-color var(--t-base),
+              transform var(--t-base), box-shadow var(--t-base);
+  /* Filed record: a thin stack of sheets resting in the archive drawer */
+  box-shadow:
+    3px 4px 0 -1px var(--sheet-gap),
+    3px 4px 0 0 rgba(148,163,184,0.14);
 }
 .historyCard:hover{
   background: rgba(255,255,255,0.040);
   border-color: var(--border2);
-  transform: translateY(-1px);
+  /* Retrieved from the drawer: lifts toward the reader */
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 26px rgba(0,0,0,0.42),
+    3px 4px 0 -1px var(--sheet-gap),
+    3px 4px 0 0 rgba(148,163,184,0.18);
 }
 /* Archived cases carry the slate grammar — green is reserved for the
    active investigation surfaces */
