@@ -15,7 +15,7 @@ const CASE_FILE_FIELDS = [
 
 export default function Home() {
   return (
-    <div className="shell">
+    <div className="shell shell--home">
       <Navbar />
       <main className="main mainCenter">
         <section className="panel hero">

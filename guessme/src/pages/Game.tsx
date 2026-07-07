@@ -70,7 +70,7 @@ export default function Game() {
     : "Interrogue a IA (ex: É humano?)";
 
   return (
-    <div className="shell">
+    <div className="shell shell--game">
       <Navbar onRestart={restart} disabled={loading || hintLoading} />
 
       <main className="main">

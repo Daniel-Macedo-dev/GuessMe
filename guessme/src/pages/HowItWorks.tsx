@@ -6,7 +6,7 @@ import ProtocolRouteMap from "../components/ProtocolRouteMap";
 
 export default function HowItWorks() {
   return (
-    <div className="shell">
+    <div className="shell shell--manual">
       <Navbar />
 
       <main className="main">

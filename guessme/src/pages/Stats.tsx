@@ -57,7 +57,7 @@ export default function Stats() {
   ];
 
   return (
-    <div className="shell">
+    <div className="shell shell--stats">
       <Navbar />
       <main className="main statsMain" data-testid="stats-page">
         <div className="statsPageHeader">
