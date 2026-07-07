@@ -43,6 +43,7 @@ export default function Stats() {
       label: "Pistas usadas",
       value: data.totalHints,
       testId: "stats-total-hints",
+      accent: "amber" as const,
       icon: "clue" as const,
     },
     {
@@ -50,6 +51,7 @@ export default function Stats() {
       value: data.totalCases > 0 ? data.averageQuestions : "—",
       sub: "por caso",
       testId: "stats-avg-questions",
+      accent: "slate" as const,
       icon: "stats" as const,
     },
   ];

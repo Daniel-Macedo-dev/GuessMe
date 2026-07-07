@@ -7,7 +7,7 @@ type Metric = {
   value: string | number;
   sub?: string;
   testId: string;
-  accent?: "green" | "amber" | "red" | "slate";
+  accent?: "green" | "amber" | "slate";
   icon?: IconName;
 };
 

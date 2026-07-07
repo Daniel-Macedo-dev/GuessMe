@@ -1905,7 +1905,6 @@ b{ font-weight: 800; }
 }
 .statsMetricCard--green::before{ background: var(--accent); opacity: 0.65; }
 .statsMetricCard--amber::before{ background: var(--accent-evidence); opacity: 0.65; }
-.statsMetricCard--red::before{ background: var(--danger); opacity: 0.65; }
 .statsMetricCard--slate::before{ background: var(--mystery); opacity: 0.65; }
 
 .statsMetricValue{
@@ -2902,11 +2901,7 @@ a:focus-visible,
 }
 
 /* ── Icon accent variants ── */
-.dossierIcon--accent { color: var(--accent); }
-.dossierIcon--amber  { color: var(--accent-evidence); }
-.dossierIcon--danger { color: var(--danger); }
 .dossierIcon--muted  { color: var(--muted); }
-.dossierIcon--intel  { color: var(--intel); }
 
 /* ── Icon + text buttons ── */
 .btn{
@@ -2973,30 +2968,6 @@ a:focus-visible,
    ILLUSTRATED EMPTY STATES
    ══════════════════════════════════════════════════════════ */
 
-/* ── Shared empty state illustration shell ── */
-.emptyIllustration{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 64px;
-  height: 64px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.025);
-  position: relative;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.emptyIllustration::before{
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(52,211,153,0.08) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-
 /* ── Notebook empty state: evidence network awaiting entries ── */
 .nbEmptyScene{
   width: 148px;
@@ -3009,8 +2980,9 @@ a:focus-visible,
   margin: 8px auto 10px;
 }
 
-/* ── Stats empty state illustration ── */
-.statsEmptyIllustration{
+/* ── Stats empty state: unplotted intelligence scene ── */
+.statsEmptyScene{
+  width: 160px;
   margin-bottom: 4px;
 }
 
@@ -3026,7 +2998,6 @@ a:focus-visible,
 
 .statsMetricCard--green .statsMetricIcon { color: var(--accent); }
 .statsMetricCard--amber .statsMetricIcon { color: var(--accent-evidence); }
-.statsMetricCard--red   .statsMetricIcon { color: var(--danger); }
 .statsMetricCard--slate .statsMetricIcon { color: var(--mystery); }
 
 /* ── Offline banner icon ── */
@@ -3075,12 +3046,8 @@ a:focus-visible,
 
 /* ── Mobile scaling ── */
 @media (max-width: 480px){
-  .emptyIllustration{ width: 52px; height: 52px; border-radius: 16px; }
   .stepIconWrap{ width: 30px; height: 30px; }
   .manualStepIcon{ width: 28px; height: 28px; }
-}
-@media (max-width: 360px){
-  .emptyIllustration{ width: 44px; height: 44px; }
 }
 
 /* ══════════════════════════════════════════════════════════
