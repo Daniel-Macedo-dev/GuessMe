@@ -2726,6 +2726,17 @@ b{ font-weight: 800; }
 }
 .queryDesk .chips{ margin-bottom: 10px; }
 .queryDesk .inputArea{ margin-top: 0; }
+/* Controls sit deeper than the desk itself: darker wells, brighter on focus */
+.queryDesk .input{
+  background: rgba(4,9,15,0.78);
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.30);
+}
+.queryDesk .input:focus-visible{
+  background: rgba(6,12,19,0.85);
+}
+.queryDesk .chip{
+  background: rgba(4,9,15,0.55);
+}
 
 /* ── Game desk: query section labels ── */
 .querySection{
