@@ -3,6 +3,7 @@ import type { CaseHistoryEntry } from "../types/guessme";
 import CaseHistoryCard from "./CaseHistoryCard";
 import CaseReplayModal from "./CaseReplayModal";
 import { parseCaseExportJson, CaseImportError } from "../helpers/caseImport";
+import ArchiveMark from "./ArchiveMark";
 import DossierIcon from "./DossierIcon";
 import PanelSectionHeader from "./PanelSectionHeader";
 
@@ -80,7 +81,10 @@ export default function CaseHistoryPanel({
       data-testid="history-panel"
     >
       <div className="historyPanelHeader">
-        <PanelSectionHeader icon="archive" title="Histórico de Casos" flush />
+        <div className="historyPanelTitleRow">
+          <PanelSectionHeader icon="archive" title="Histórico de Casos" flush />
+          <span className="caseStamp caseStamp--archived caseStamp--sm" aria-hidden="true">Arquivo</span>
+        </div>
         <div className="historyPanelActions">
           <button
             className="btn historyActionBtn historyImportBtn"
@@ -130,8 +134,8 @@ export default function CaseHistoryPanel({
 
       {history.length === 0 ? (
         <div className="historyEmpty" role="status" data-testid="history-empty">
-          <div className="emptyIllustration historyEmptyIllustration emptyIllustration--slate" aria-hidden="true">
-            <DossierIcon name="archive" size={28} aria-hidden={true} className="dossierIcon--muted" />
+          <div className="historyEmptyScene" aria-hidden="true">
+            <ArchiveMark className="visualScene--slate" />
           </div>
           <p className="muted small">Nenhum caso arquivado ainda.</p>
         </div>

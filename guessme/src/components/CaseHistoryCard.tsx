@@ -54,7 +54,12 @@ function CaseHistoryCard({ entry, onReplay, onDelete }: Props) {
         </span>
       </div>
 
-      <div className="historyCardDate muted small">{formatDate(entry.createdAt)}</div>
+      <div className="historyCardFiling muted small">
+        <span className="historyCardRef" aria-hidden="true">
+          REF {entry.id.slice(-6).toUpperCase()}
+        </span>
+        <span className="historyCardDate">{formatDate(entry.createdAt)}</span>
+      </div>
 
       <div className="historyCardActions">
         <button

@@ -1400,6 +1400,12 @@ b{ font-weight: 800; }
   gap: 10px;
   margin-bottom: 12px;
 }
+.historyPanelTitleRow{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
 .replaySectionTitle{
   margin: 0 0 8px;
@@ -1441,13 +1447,26 @@ b{ font-weight: 800; }
   border-color: var(--border2);
   transform: translateY(-1px);
 }
+/* Archived cases carry the slate grammar — green is reserved for the
+   active investigation surfaces */
 .historyCard::before{
   content: '';
   position: absolute;
   left: 0; top: 0; bottom: 0;
   width: 3px;
-  background: var(--accent);
-  opacity: 0.45;
+  background: var(--mystery);
+  opacity: 0.50;
+}
+/* Filing-tab edge along the top of each archived card */
+.historyCard::after{
+  content: '';
+  position: absolute;
+  top: 0; left: 20px;
+  width: 56px; height: 3px;
+  background: var(--mystery);
+  opacity: 0.30;
+  border-radius: 0 0 2px 2px;
+  pointer-events: none;
 }
 
 .historyCardHeader{
@@ -1517,8 +1536,21 @@ b{ font-weight: 800; }
   display: block;
 }
 
-.historyCardDate{
+/* Archival filing row: reference code + stamped chronology */
+.historyCardFiling{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
   margin-bottom: 10px;
+}
+.historyCardRef{
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-dim);
 }
 
 .historyCardActions{
@@ -2960,18 +2992,15 @@ a:focus-visible,
 }
 
 
-.emptyIllustration--slate::before{
-  background: radial-gradient(circle at 50% 50%, rgba(148,163,184,0.08) 0%, transparent 70%);
-}
-
 /* ── Notebook empty state: evidence network awaiting entries ── */
 .nbEmptyScene{
   width: 148px;
   margin: 14px auto 10px;
 }
 
-/* ── History empty state ── */
-.historyEmptyIllustration{
+/* ── History empty state: archive drawer scene ── */
+.historyEmptyScene{
+  width: 150px;
   margin: 8px auto 10px;
 }
 
