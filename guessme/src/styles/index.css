@@ -3037,18 +3037,10 @@ a:focus-visible,
   opacity: 0.85;
 }
 
-/* ── Install prompt icon ── */
-.installPromptIconWrap{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  border: 1px solid var(--border-accent);
-  background: rgba(52,211,153,0.07);
-  flex-shrink: 0;
+/* ── Install prompt: system-issued package seal ── */
+.installPromptSeal{
   color: var(--accent);
+  opacity: 0.85;
 }
 
 /* ── Panel section header with icon ── */
