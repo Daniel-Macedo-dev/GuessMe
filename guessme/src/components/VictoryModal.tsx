@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { WinnerData } from "../types/guessme";
 import PersonagemCard from "./PersonagemCard";
+import CaseSeal from "./CaseSeal";
 import DossierIcon from "./DossierIcon";
 
 type Props = {
@@ -53,6 +54,7 @@ export default function VictoryModal({ winner, onRestart }: Props) {
         <div className="victoryReportLabel" aria-hidden="true">RELATÓRIO DE CASO · ENCERRADO</div>
 
         <div className="victoryHeader">
+          <CaseSeal variant="closed" size={72} className="victoryClosureSeal" />
           <div id="victory-dialog-title" className="caseSolvedStamp">Caso Encerrado</div>
           <p className="muted victorySubtitle">Identidade confirmada:</p>
         </div>

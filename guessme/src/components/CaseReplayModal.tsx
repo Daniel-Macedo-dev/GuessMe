@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import CaseSeal from "./CaseSeal";
 import DossierIcon from "./DossierIcon";
 import type { CaseEvidenceEntry, CaseHistoryEntry, CaseIntelEntry } from "../types/guessme";
 import MessageBubble from "./MessageBubble";
@@ -200,6 +201,7 @@ export default function CaseReplayModal({ entry, onClose }: Props) {
       onKeyDown={handleKeyDown}
     >
       <div className="modal replayModal" ref={modalRef}>
+        <CaseSeal variant="archived" size={220} className="replaySealWatermark" />
         <div className="replayClassLabel" aria-hidden="true">DOSSIÊ ARQUIVADO · ACESSO RESTRITO</div>
 
         <div className="replayHeader">
