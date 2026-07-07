@@ -193,7 +193,7 @@ export default function CaseReplayModal({ entry, onClose }: Props) {
 
   return (
     <div
-      className="modalOverlay"
+      className="modalOverlay modalOverlay--archive"
       role="dialog"
       aria-modal="true"
       aria-labelledby="replay-dialog-title"
