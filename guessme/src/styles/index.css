@@ -2194,6 +2194,13 @@ b{ font-weight: 800; }
   gap: 3px;
 }
 
+/* Personnel-file credential seal on the far edge of the rank card */
+.agentCredentialSeal{
+  margin-left: auto;
+  color: var(--accent);
+  opacity: 0.45;
+}
+
 .agentRankLabel{
   margin: 0;
   font-family: var(--font-mono);
@@ -2373,6 +2380,8 @@ b{ font-weight: 800; }
   .agentRankCard{ flex-direction: column; align-items: flex-start; gap: 12px; }
   .agentRankStamp{ min-width: auto; }
   .achievementList{ grid-template-columns: 1fr; }
+  /* Stacked rank card: credential seal returns to the flow, smaller */
+  .agentCredentialSeal{ margin-left: 0; width: 52px; height: 52px; }
 }
 @media (max-width: 480px){
   .agentRankTitle{ font-size: 17px; }

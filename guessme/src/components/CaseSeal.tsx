@@ -1,4 +1,4 @@
-type Variant = "closed" | "archived" | "install";
+type Variant = "closed" | "archived" | "install" | "agent";
 
 type Props = {
   variant?: Variant;
@@ -22,6 +22,7 @@ const VARIANT_LABEL: Record<Variant, string> = {
   closed: "ENCERRADO",
   archived: "ARQUIVADO",
   install: "PACOTE",
+  agent: "AGENTE",
 };
 
 function VariantGlyph({ variant }: { variant: Variant }) {
@@ -46,11 +47,19 @@ function VariantGlyph({ variant }: { variant: Variant }) {
       </>
     );
   }
+  if (variant === "install") {
+    return (
+      <>
+        <line x1="48" y1="38" x2="48" y2="52" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        <polyline points="42,46 48,52 54,46" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <line x1="40" y1="57" x2="56" y2="57" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      </>
+    );
+  }
   return (
     <>
-      <line x1="48" y1="38" x2="48" y2="52" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <polyline points="42,46 48,52 54,46" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-      <line x1="40" y1="57" x2="56" y2="57" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="48" cy="44" r="4.5" stroke="currentColor" strokeWidth="1.5" fill="none" />
+      <path d="M40 58c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none" />
     </>
   );
 }

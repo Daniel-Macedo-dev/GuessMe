@@ -1,4 +1,5 @@
 import type { AgentRank } from "../types/progression";
+import CaseSeal from "./CaseSeal";
 
 type Props = {
   rank: AgentRank;
@@ -21,6 +22,7 @@ export default function AgentRankCard({ rank, unlockedCount, totalCount }: Props
           {unlockedCount} / {totalCount} conquistas desbloqueadas
         </p>
       </div>
+      <CaseSeal variant="agent" size={64} className="agentCredentialSeal" />
     </div>
   );
 }
