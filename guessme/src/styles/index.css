@@ -644,6 +644,19 @@ b{ font-weight: 800; }
   .heroCaseFile{ margin-top: 0; max-width: 420px; }
   .heroGrid{ grid-template-columns: 1fr; gap: 14px; }
   .heroGrid::before{ display: none; }
+  /* Stacked protocol: vertical connector segments keep the procedural chain */
+  .heroProtocolCard:not(:first-child)::before{
+    content: '';
+    position: absolute;
+    left: 17px;
+    top: -14px; /* span the grid gap up to the previous card */
+    height: 38px; /* end tucked under the opaque step icon */
+    width: 1px;
+    background: repeating-linear-gradient(180deg,
+      rgba(52,211,153,0.22) 0px, rgba(52,211,153,0.22) 5px,
+      transparent 5px, transparent 11px);
+    pointer-events: none;
+  }
   .chatScroll{ height: 48vh; }
 }
 @media (max-width: 640px){
