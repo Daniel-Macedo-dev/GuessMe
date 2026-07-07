@@ -61,6 +61,20 @@
   --surface-desk:   rgba(6,11,18,0.72);
   --surface-solid:  #0b141c;
   --border-accent:  rgba(52,211,153,0.18);
+
+  /* ── Material hierarchy ──
+     Environment (body) → document (active dossier sheets) → inset
+     (transcript/desk work zones) → archive (retrieved records).
+     Documents cast structural shadows; insets recede; archives sit flat. */
+  --surface-archive:   rgba(9,13,19,0.58);
+  --edge-document:     rgba(255,255,255,0.055);  /* lit top paper edge */
+  --edge-document-dim: rgba(255,255,255,0.03);
+  --shadow-document:   0 14px 40px rgba(0,0,0,0.50), 0 3px 10px rgba(0,0,0,0.30),
+                       inset 0 1px 0 var(--edge-document);
+  --shadow-inset:      inset 0 2px 14px rgba(0,0,0,0.30), inset 0 -1px 0 rgba(255,255,255,0.035);
+  --shadow-archive:    inset 0 1px 12px rgba(0,0,0,0.26), 0 4px 16px rgba(0,0,0,0.30);
+  /* Under-sheet gap color for stacked-document box-shadow layers */
+  --sheet-gap: rgba(7,11,15,0.92);
 }
 
 *{ box-sizing: border-box; }
