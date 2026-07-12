@@ -5,6 +5,7 @@ A aplicação consome a **GuessMe API**, enviando perguntas, exibindo respostas 
 
 ---
 
+
 ## 📌 Visão Geral
 
 O **GuessMe** é a interface visual do jogo, criada para proporcionar uma experiência de interação simples e dinâmica entre o usuário e a IA.
