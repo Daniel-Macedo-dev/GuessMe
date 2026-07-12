@@ -3,6 +3,7 @@
 Frontend web do **GuessMe**, desenvolvido para permitir a interação do usuário com a inteligência artificial responsável pelo jogo de adivinhação de personagens.  
 A aplicação consome a **GuessMe API**, enviando perguntas, exibindo respostas e conduzindo o fluxo da partida em uma interface web moderna.
 
+
 ---
 
 ## 📌 Visão Geral
