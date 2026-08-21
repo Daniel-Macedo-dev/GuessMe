@@ -4,9 +4,12 @@ const BASE_URL: string =
 type FetchOptions = RequestInit & { timeoutMs?: number };
 
 export async function apiFetch<T>(path: string, options: FetchOptions = {}) {
-  const { timeoutMs = 20000, ...rest } = options;
+  const { timeoutMs = 20000, signal, ...rest } = options;
 
   const controller = new AbortController();
+  const abortFromCaller = () => controller.abort();
+  signal?.addEventListener("abort", abortFromCaller, { once: true });
+  if (signal?.aborted) controller.abort();
   let timedOut = false;
   const timer = setTimeout(() => {
     timedOut = true;
@@ -43,5 +46,6 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}) {
     throw e;
   } finally {
     clearTimeout(timer);
+    signal?.removeEventListener("abort", abortFromCaller);
   }
 }

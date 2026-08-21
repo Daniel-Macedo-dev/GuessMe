@@ -239,6 +239,31 @@ test.describe("AI answer states", () => {
 // ─── Hint ─────────────────────────────────────────────────────────────────────
 
 test.describe("Hint flow", () => {
+  test("restarting during a pending hint does not append it to the new case", async ({ page }) => {
+    await page.route("**/api/game/hint", async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          answer: "Pista do caso antigo.",
+          success: false,
+          character: null,
+          sessionId: "test-session-0000-0000-0000-000000000001",
+        }),
+      });
+    });
+    await page.goto("/game");
+    await expect(page.getByTestId("chat-scroll")).toContainText("primeira pergunta");
+
+    await page.getByRole("button", { name: /Solicitar pista/ }).click();
+    await page.locator(".gameHeaderActions").getByRole("button", { name: "Novo caso" }).click();
+
+    await expect(page.getByTestId("chat-scroll")).toContainText("primeira pergunta");
+    await page.waitForTimeout(600);
+    await expect(page.getByTestId("chat-scroll")).not.toContainText("Pista do caso antigo.");
+  });
+
   test("question controls stay disabled while a hint is loading", async ({ page }) => {
     await page.route("**/api/game/hint", async (route) => {
       await new Promise((resolve) => setTimeout(resolve, 500));

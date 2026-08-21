@@ -5,7 +5,7 @@ export async function getCategories(): Promise<string[]> {
   return apiFetch<string[]>("/api/game/categories", { method: "GET" });
 }
 
-export async function startGame(category?: string): Promise<AIResponse> {
+export async function startGame(category?: string, signal?: AbortSignal): Promise<AIResponse> {
   const c = (category || "").trim();
   const body: Record<string, string> = {};
   if (c && c.toLowerCase() !== "geral") body.category = c;
@@ -13,19 +13,26 @@ export async function startGame(category?: string): Promise<AIResponse> {
   return apiFetch<AIResponse>("/api/game/start", {
     method: "POST",
     body: JSON.stringify(body),
+    signal,
   });
 }
 
-export async function askGuessMe(question: string, sessionId: string | null): Promise<AIResponse> {
+export async function askGuessMe(
+  question: string,
+  sessionId: string | null,
+  signal?: AbortSignal,
+): Promise<AIResponse> {
   return apiFetch<AIResponse>("/api/game/ask", {
     method: "POST",
     body: JSON.stringify({ question, sessionId }),
+    signal,
   });
 }
 
-export async function requestHint(sessionId: string | null): Promise<AIResponse> {
+export async function requestHint(sessionId: string | null, signal?: AbortSignal): Promise<AIResponse> {
   return apiFetch<AIResponse>("/api/game/hint", {
     method: "POST",
     body: JSON.stringify({ sessionId }),
+    signal,
   });
 }

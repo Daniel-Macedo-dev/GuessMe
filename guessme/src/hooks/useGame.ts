@@ -127,7 +127,7 @@ export function useGame() {
 
   const startedRef = useRef(false);
   const inFlightRef = useRef<AbortController | null>(null);
-  const hintInFlightRef = useRef(false);
+  const hintInFlightRef = useRef<AbortController | null>(null);
 
   const chatScrollRef = useRef<HTMLDivElement | null>(null);
 
@@ -178,6 +178,11 @@ export function useGame() {
       inFlightRef.current.abort();
       inFlightRef.current = null;
     }
+    if (hintInFlightRef.current) {
+      hintInFlightRef.current.abort();
+      hintInFlightRef.current = null;
+      setHintLoading(false);
+    }
   }
 
   // ===== load categories (uma vez) =====
@@ -213,7 +218,7 @@ export function useGame() {
 
     try {
       const chosen = (cat ?? category) || "Geral";
-      const res = await startGame(chosen);
+      const res = await startGame(chosen, controller.signal);
 
       if (inFlightRef.current !== controller) return;
 
@@ -227,8 +232,10 @@ export function useGame() {
       setError("Não foi possível abrir o caso. Verifique se a API está acessível e tente novamente.");
       setMessages([msg("AI", "Não foi possível abrir o caso agora. Verifique se a API está rodando.", "error")]);
     } finally {
-      if (inFlightRef.current === controller) inFlightRef.current = null;
-      setLoading(false);
+      if (inFlightRef.current === controller) {
+        inFlightRef.current = null;
+        setLoading(false);
+      }
     }
   }
 
@@ -255,7 +262,7 @@ export function useGame() {
     inFlightRef.current = controller;
 
     try {
-      const res = await askGuessMe(q, sessionId);
+      const res = await askGuessMe(q, sessionId, controller.signal);
 
       if (inFlightRef.current !== controller) return;
 
@@ -288,8 +295,10 @@ export function useGame() {
       setQuestionsCount((n) => Math.max(0, n - 1));
       setError(e?.message || "Erro ao chamar a API. Verifique se o servidor está rodando.");
     } finally {
-      if (inFlightRef.current === controller) inFlightRef.current = null;
-      setLoading(false);
+      if (inFlightRef.current === controller) {
+        inFlightRef.current = null;
+        setLoading(false);
+      }
     }
   }
 
@@ -297,13 +306,16 @@ export function useGame() {
   async function hint() {
     if (loading || winner || hintInFlightRef.current || sessionExpired) return;
 
-    hintInFlightRef.current = true;
+    const controller = new AbortController();
+    hintInFlightRef.current = controller;
     setHintLoading(true);
     setError(null);
     setLimitMessage(null);
 
     try {
-      const res = await requestHint(sessionId);
+      const res = await requestHint(sessionId, controller.signal);
+
+      if (hintInFlightRef.current !== controller) return;
 
       const kind = classifyAnswer(res.answer);
 
@@ -321,10 +333,13 @@ export function useGame() {
         setMessages((prev) => [...prev, msg("AI", text, "hint")]);
       }
     } catch (e: any) {
+      if (hintInFlightRef.current !== controller) return;
       setError(e?.message || "Erro ao pedir dica. Verifique se o servidor está rodando.");
     } finally {
-      hintInFlightRef.current = false;
-      setHintLoading(false);
+      if (hintInFlightRef.current === controller) {
+        hintInFlightRef.current = null;
+        setHintLoading(false);
+      }
     }
   }
 
