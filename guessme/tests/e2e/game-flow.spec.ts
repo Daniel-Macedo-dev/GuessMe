@@ -70,6 +70,22 @@ test.describe("Category select", () => {
 
     await expect(page.getByTestId("chat-scroll")).toContainText("Anime");
   });
+
+  test("category menu supports arrow navigation and restores trigger focus", async ({ page }) => {
+    await page.goto("/game");
+    const trigger = page.getByRole("button", { name: /Domínio/ });
+    await trigger.click();
+
+    await expect(page.getByRole("menuitemradio", { name: "Geral" })).toBeFocused();
+    await page.keyboard.press("ArrowDown");
+    await expect(page.getByRole("menuitemradio", { name: "Anime" })).toBeFocused();
+    await page.keyboard.press("End");
+    await expect(page.getByRole("menuitemradio", { name: "Séries" })).toBeFocused();
+    await page.keyboard.press("Escape");
+
+    await expect(page.getByRole("menu")).not.toBeVisible();
+    await expect(trigger).toBeFocused();
+  });
 });
 
 // ─── Question input ───────────────────────────────────────────────────────────
