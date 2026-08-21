@@ -4,7 +4,7 @@
 
 GuessMe is a browser-based investigation game with a custom Casefile Noir visual identity. You interrogate an AI that secretly plays a character: ask yes/no questions, build an evidence file, collect hints, and crack the case. Every solved case is archived locally — with a full transcript, evidence snapshot, stats dashboard, and agent rank progression.
 
-Built as a portfolio project demonstrating: AI-powered game mechanics, handcrafted CSS design system, zero-backend client architecture, and production-quality E2E coverage.
+Built as a portfolio project demonstrating: AI-powered game mechanics, handcrafted CSS design system, resilient full-stack API integration, and production-quality E2E coverage.
 
 - **Frontend:** React 19, TypeScript, Vite 7, custom CSS — this repo
 - **Backend API:** Java + Spring Boot + Gemini — [guessme-api](https://github.com/Daniel-Macedo-dev/guessme-api)
@@ -101,7 +101,7 @@ npm run dev            # start Vite dev server
 npm run build          # production build (outputs to dist/)
 npm run preview        # serve the production build locally (use for PWA testing)
 npm run lint           # ESLint check (zero warnings)
-npm run e2e            # Playwright — 283 tests, no backend required
+npm run e2e            # Playwright — 284 tests, no backend required
 npm run e2e:ui         # Playwright interactive UI mode
 npm run e2e:report     # open last Playwright HTML report
 npm run screenshots    # capture visual-screenshots/ (starts its own dev server if needed)
@@ -165,7 +165,7 @@ guessme/
 ├── scripts/
 │   └── generate-icons.ts       # Playwright-based PNG generation (zero new deps)
 └── tests/
-    ├── e2e/                    # Eleven Playwright spec files — 283 tests
+    ├── e2e/                    # Eleven Playwright spec files — 284 tests
     └── visual/
         └── screenshots.ts      # Multi-viewport screenshot capture script
 ```
@@ -174,7 +174,7 @@ guessme/
 
 - **Zero CSS framework** — all styles in `index.css` with CSS custom properties. The Casefile Noir identity requires precise control of gradients, glows, and backdrop filters; utility classes would fight the design.
 - **Pure functional derivation** — stats, progression, and evidence are computed as pure functions of the history array. No secondary localStorage keys, no sync complexity, no reconciliation.
-- **API route isolation in tests** — all 265 Playwright tests mock API responses via `page.route()`. The suite runs with no backend and no Gemini key.
+- **API route isolation in tests** — all 284 Playwright tests mock API responses via `page.route()`. The suite runs with no backend and no Gemini key.
 - **Single localStorage key** — `guessme.caseHistory.v1` is the only persisted state. Clearing it resets history, stats, and progression simultaneously.
 - **`vite-plugin-pwa` over manual SW** — Vite's hashed asset filenames (`index-BnWCv19D.js`) can't be reliably listed in a hand-written service worker. The plugin generates a Workbox-based SW from the actual build manifest, guaranteeing correct precaching. SW is disabled in dev (`devOptions: { enabled: false }`) so Playwright's `page.route()` interceptors work without SW interference.
 
@@ -469,7 +469,7 @@ Classification priority: `message.verdict` (structured backend field) → text p
 
 ## E2E test coverage
 
-Playwright 1.61 — **283 tests** across eleven spec files. All API calls are intercepted via `page.route()`. History, stats, and progression tests use `localStorage` seeding via `addInitScript`. No backend or Gemini key required.
+Playwright 1.61 — **284 tests** across eleven spec files. All API calls are intercepted via `page.route()`. History, stats, and progression tests use `localStorage` seeding via `addInitScript`. No backend or Gemini key required.
 
 ```bash
 npx playwright install --with-deps chromium   # one-time setup
