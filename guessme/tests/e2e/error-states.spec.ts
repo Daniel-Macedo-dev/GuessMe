@@ -14,6 +14,27 @@ test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => localStorage.clear());
 });
 
+test("recovers from structurally invalid persisted game state", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem(
+      "guessme:state:v5",
+      JSON.stringify({
+        messages: [{ id: "broken", sender: "AI", kind: "ai" }],
+        questionsCount: 1,
+        winner: null,
+        category: "Geral",
+        sessionId: "stale-session",
+      }),
+    );
+  });
+  await mockBoot(page);
+
+  await page.goto("/game");
+
+  await expect(page.getByTestId("chat-scroll")).toContainText("primeira pergunta");
+  await expect(page.getByRole("textbox", { name: "Pergunta para a investigação" })).toBeEnabled();
+});
+
 // ─── Backend unavailable ──────────────────────────────────────────────────────
 
 test.describe("Backend unavailable", () => {

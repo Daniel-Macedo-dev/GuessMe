@@ -49,6 +49,29 @@ type Stored = {
   sessionId: string | null;
 };
 
+function isMessage(value: unknown): value is Message {
+  if (!value || typeof value !== "object") return false;
+  const candidate = value as Partial<Message>;
+  return (
+    typeof candidate.id === "string" &&
+    (candidate.sender === "Você" || candidate.sender === "AI") &&
+    typeof candidate.text === "string" &&
+    typeof candidate.ts === "number" &&
+    Number.isFinite(candidate.ts)
+  );
+}
+
+function isWinner(value: unknown): value is WinnerData | null {
+  if (value === null || value === undefined) return true;
+  if (typeof value !== "object") return false;
+  const candidate = value as Partial<WinnerData>;
+  return (
+    typeof candidate.name === "string" &&
+    typeof candidate.work === "string" &&
+    typeof candidate.image === "string"
+  );
+}
+
 function uid() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
@@ -62,7 +85,9 @@ function safeLoad(): Stored | null {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const data = JSON.parse(raw) as Stored;
-    if (!Array.isArray(data.messages)) return null;
+    if (!Array.isArray(data.messages) || !data.messages.every(isMessage)) return null;
+    if (!Number.isInteger(data.questionsCount) || data.questionsCount < 0) return null;
+    if (!isWinner(data.winner)) return null;
     if (typeof data.category !== "string") data.category = "Geral";
     // Reject stored game progress without a sessionId — pre-integration data would route
     // to the backend's shared default session, which is wrong.
