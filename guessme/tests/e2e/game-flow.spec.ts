@@ -223,6 +223,31 @@ test.describe("AI answer states", () => {
 // ─── Hint ─────────────────────────────────────────────────────────────────────
 
 test.describe("Hint flow", () => {
+  test("question controls stay disabled while a hint is loading", async ({ page }) => {
+    await page.route("**/api/game/hint", async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          answer: "Uma pista útil.",
+          success: false,
+          character: null,
+          sessionId: "test-session-0000-0000-0000-000000000001",
+        }),
+      });
+    });
+    await page.goto("/game");
+    await expect(page.getByTestId("chat-scroll")).toContainText("primeira pergunta");
+
+    await page.getByRole("button", { name: /Solicitar pista/ }).click();
+
+    await expect(page.getByRole("textbox", { name: "Pergunta para a investigação" })).toBeDisabled();
+    await expect(page.getByRole("button", { name: "Enviar" })).toBeDisabled();
+    await expect(page.getByTestId("chat-scroll")).toContainText("Uma pista útil.");
+    await expect(page.getByRole("textbox", { name: "Pergunta para a investigação" })).toBeEnabled();
+  });
+
   test("hint button triggers request and shows hint bubble in chat", async ({
     page,
   }) => {

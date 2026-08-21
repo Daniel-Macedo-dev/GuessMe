@@ -166,10 +166,11 @@ export function useGame() {
   const canAsk = useMemo(
     () =>
       !loading &&
+      !hintLoading &&
       !winner &&
       !sessionExpired &&
       (sessionId !== null || messages.length === 0),
-    [loading, winner, sessionExpired, sessionId, messages.length]
+    [loading, hintLoading, winner, sessionExpired, sessionId, messages.length]
   );
 
   function cancelInFlight() {
