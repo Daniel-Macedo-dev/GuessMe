@@ -187,6 +187,21 @@ test.describe("Stale session", () => {
 // ─── Gemini system error ──────────────────────────────────────────────────────
 
 test.describe("Gemini system error", () => {
+  test("malformed API response shows a stable recovery message", async ({ page }) => {
+    await mockBoot(page);
+    await page.route("**/api/game/ask", async (route) => {
+      await route.fulfill({ status: 200, contentType: "text/plain", body: "not-json" });
+    });
+    await page.goto("/game");
+    await expect(page.getByTestId("chat-scroll")).toContainText("primeira pergunta");
+
+    await page.getByRole("textbox", { name: "Pergunta para a investigação" }).fill("É humano?");
+    await page.getByRole("button", { name: "Enviar" }).click();
+
+    await expect(page.getByTestId("error-box")).toContainText("Resposta inválida do servidor.");
+    await expect(page.getByTestId("error-box")).not.toContainText("JSON");
+  });
+
   test("Gemini API error shows cleaned message in error box", async ({
     page,
   }) => {

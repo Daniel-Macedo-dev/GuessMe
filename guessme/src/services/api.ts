@@ -27,14 +27,24 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}) {
     });
 
     const text = await res.text();
-    const data = text ? JSON.parse(text) : null;
+    let data: unknown = null;
+    if (text) {
+      try {
+        data = JSON.parse(text);
+      } catch {
+        if (res.ok) throw new Error("Resposta inválida do servidor.");
+      }
+    }
 
     if (!res.ok) {
+      const errorData = data as { message?: string; error?: string } | null;
       const message =
-        (data && (data.message || data.error)) ||
+        (errorData && (errorData.message || errorData.error)) ||
         `Erro HTTP ${res.status}: ${res.statusText}`;
       throw new Error(message);
     }
+
+    if (data === null) throw new Error("Resposta vazia do servidor.");
 
     return data as T;
   } catch (e) {
