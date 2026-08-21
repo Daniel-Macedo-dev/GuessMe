@@ -101,13 +101,13 @@ export function useCaseHistory() {
   }, []);
 
   const importEntry = useCallback(
-    (entry: CaseHistoryEntry): { renamed: boolean } => {
+    (entry: CaseHistoryEntry): { renamed: boolean; saved: boolean } => {
       const current = getCaseHistory();
       const existingIds = new Set(current.map((e) => e.id));
       const { entry: normalized, renamed } = normalizeImportedCase(entry, existingIds);
-      saveCaseHistoryEntry(normalized);
+      const saved = saveCaseHistoryEntry(normalized);
       refresh();
-      return { renamed };
+      return { renamed, saved };
     },
     [],
   );

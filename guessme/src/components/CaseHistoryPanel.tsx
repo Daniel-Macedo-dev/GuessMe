@@ -16,7 +16,7 @@ type Props = {
   history: CaseHistoryEntry[];
   onDelete: (id: string) => void;
   onClearAll: () => void;
-  onImport: (entry: CaseHistoryEntry) => { renamed: boolean };
+  onImport: (entry: CaseHistoryEntry) => { renamed: boolean; saved: boolean };
 };
 
 export default function CaseHistoryPanel({
@@ -55,7 +55,15 @@ export default function CaseHistoryPanel({
       }
       try {
         const entry = parseCaseExportJson(raw);
-        const { renamed } = onImport(entry);
+        const { renamed, saved } = onImport(entry);
+        if (!saved) {
+          setImportStatus({
+            kind: "error",
+            message: "Não foi possível salvar o caso neste navegador.",
+          });
+          resetStatus();
+          return;
+        }
         setImportStatus({ kind: "success", renamed });
         resetStatus();
       } catch (err) {

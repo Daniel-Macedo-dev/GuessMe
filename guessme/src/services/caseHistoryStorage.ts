@@ -19,11 +19,12 @@ function safeRead(): CaseHistoryEntry[] {
   }
 }
 
-function safeWrite(entries: CaseHistoryEntry[]): void {
+function safeWrite(entries: CaseHistoryEntry[]): boolean {
   try {
     localStorage.setItem(KEY, JSON.stringify(entries));
+    return true;
   } catch {
-    //
+    return false;
   }
 }
 
@@ -31,12 +32,12 @@ export function getCaseHistory(): CaseHistoryEntry[] {
   return safeRead();
 }
 
-export function saveCaseHistoryEntry(entry: CaseHistoryEntry): void {
+export function saveCaseHistoryEntry(entry: CaseHistoryEntry): boolean {
   const current = safeRead();
   const isDuplicate = current.some((e) => e.id === entry.id);
-  if (isDuplicate) return;
+  if (isDuplicate) return true;
   const updated = [entry, ...current].slice(0, MAX_ENTRIES);
-  safeWrite(updated);
+  return safeWrite(updated);
 }
 
 export function deleteCaseHistoryEntry(id: string): void {

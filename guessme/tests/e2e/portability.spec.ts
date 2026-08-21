@@ -471,6 +471,23 @@ test.describe("Import invalid case JSON", () => {
     fs.unlinkSync(tmpFile);
   });
 
+  test("import reports a storage failure instead of claiming success", async ({ page }) => {
+    await page.addInitScript((key) => {
+      const original = Storage.prototype.setItem;
+      Storage.prototype.setItem = function (name: string, value: string) {
+        if (name === key) throw new DOMException("Quota exceeded", "QuotaExceededError");
+        return original.call(this, name, value);
+      };
+    }, STORAGE_KEY);
+    const tmpFile = makeTempJsonFile({ schemaVersion: 1, app: "GuessMe", case: SEED_ENTRY });
+    await page.goto("/game");
+    await page.getByTestId("history-import-input").setInputFiles(tmpFile);
+
+    await expect(page.getByTestId("history-import-status")).toContainText("Não foi possível salvar");
+    await expect(page.getByTestId("history-empty")).toBeVisible();
+    fs.unlinkSync(tmpFile);
+  });
+
   test("malformed nested history data is discarded without breaking replay", async ({ page }) => {
     const malformed = {
       ...SEED_ENTRY,
