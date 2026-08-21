@@ -202,4 +202,16 @@ test.describe("Gemini system error", () => {
     expect(boxText).not.toMatch(/^\{/);
     expect(boxText).not.toContain('"code":400');
   });
+
+  test("Gemini error does not consume the question counter", async ({ page }) => {
+    await mockBoot(page);
+    await mockAskGeminiError(page);
+    await page.goto("/game");
+    await expect(page.getByTestId("chat-scroll")).toContainText("primeira pergunta");
+    await page.getByRole("textbox", { name: "Pergunta para a investigação" }).fill("É humano?");
+    await page.getByRole("button", { name: "Enviar" }).click();
+
+    await expect(page.getByTestId("error-box")).toBeVisible();
+    await expect(page.getByTestId("questions-count")).toContainText("0");
+  });
 });

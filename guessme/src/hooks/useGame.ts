@@ -241,6 +241,7 @@ export function useGame() {
         setQuestionsCount((n) => n - 1);
         setError("Sessão expirada. Clique em 'Novo caso' para iniciar uma nova investigação.");
       } else if (kind === "system-error") {
+        setQuestionsCount((n) => Math.max(0, n - 1));
         setError(cleanGeminiError(res.answer));
       } else if (kind === "user-limit") {
         // Backend rejected the request (cooldown, max questions, overlong) — not counted.
@@ -258,6 +259,7 @@ export function useGame() {
       }
     } catch (e: any) {
       if (inFlightRef.current !== controller) return;
+      setQuestionsCount((n) => Math.max(0, n - 1));
       setError(e?.message || "Erro ao chamar a API. Verifique se o servidor está rodando.");
     } finally {
       if (inFlightRef.current === controller) inFlightRef.current = null;
