@@ -87,6 +87,7 @@ const STATUS_LABELS: Record<string, { success: string; error: string }> = {
 export default function CaseReplayModal({ entry, onClose }: Props) {
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const statusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [copyStatus, setCopyStatus] = useState<ActionStatus>("idle");
@@ -94,12 +95,14 @@ export default function CaseReplayModal({ entry, onClose }: Props) {
   const [svgStatus, setSvgStatus] = useState<ActionStatus>("idle");
 
   useEffect(() => {
+    previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     closeBtnRef.current?.focus();
     return () => {
       document.body.style.overflow = prev;
       if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
+      previouslyFocusedRef.current?.focus();
     };
   }, []);
 

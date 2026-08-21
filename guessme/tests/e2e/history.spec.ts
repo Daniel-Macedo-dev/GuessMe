@@ -219,10 +219,12 @@ test.describe("Case replay modal", () => {
 
   test("replay modal closes with close button", async ({ page }) => {
     await page.goto("/game");
-    await page.getByTestId("history-replay-btn").first().click();
+    const replayButton = page.getByTestId("history-replay-btn").first();
+    await replayButton.click();
     await expect(page.getByTestId("replay-modal")).toBeVisible();
     await page.getByTestId("replay-close-btn").click();
     await expect(page.getByTestId("replay-modal")).not.toBeVisible();
+    await expect(replayButton).toBeFocused();
   });
 
   test("replay modal closes with Escape key", async ({ page }) => {
