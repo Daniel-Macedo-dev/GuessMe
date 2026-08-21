@@ -194,6 +194,24 @@ test.describe("Install prompt", () => {
     });
     const prompt = page.getByTestId("install-prompt");
     await expect(prompt).toHaveAttribute("role", "dialog");
+    await expect(prompt).not.toHaveAttribute("aria-modal");
+    await expect(prompt).toHaveAttribute("aria-describedby", "install-prompt-description");
+  });
+
+  test("Escape dismisses the prompt while focus is inside it", async ({ page }) => {
+    await page.goto("/");
+    await page.evaluate(() => {
+      const evt = new Event("beforeinstallprompt", { bubbles: true, cancelable: true }) as Event & {
+        prompt: () => Promise<void>;
+        userChoice: Promise<{ outcome: string }>;
+      };
+      evt.prompt = () => Promise.resolve();
+      evt.userChoice = Promise.resolve({ outcome: "dismissed" });
+      window.dispatchEvent(evt);
+    });
+    await page.getByTestId("install-prompt-dismiss").focus();
+    await page.keyboard.press("Escape");
+    await expect(page.getByTestId("install-prompt")).not.toBeVisible();
   });
 
   test("no horizontal overflow with install prompt visible at 390px", async ({ page }) => {

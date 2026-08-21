@@ -39,8 +39,11 @@ export default function InstallAppPrompt() {
     <div
       className="installPrompt"
       role="dialog"
-      aria-modal="true"
       aria-labelledby="install-prompt-title"
+      aria-describedby="install-prompt-description"
+      onKeyDown={(event) => {
+        if (event.key === "Escape") handleDismiss();
+      }}
       data-testid="install-prompt"
     >
       <div className="installPromptLabel" aria-hidden="true">DOSSIÊ DIGITAL · INSTALAR</div>
@@ -48,7 +51,7 @@ export default function InstallAppPrompt() {
         <CaseSeal variant="install" size={52} className="installPromptSeal" />
         <div className="installPromptText">
           <span id="install-prompt-title">Instalar GuessMe</span>
-          <span>Acesso rápido como aplicativo nativo</span>
+          <span id="install-prompt-description">Acesso rápido como aplicativo nativo</span>
         </div>
       </div>
       <div className="installPromptActions">
