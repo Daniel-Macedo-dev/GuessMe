@@ -20,25 +20,58 @@ function isObject(v: unknown): v is Record<string, unknown> {
   return v !== null && typeof v === "object" && !Array.isArray(v);
 }
 
+function nonNegativeInteger(v: unknown): number {
+  return isNumber(v) && Number.isInteger(v) && v >= 0 ? v : 0;
+}
+
 function validateMessages(raw: unknown): Message[] {
   if (!isArray(raw)) return [];
-  return raw.filter(
-    (m): m is Message =>
-      isObject(m) &&
-      isString((m as Record<string, unknown>).id) &&
-      isString((m as Record<string, unknown>).text),
-  ) as Message[];
+  const senders = new Set<Message["sender"]>(["Você", "AI"]);
+  const kinds = new Set<NonNullable<Message["kind"]>>(["ai", "user", "hint", "error"]);
+  const verdicts = new Set<NonNullable<Message["verdict"]>>(["YES", "NO", "MAYBE", "UNKNOWN"]);
+  return raw.flatMap((value): Message[] => {
+    if (!isObject(value) || !isString(value.id) || value.id.trim() === "") return [];
+    if (!isString(value.text) || !isNumber(value.ts) || !senders.has(value.sender as Message["sender"])) return [];
+    if (value.kind !== undefined && !kinds.has(value.kind as NonNullable<Message["kind"]>)) return [];
+    if (value.verdict !== undefined && !verdicts.has(value.verdict as NonNullable<Message["verdict"]>)) return [];
+    return [{
+      id: value.id.trim(),
+      sender: value.sender as Message["sender"],
+      text: value.text,
+      ts: value.ts,
+      ...(value.kind === undefined ? {} : { kind: value.kind as Message["kind"] }),
+      ...(value.verdict === undefined ? {} : { verdict: value.verdict as Message["verdict"] }),
+    }];
+  });
 }
 
 function validateEvidence(raw: unknown): CaseEvidence {
   const empty: CaseEvidence = { confirmed: [], refuted: [], inconclusive: [], hints: [] };
   if (!isObject(raw)) return empty;
-  const toArr = (v: unknown) => (isArray(v) ? v : []);
+  const evidenceEntries = (
+    value: unknown,
+    kind: CaseEvidence["confirmed"][number]["kind"],
+  ): CaseEvidence["confirmed"] => {
+    if (!isArray(value)) return [];
+    return value.flatMap((item) =>
+      isObject(item) && isString(item.id) && item.id.trim() !== "" &&
+      isString(item.question) && isString(item.answer)
+        ? [{ id: item.id.trim(), question: item.question, answer: item.answer, kind }]
+        : [],
+    );
+  };
+  const hints = isArray(raw.hints)
+    ? raw.hints.flatMap((item) =>
+        isObject(item) && isString(item.id) && item.id.trim() !== "" && isString(item.text)
+          ? [{ id: item.id.trim(), text: item.text }]
+          : [],
+      )
+    : [];
   return {
-    confirmed: toArr(raw.confirmed) as CaseEvidence["confirmed"],
-    refuted: toArr(raw.refuted) as CaseEvidence["refuted"],
-    inconclusive: toArr(raw.inconclusive) as CaseEvidence["inconclusive"],
-    hints: toArr(raw.hints) as CaseEvidence["hints"],
+    confirmed: evidenceEntries(raw.confirmed, "confirmed"),
+    refuted: evidenceEntries(raw.refuted, "refuted"),
+    inconclusive: evidenceEntries(raw.inconclusive, "inconclusive"),
+    hints,
   };
 }
 
@@ -46,11 +79,17 @@ function validateVerdictStats(raw: unknown): VerdictStats {
   const def: VerdictStats = { yes: 0, no: 0, maybe: 0, unknown: 0 };
   if (!isObject(raw)) return def;
   return {
-    yes: isNumber(raw.yes) ? raw.yes : 0,
-    no: isNumber(raw.no) ? raw.no : 0,
-    maybe: isNumber(raw.maybe) ? raw.maybe : 0,
-    unknown: isNumber(raw.unknown) ? raw.unknown : 0,
+    yes: nonNegativeInteger(raw.yes),
+    no: nonNegativeInteger(raw.no),
+    maybe: nonNegativeInteger(raw.maybe),
+    unknown: nonNegativeInteger(raw.unknown),
   };
+}
+
+function validateSolvedSummary(raw: unknown): CaseHistoryEntry["solvedSummary"] {
+  if (!isObject(raw) || !isString(raw.name) || raw.name.trim() === "") return null;
+  if (!isString(raw.work) || !isString(raw.image)) return null;
+  return { name: raw.name.trim(), work: raw.work.trim(), image: raw.image };
 }
 
 export function validateCaseHistoryEntry(input: unknown): CaseHistoryEntry | null {
@@ -70,7 +109,6 @@ export function validateCaseHistoryEntry(input: unknown): CaseHistoryEntry | nul
   if (!isString(work)) return null;
   if (!isString(category)) return null;
   if (!isArray(messages)) return null;
-  if (!isObject(evidence)) return null;
 
   return {
     id: id.trim(),
@@ -78,14 +116,12 @@ export function validateCaseHistoryEntry(input: unknown): CaseHistoryEntry | nul
     characterName: characterName.trim(),
     work: (work as string).trim(),
     category: (category as string).trim(),
-    questionCount: isNumber(input.questionCount) ? input.questionCount : 0,
-    hintCount: isNumber(input.hintCount) ? input.hintCount : 0,
+    questionCount: nonNegativeInteger(input.questionCount),
+    hintCount: nonNegativeInteger(input.hintCount),
     messages: validateMessages(messages),
     evidence: validateEvidence(evidence),
-    solvedSummary: isObject(input.solvedSummary)
-      ? (input.solvedSummary as CaseHistoryEntry["solvedSummary"])
-      : null,
-    winningQuestion: isString(input.winningQuestion) ? input.winningQuestion : null,
+    solvedSummary: validateSolvedSummary(input.solvedSummary),
+    winningQuestion: isString(input.winningQuestion) ? input.winningQuestion.trim() || null : null,
     verdictStats: validateVerdictStats(input.verdictStats),
   };
 }

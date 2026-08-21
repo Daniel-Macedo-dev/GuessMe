@@ -1,4 +1,5 @@
 import type { CaseHistoryEntry } from "../types/guessme";
+import { validateCaseHistoryEntry } from "../helpers/caseImport";
 
 const KEY = "guessme.caseHistory.v1";
 const MAX_ENTRIES = 25;
@@ -9,13 +10,10 @@ function safeRead(): CaseHistoryEntry[] {
     if (!raw) return [];
     const parsed = JSON.parse(raw) as unknown;
     if (!Array.isArray(parsed)) return [];
-    return parsed.filter(
-      (e): e is CaseHistoryEntry =>
-        e !== null &&
-        typeof e === "object" &&
-        typeof (e as CaseHistoryEntry).id === "string" &&
-        typeof (e as CaseHistoryEntry).createdAt === "number",
-    );
+    return parsed.flatMap((entry) => {
+      const validated = validateCaseHistoryEntry(entry);
+      return validated ? [validated] : [];
+    });
   } catch {
     return [];
   }

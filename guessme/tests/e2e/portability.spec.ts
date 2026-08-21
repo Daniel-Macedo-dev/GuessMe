@@ -470,6 +470,26 @@ test.describe("Import invalid case JSON", () => {
     await expect(page.getByTestId("history-empty")).toBeVisible();
     fs.unlinkSync(tmpFile);
   });
+
+  test("malformed nested history data is discarded without breaking replay", async ({ page }) => {
+    const malformed = {
+      ...SEED_ENTRY,
+      messages: [SEED_ENTRY.messages[0], { id: "bad", text: "missing sender and timestamp" }],
+      evidence: {
+        confirmed: [{ id: "bad", question: null, answer: { raw: true } }],
+        refuted: [],
+        inconclusive: [],
+        hints: [{ id: "bad-hint", text: null }],
+      },
+      solvedSummary: { name: { invalid: true }, work: null, image: 42 },
+      verdictStats: { yes: -3, no: 1.5, maybe: 0, unknown: 0 },
+    };
+    await seedHistory(page, [malformed as typeof SEED_ENTRY]);
+    await openReplayModal(page);
+
+    await expect(page.getByTestId("replay-modal")).toBeVisible();
+    await expect(page.getByText("missing sender and timestamp")).toHaveCount(0);
+  });
 });
 
 // ─── Import: duplicate prevention ─────────────────────────────────────────────
