@@ -401,6 +401,21 @@ test.describe("Victory flow", () => {
     ).toBeVisible();
   });
 
+  test("victory modal keeps keyboard focus inside the dialog", async ({ page }) => {
+    await mockAskWin(page);
+    await page.goto("/game");
+    await expect(page.getByTestId("chat-scroll")).toContainText("primeira pergunta");
+    await page.getByRole("textbox", { name: "Pergunta para a investigação" }).fill("É o Naruto?");
+    await page.getByRole("button", { name: "Enviar" }).click();
+
+    const restartButton = page.getByRole("dialog").getByRole("button", { name: "Novo caso" });
+    await expect(restartButton).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(restartButton).toBeFocused();
+    await page.keyboard.press("Shift+Tab");
+    await expect(restartButton).toBeFocused();
+  });
+
   test("shows solved status badge variant after victory", async ({ page }) => {
     await mockAskWin(page);
     await page.goto("/game");

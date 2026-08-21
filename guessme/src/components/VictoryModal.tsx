@@ -46,7 +46,13 @@ export default function VictoryModal({ winner, onRestart }: Props) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="victory-dialog-title"
-      onKeyDown={(e) => { if (e.key === "Escape") onRestart(); }}
+      onKeyDown={(e) => {
+        if (e.key === "Escape") onRestart();
+        if (e.key === "Tab") {
+          e.preventDefault();
+          restartBtnRef.current?.focus();
+        }
+      }}
     >
       <ConfettiBurst active={open} />
 
