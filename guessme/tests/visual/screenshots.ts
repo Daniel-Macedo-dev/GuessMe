@@ -76,7 +76,16 @@ const SEED_3 = JSON.stringify([
   {
     id: "ss-001", createdAt: Date.now() - 86400000 * 3,
     characterName: "Naruto Uzumaki", work: "Naruto", category: "Anime",
-    questionCount: 8, hintCount: 2, messages: [],
+    questionCount: 8, hintCount: 2,
+    messages: [
+      { id: "n1", sender: "AI", text: "Caso aberto. Pode fazer sua primeira pergunta.", ts: 1, kind: "ai" },
+      { id: "n2", sender: "Você", text: "É de anime?", ts: 2, kind: "user" },
+      { id: "n3", sender: "AI", text: "Sim.", ts: 3, kind: "ai", verdict: "YES" },
+      { id: "n4", sender: "Você", text: "É vilão?", ts: 4, kind: "user" },
+      { id: "n5", sender: "AI", text: "Não.", ts: 5, kind: "ai", verdict: "NO" },
+      { id: "n6", sender: "Você", text: "É o Naruto?", ts: 6, kind: "user" },
+      { id: "n7", sender: "AI", text: "Sim! Identidade confirmada.", ts: 7, kind: "ai", verdict: "YES" },
+    ],
     evidence: {
       confirmed: [{ id: "c1", question: "É de anime?", answer: "Sim", kind: "confirmed" }],
       refuted:   [{ id: "r1", question: "É vilão?",    answer: "Não", kind: "refuted"  }],
@@ -355,7 +364,7 @@ async function capture(): Promise<number> {
         // through tall captures. Keep the header in normal document flow for
         // QA artifacts so screenshots reflect the layout without duplication.
         if (!route.viewportOnly) {
-          await page.addStyleTag({ content: ".topbar { position: static !important; }" });
+          await page.addStyleTag({ content: ".topbar { position: static !important; } .skipLink { display: none !important; }" });
         }
 
         const file = path.join(OUT, `${vp.name}--${route.name}.png`);

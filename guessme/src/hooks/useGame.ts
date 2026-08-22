@@ -230,7 +230,6 @@ export function useGame() {
       if (inFlightRef.current !== controller) return;
       setBootError(true);
       setError("Não foi possível abrir o caso. Verifique se a API está acessível e tente novamente.");
-      setMessages([msg("AI", "Não foi possível abrir o caso agora. Verifique se a API está rodando.", "error")]);
     } finally {
       if (inFlightRef.current === controller) {
         inFlightRef.current = null;

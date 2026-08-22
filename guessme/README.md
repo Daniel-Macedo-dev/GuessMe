@@ -102,7 +102,7 @@ npm run dev            # start Vite dev server
 npm run build          # production build (outputs to dist/)
 npm run preview        # serve the production build locally (use for PWA testing)
 npm run lint           # ESLint check (zero warnings)
-npm run e2e            # Playwright — 299 tests, no backend required
+npm run e2e            # Playwright — 300 tests, no backend required
 npm run e2e:ui         # Playwright interactive UI mode
 npm run e2e:report     # open last Playwright HTML report
 npm run screenshots    # capture visual-screenshots/ (starts its own dev server if needed)
@@ -166,7 +166,7 @@ guessme/
 ├── scripts/
 │   └── generate-icons.ts       # Playwright-based PNG generation (zero new deps)
 └── tests/
-    ├── e2e/                    # Eleven Playwright spec files — 299 tests
+    ├── e2e/                    # Eleven Playwright spec files — 300 tests
     └── visual/
         └── screenshots.ts      # Multi-viewport screenshot capture script
 ```

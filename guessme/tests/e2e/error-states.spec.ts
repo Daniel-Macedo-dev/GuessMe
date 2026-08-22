@@ -54,6 +54,14 @@ test.describe("Backend unavailable", () => {
       page.getByRole("button", { name: "Tentar novamente" }),
     ).toBeVisible({ timeout: 10_000 });
   });
+
+  test("does not duplicate a boot failure inside the transcript", async ({ page }) => {
+    await mockCategories(page);
+    await mockStartUnavailable(page);
+    await page.goto("/game");
+    await expect(page.getByTestId("error-box")).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByTestId("chat-scroll")).not.toContainText("Não foi possível abrir o caso");
+  });
 });
 
 // ─── Cooldown ─────────────────────────────────────────────────────────────────
