@@ -26,6 +26,7 @@ export default function CaseHistoryPanel({
   onImport,
 }: Props) {
   const [replayEntry, setReplayEntry] = useState<CaseHistoryEntry | null>(null);
+  const [confirmingClear, setConfirmingClear] = useState(false);
   const [importStatus, setImportStatus] = useState<ImportStatus>({ kind: "idle" });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const statusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -112,16 +113,33 @@ export default function CaseHistoryPanel({
             data-testid="history-import-input"
             onChange={handleFileChange}
           />
-          {history.length > 0 && (
+          {history.length > 0 && (confirmingClear ? (
+            <div className="historyClearConfirm" role="group" aria-label="Confirmar limpeza do histórico">
+              <span className="historyDeletePrompt" role="status">Apagar todos?</span>
+              <button
+                className="btn historyActionBtn historyDeleteBtn"
+                onClick={() => {
+                  onClearAll();
+                  setConfirmingClear(false);
+                }}
+                data-testid="history-clear-confirm-btn"
+              >
+                Confirmar
+              </button>
+              <button className="btn historyActionBtn" onClick={() => setConfirmingClear(false)}>
+                Cancelar
+              </button>
+            </div>
+          ) : (
             <button
               className="btn historyActionBtn historyDeleteBtn"
-              onClick={onClearAll}
+              onClick={() => setConfirmingClear(true)}
               data-testid="history-clear-btn"
               aria-label="Limpar histórico"
             >
               Limpar
             </button>
-          )}
+          ))}
         </div>
       </div>
 

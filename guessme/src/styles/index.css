@@ -1742,6 +1742,23 @@ b{ font-weight: 800; }
   flex-wrap: wrap;
 }
 
+.historyDeleteConfirm,
+.historyClearConfirm{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.historyDeleteConfirm{ margin-left: auto; }
+.historyDeletePrompt{
+  color: var(--danger);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
 .historyActionBtn{
   padding: 6px 14px;
   font-size: 13px;
@@ -2023,6 +2040,9 @@ b{ font-weight: 800; }
 @media (max-width: 400px){
   .historyCardActions{ flex-direction: column; }
   .historyActionBtn{ width: 100%; text-align: center; }
+  .historyDeleteConfirm,
+  .historyClearConfirm{ width: 100%; }
+  .historyDeletePrompt{ width: 100%; text-align: center; }
 }
 
 /* ══════════════════════════════════════════════════════════

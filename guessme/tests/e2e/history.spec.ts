@@ -254,6 +254,8 @@ test.describe("Delete history entry", () => {
     await page.goto("/game");
     await expect(page.getByTestId("history-card")).toBeVisible();
     await page.getByTestId("history-delete-btn").first().click();
+    await expect(page.getByText("Excluir este registro?")).toBeVisible();
+    await page.getByTestId("history-delete-confirm-btn").click();
     await expect(page.getByTestId("history-card")).not.toBeVisible();
     await expect(page.getByTestId("history-empty")).toBeVisible();
   });
@@ -261,6 +263,7 @@ test.describe("Delete history entry", () => {
   test("deletion is written to localStorage", async ({ page }) => {
     await page.goto("/game");
     await page.getByTestId("history-delete-btn").first().click();
+    await page.getByTestId("history-delete-confirm-btn").click();
     await expect(page.getByTestId("history-empty")).toBeVisible();
     const stored = await page.evaluate(() =>
       localStorage.getItem("guessme.caseHistory.v1"),
@@ -284,8 +287,18 @@ test.describe("Clear all history", () => {
     await page.goto("/game");
     await expect(page.getByTestId("history-card")).toHaveCount(2);
     await page.getByTestId("history-clear-btn").click();
+    await expect(page.getByText("Apagar todos?")).toBeVisible();
+    await page.getByTestId("history-clear-confirm-btn").click();
     await expect(page.getByTestId("history-empty")).toBeVisible();
     await expect(page.getByTestId("history-card")).toHaveCount(0);
+  });
+
+  test("clear all can be cancelled without losing cases", async ({ page }) => {
+    await page.goto("/game");
+    await page.getByTestId("history-clear-btn").click();
+    await page.getByRole("button", { name: "Cancelar" }).click();
+    await expect(page.getByTestId("history-card")).toHaveCount(2);
+    await expect(page.getByTestId("history-clear-btn")).toBeVisible();
   });
 });
 

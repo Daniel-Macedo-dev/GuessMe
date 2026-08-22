@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import type { CaseHistoryEntry } from "../types/guessme";
 import DossierIcon from "./DossierIcon";
 
@@ -19,6 +19,7 @@ function formatDate(ts: number): string {
 }
 
 function CaseHistoryCard({ entry, onReplay, onDelete }: Props) {
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
   const { confirmed, refuted, inconclusive } = entry.evidence;
 
   return (
@@ -71,14 +72,26 @@ function CaseHistoryCard({ entry, onReplay, onDelete }: Props) {
           <DossierIcon name="replay" size={13} aria-hidden={true} />
           Rever caso
         </button>
-        <button
-          className="btn historyActionBtn historyDeleteBtn"
-          onClick={() => onDelete(entry.id)}
-          data-testid="history-delete-btn"
-          aria-label={`Excluir caso: ${entry.characterName}`}
-        >
-          Excluir
-        </button>
+        {confirmingDelete ? (
+          <div className="historyDeleteConfirm" role="group" aria-label={`Confirmar exclusão de ${entry.characterName}`}>
+            <span className="historyDeletePrompt" role="status">Excluir este registro?</span>
+            <button className="btn historyActionBtn historyDeleteBtn" onClick={() => onDelete(entry.id)} data-testid="history-delete-confirm-btn">
+              Confirmar
+            </button>
+            <button className="btn historyActionBtn" onClick={() => setConfirmingDelete(false)}>
+              Cancelar
+            </button>
+          </div>
+        ) : (
+          <button
+            className="btn historyActionBtn historyDeleteBtn"
+            onClick={() => setConfirmingDelete(true)}
+            data-testid="history-delete-btn"
+            aria-label={`Excluir caso: ${entry.characterName}`}
+          >
+            Excluir
+          </button>
+        )}
       </div>
     </article>
   );
