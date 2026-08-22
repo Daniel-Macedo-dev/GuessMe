@@ -9,12 +9,17 @@ if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
 const BASE_URL = "http://localhost:5173";
 
 const VIEWPORTS = [
+  { name: "desktop-1920", width: 1920, height: 1080 },
   { name: "desktop-1440", width: 1440, height: 900 },
   { name: "desktop-1366", width: 1366, height: 768 },
+  { name: "desktop-1280", width: 1280, height: 720 },
   { name: "desktop-1024", width: 1024, height: 768 },
   { name: "tablet-768",   width: 768,  height: 1024 },
+  { name: "mobile-480",   width: 480,  height: 900 },
+  { name: "mobile-430",   width: 430,  height: 932 },
   { name: "mobile-390",   width: 390,  height: 844 },
-  { name: "mobile-360",   width: 360,  height: 780 },
+  { name: "mobile-375",   width: 375,  height: 812 },
+  { name: "mobile-360",   width: 360,  height: 800 },
 ];
 
 /* ── Dev-server lifecycle ──
@@ -222,6 +227,8 @@ type Route = {
   waitUntil?: "networkidle" | "load";
   /** Post-load interaction to reach modal/system states */
   action?: "open-replay" | "fire-install";
+  /** Force a deterministic API failure for recovery-state captures. */
+  apiState?: "unavailable";
   /** Fixed-position overlays repaint badly in fullPage captures — use viewport */
   viewportOnly?: boolean;
 };
@@ -241,6 +248,9 @@ const ROUTES: OfflineRoute[] = [
 
   // Game — active investigation with rich transcript and populated notebook
   { name: "game-active",  path: "/game", gameSeed: SEED_GAME_ACTIVE },
+
+  // Game — deterministic backend-unavailable recovery state
+  { name: "game-error", path: "/game", apiState: "unavailable" },
 
   // Stats — empty (no cases)
   { name: "stats-empty",  path: "/stats" },
@@ -290,6 +300,10 @@ async function capture(): Promise<number> {
       const page = await ctx.newPage();
 
       try {
+        if (route.apiState === "unavailable") {
+          await page.route("http://localhost:8080/api/game/**", (request) => request.abort("connectionrefused"));
+        }
+
         // Contexts are shared across routes and localStorage persists per
         // origin — always reset to exactly the state this route declares, so
         // seeds from earlier routes can never leak into later captures.
@@ -307,6 +321,10 @@ async function capture(): Promise<number> {
           timeout: 20000,
         });
         await page.waitForTimeout(500);
+
+        if (route.apiState === "unavailable") {
+          await page.getByTestId("error-box").waitFor({ state: "visible", timeout: 5000 });
+        }
 
         if (route.simulateOffline) {
           await page.context().setOffline(true);
@@ -331,6 +349,13 @@ async function capture(): Promise<number> {
           });
           await page.getByTestId("install-prompt").waitFor({ state: "visible", timeout: 5000 });
           await page.waitForTimeout(300);
+        }
+
+        // Chromium's full-page stitching can repaint sticky headers halfway
+        // through tall captures. Keep the header in normal document flow for
+        // QA artifacts so screenshots reflect the layout without duplication.
+        if (!route.viewportOnly) {
+          await page.addStyleTag({ content: ".topbar { position: static !important; }" });
         }
 
         const file = path.join(OUT, `${vp.name}--${route.name}.png`);

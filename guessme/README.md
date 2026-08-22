@@ -33,7 +33,7 @@ Built as a portfolio project demonstrating: AI-powered game mechanics, handcraft
 
 ## Screenshots
 
-Generate screenshots of all routes at six viewport sizes with a single command:
+Generate screenshots of all representative routes and states at eleven viewport sizes with a single command:
 
 ```bash
 npm run screenshots
@@ -41,7 +41,7 @@ npm run screenshots
 
 The script is self-contained: if nothing is listening on port 5173 it starts the Vite dev server, waits until it responds, captures, and shuts the server (and its process tree) down cleanly. An already-running dev server is reused and left running.
 
-Output is saved to `visual-screenshots/` which is gitignored. 78 PNGs are generated (13 routes × 6 viewports), including seeded workstation, modal-report, and install-prompt scenarios. Every route resets `localStorage` to exactly its declared seed, so captures are fully deterministic and order-independent.
+Output is saved to `visual-screenshots/` which is gitignored. 154 PNGs are generated (14 routes × 11 viewports), including seeded workstation, deterministic error recovery, modal-report, and install-prompt scenarios. Every route resets `localStorage` to exactly its declared seed, so captures are fully deterministic and order-independent.
 
 ### Routes captured
 
@@ -52,6 +52,7 @@ Output is saved to `visual-screenshots/` which is gitignored. 78 PNGs are genera
 | `game-empty` | `/game` | — (shows investigation interface) |
 | `game-history` | `/game` | 3 seeded cases (shows populated Histórico de Casos) |
 | `game-active` | `/game` | Seeded transcript (dividers, verdict badges, populated notebook) |
+| `game-error` | `/game` | Deterministic backend-unavailable recovery state |
 | `stats-empty` | `/stats` | — (empty state with Agent Dossier) |
 | `stats-progression` | `/stats` | 3 seeded cases (Analista rank, first achievements) |
 | `stats-rich` | `/stats` | 8 seeded cases across 4 categories (full dashboard) |
@@ -65,7 +66,7 @@ Modal and prompt routes capture the viewport instead of the full page because fi
 
 ### Viewports
 
-`desktop-1440` · `desktop-1366` · `desktop-1024` · `tablet-768` · `mobile-390` · `mobile-360`
+`desktop-1920` · `desktop-1440` · `desktop-1366` · `desktop-1280` · `desktop-1024` · `tablet-768` · `mobile-480` · `mobile-430` · `mobile-390` · `mobile-375` · `mobile-360`
 
 ---
 
@@ -101,7 +102,7 @@ npm run dev            # start Vite dev server
 npm run build          # production build (outputs to dist/)
 npm run preview        # serve the production build locally (use for PWA testing)
 npm run lint           # ESLint check (zero warnings)
-npm run e2e            # Playwright — 284 tests, no backend required
+npm run e2e            # Playwright — 299 tests, no backend required
 npm run e2e:ui         # Playwright interactive UI mode
 npm run e2e:report     # open last Playwright HTML report
 npm run screenshots    # capture visual-screenshots/ (starts its own dev server if needed)
@@ -165,7 +166,7 @@ guessme/
 ├── scripts/
 │   └── generate-icons.ts       # Playwright-based PNG generation (zero new deps)
 └── tests/
-    ├── e2e/                    # Eleven Playwright spec files — 284 tests
+    ├── e2e/                    # Eleven Playwright spec files — 299 tests
     └── visual/
         └── screenshots.ts      # Multi-viewport screenshot capture script
 ```
