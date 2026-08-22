@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 
 type Props = {
   value: string;
@@ -68,7 +68,7 @@ export default function CategorySelect({ value, options, onChange, disabled, lab
     triggerRef.current?.focus();
   }
 
-  function moveMenuFocus(event: KeyboardEvent<HTMLDivElement>) {
+  function moveMenuFocus(event: ReactKeyboardEvent<HTMLDivElement>) {
     const options = Array.from(
       event.currentTarget.querySelectorAll<HTMLButtonElement>(".catSelectItem"),
     );
