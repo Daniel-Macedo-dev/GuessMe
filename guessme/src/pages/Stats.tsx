@@ -59,7 +59,7 @@ export default function Stats() {
   return (
     <div className="shell shell--stats">
       <Navbar />
-      <main className="main statsMain" data-testid="stats-page">
+      <main id="main-content" className="main statsMain" tabIndex={-1} data-testid="stats-page">
         <div className="statsPageHeader">
           <div className="dossierEyebrow statsEyebrow" aria-hidden="true">
             <span>RELATÓRIO DE INTELIGÊNCIA</span>

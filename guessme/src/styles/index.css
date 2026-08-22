@@ -154,6 +154,21 @@ b{ font-weight: 800; }
 
 .row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
 
+.skipLink{
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 2000;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: #04100d;
+  font-weight: 800;
+  transform: translateY(-160%);
+  transition: transform var(--t-fast);
+}
+.skipLink:focus{ transform: translateY(0); }
+
 /* ── Topbar / Navbar ── */
 .topbar{
   position: sticky;
@@ -784,7 +799,28 @@ b{ font-weight: 800; }
   .historyPanel{ padding: 14px; }
 }
 @media (max-width: 480px){
-  .nav{ display: none; }
+  .topbarInner{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding-bottom: 0;
+  }
+  .nav{
+    grid-column: 1 / -1;
+    order: 3;
+    overflow-x: auto;
+    gap: 2px;
+    margin: 0 -14px;
+    padding: 4px 10px 8px;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar{ display: none; }
+  .navLink{
+    flex: 1 0 auto;
+    min-height: 38px;
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 12px;
+  }
   .heroTitle{ font-size: 30px; letter-spacing: -0.4px; }
   .statsBar{ padding: 8px 12px 8px 16px; }
   .statValue{ font-size: 18px; }

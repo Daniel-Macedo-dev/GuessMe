@@ -9,7 +9,7 @@ export default function HowItWorks() {
     <div className="shell shell--manual">
       <Navbar />
 
-      <main className="main">
+      <main id="main-content" className="main" tabIndex={-1}>
         <section className="panel pagePanel">
           <div className="protocolHeader">
             <div className="dossierEyebrow protocolEyebrow" aria-hidden="true">

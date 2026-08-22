@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <div className="shell shell--home">
       <Navbar />
-      <main className="main mainCenter">
+      <main id="main-content" className="main mainCenter" tabIndex={-1}>
         <section className="panel hero">
 
           <div className="dossierEyebrow heroClassification" aria-hidden="true">

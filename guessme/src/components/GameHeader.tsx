@@ -40,9 +40,9 @@ export default function GameHeader({
           <span>IA-1</span>
         </div>
         <div className="gameHeaderTitleRow">
-          <h2 className="h2">
+          <h1 className="h2">
             {solved ? "Investigação Concluída" : "Investigação Ativa"}
-          </h2>
+          </h1>
           <CaseStatusBadge status={caseStatus} />
         </div>
         <p className="muted gameSubtitle">

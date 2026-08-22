@@ -48,6 +48,15 @@ test.describe("Mobile layout — 390 px (iPhone 14 proxy)", () => {
     await page.goto("/game");
     await expect(page.getByRole("link", { name: "GuessMe" })).toBeVisible();
   });
+
+  test("primary route navigation remains available", async ({ page }) => {
+    await page.goto("/game");
+    const nav = page.getByRole("navigation", { name: "Navegação principal" });
+    await expect(nav.getByRole("link", { name: "Home" })).toBeVisible();
+    await expect(nav.getByRole("link", { name: "Como funciona" })).toBeVisible();
+    await expect(nav.getByRole("link", { name: "Jogo" })).toHaveAttribute("aria-current", "page");
+    await expect(nav.getByRole("link", { name: "Estatísticas" })).toBeVisible();
+  });
 });
 
 test.describe("Mobile layout — 360 px (small Android proxy)", () => {

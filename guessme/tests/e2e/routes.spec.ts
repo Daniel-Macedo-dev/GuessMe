@@ -91,6 +91,21 @@ test.describe("Game page", () => {
 // ─── Navigation ───────────────────────────────────────────────────────────────
 
 test.describe("Navigation", () => {
+  test("updates the document title and marks the current route", async ({ page }) => {
+    await page.goto("/how-it-works");
+    await expect(page).toHaveTitle("Manual do Agente — GuessMe");
+    await expect(page.getByRole("link", { name: "Como funciona" })).toHaveAttribute("aria-current", "page");
+  });
+
+  test("offers a keyboard skip link to the main content", async ({ page }) => {
+    await page.goto("/");
+    await page.keyboard.press("Tab");
+    const skipLink = page.getByRole("link", { name: "Ir para o conteúdo" });
+    await expect(skipLink).toBeFocused();
+    await skipLink.press("Enter");
+    await expect(page.locator("#main-content")).toBeFocused();
+  });
+
   test("Home Abrir caso link goes to /game", async ({ page }) => {
     await page.addInitScript(() => localStorage.clear());
     await mockBoot(page);
@@ -150,5 +165,6 @@ test.describe("SPA direct URL access", () => {
     await expect(
       page.getByRole("textbox", { name: "Pergunta para a investigação" }),
     ).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: /Investigação/ })).toBeVisible();
   });
 });

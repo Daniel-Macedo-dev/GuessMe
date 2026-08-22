@@ -9,6 +9,13 @@ type Props = {
 export default function Navbar({ onRestart, disabled = false }: Props) {
   const { pathname } = useLocation();
 
+  const links = [
+    { to: "/", label: "Home" },
+    { to: "/how-it-works", label: "Como funciona" },
+    { to: "/game", label: "Jogo" },
+    { to: "/stats", label: "Estatísticas" },
+  ];
+
   return (
     <header className="topbar">
       <div className="topbarInner">
@@ -20,19 +27,20 @@ export default function Navbar({ onRestart, disabled = false }: Props) {
           </span>
         </Link>
 
-        <nav className="nav">
-          <Link className={`navLink ${pathname === "/" ? "active" : ""}`} to="/">
-            Home
-          </Link>
-          <Link className={`navLink ${pathname === "/how-it-works" ? "active" : ""}`} to="/how-it-works">
-            Como funciona
-          </Link>
-          <Link className={`navLink ${pathname === "/game" ? "active" : ""}`} to="/game">
-            Jogo
-          </Link>
-          <Link className={`navLink ${pathname === "/stats" ? "active" : ""}`} to="/stats">
-            Estatísticas
-          </Link>
+        <nav className="nav" aria-label="Navegação principal">
+          {links.map(({ to, label }) => {
+            const active = pathname === to;
+            return (
+              <Link
+                key={to}
+                className={`navLink ${active ? "active" : ""}`}
+                to={to}
+                aria-current={active ? "page" : undefined}
+              >
+                {label}
+              </Link>
+            );
+          })}
         </nav>
 
         {onRestart ? (

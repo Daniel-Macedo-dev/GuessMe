@@ -73,7 +73,7 @@ export default function Game() {
     <div className="shell shell--game">
       <Navbar onRestart={restart} disabled={loading || hintLoading} />
 
-      <main className="main">
+      <main id="main-content" className="main" tabIndex={-1}>
         <GameHeader
           onRestart={restart}
           onHint={hint}
