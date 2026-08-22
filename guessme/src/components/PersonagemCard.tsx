@@ -1,15 +1,26 @@
+import { useState } from "react";
 import type { WinnerData } from "../types/guessme";
 
 type Props = { winner: WinnerData };
 
 export default function PersonagemCard({ winner }: Props) {
+  const [failedImage, setFailedImage] = useState<string | null>(null);
+  const showImage = Boolean(winner.image) && failedImage !== winner.image;
+
   return (
     <div className="victoryCard">
       <div className="victoryAvatarWrap">
-        {winner.image ? (
-          <img className="victoryAvatar" src={winner.image} alt={winner.name} />
+        {showImage ? (
+          <img
+            className="victoryAvatar"
+            src={winner.image}
+            alt={`Retrato de ${winner.name}`}
+            onError={() => setFailedImage(winner.image)}
+          />
         ) : (
-          <div className="victoryAvatarFallback" aria-hidden="true">?</div>
+          <div className="victoryAvatarFallback" role="img" aria-label={`Retrato indisponível para ${winner.name}`}>
+            <span aria-hidden="true">?</span>
+          </div>
         )}
       </div>
 

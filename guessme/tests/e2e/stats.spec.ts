@@ -201,6 +201,13 @@ test.describe("Stats dashboard — multiple cases", () => {
     await expect(catBars).toContainText("Games");
   });
 
+  test("distribution bars expose values without relying on color", async ({ page }) => {
+    await page.goto("/stats");
+    const animeMeter = page.getByRole("meter", { name: "Anime" });
+    await expect(animeMeter).toHaveAttribute("aria-valuenow", "2");
+    await expect(animeMeter).toHaveAttribute("aria-valuemax", "2");
+  });
+
   test("evidence panel is visible", async ({ page }) => {
     await page.goto("/stats");
     await expect(page.getByTestId("stats-evidence-panel")).toBeVisible();

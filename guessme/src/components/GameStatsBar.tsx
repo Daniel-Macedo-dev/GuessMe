@@ -22,14 +22,14 @@ export default function GameStatsBar({ questionsCount, hintsCount }: Props) {
             <DossierIcon name="magnifier" size={9} aria-hidden={true} className="statLabelIcon" />
             Interrogações
           </dt>
-          <dd className="statValue" data-testid="questions-count">{questionsCount}</dd>
+          <dd className="statValue" data-testid="questions-count" aria-live="polite">{questionsCount}</dd>
         </div>
         <div className="stat">
           <dt className="statLabel">
             <DossierIcon name="clue" size={9} aria-hidden={true} className="statLabelIcon" />
             Pistas
           </dt>
-          <dd className="statValue statValueHints" data-testid="hints-count">{hintsCount}</dd>
+          <dd className="statValue statValueHints" data-testid="hints-count" aria-live="polite">{hintsCount}</dd>
         </div>
       </dl>
       <div className="statTelemetry">

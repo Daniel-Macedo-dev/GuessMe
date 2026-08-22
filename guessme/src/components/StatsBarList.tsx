@@ -23,11 +23,19 @@ export default function StatsBarList({ items, testId }: Props) {
               <span className="statsBarLabel">{item.label}</span>
               <span className="statsBarValue muted small">{item.value}</span>
             </div>
-            <div className="statsBarTrack" role="presentation">
+            <div
+              className="statsBarTrack"
+              role="meter"
+              aria-label={item.label}
+              aria-valuemin={0}
+              aria-valuemax={item.maxValue}
+              aria-valuenow={item.value}
+              aria-valuetext={`${item.value}${item.sub ? `; ${item.sub}` : ""}`}
+            >
               <div
                 className={`statsBarFill${item.colorClass ? ` ${item.colorClass}` : ""}`}
                 style={{ width: `${clampedPct}%` }}
-                aria-label={`${item.label}: ${item.value} (${clampedPct}%)`}
+                aria-hidden="true"
               />
             </div>
             {item.sub && <span className="statsBarSub muted small">{item.sub}</span>}
