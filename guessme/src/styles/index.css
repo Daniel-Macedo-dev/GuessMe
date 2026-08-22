@@ -162,7 +162,7 @@ b{ font-weight: 800; }
   padding: 10px 14px;
   border-radius: var(--radius-sm);
   background: var(--accent);
-  color: #04100d;
+  color: var(--bg);
   font-weight: 800;
   transform: translateY(-160%);
   transition: transform var(--t-fast);

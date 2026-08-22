@@ -255,6 +255,7 @@ test.describe("Delete history entry", () => {
     await expect(page.getByTestId("history-card")).toBeVisible();
     await page.getByTestId("history-delete-btn").first().click();
     await expect(page.getByText("Excluir este registro?")).toBeVisible();
+    await expect(page.getByTestId("history-delete-confirm-btn")).toBeFocused();
     await page.getByTestId("history-delete-confirm-btn").click();
     await expect(page.getByTestId("history-card")).not.toBeVisible();
     await expect(page.getByTestId("history-empty")).toBeVisible();
@@ -288,6 +289,7 @@ test.describe("Clear all history", () => {
     await expect(page.getByTestId("history-card")).toHaveCount(2);
     await page.getByTestId("history-clear-btn").click();
     await expect(page.getByText("Apagar todos?")).toBeVisible();
+    await expect(page.getByTestId("history-clear-confirm-btn")).toBeFocused();
     await page.getByTestId("history-clear-confirm-btn").click();
     await expect(page.getByTestId("history-empty")).toBeVisible();
     await expect(page.getByTestId("history-card")).toHaveCount(0);

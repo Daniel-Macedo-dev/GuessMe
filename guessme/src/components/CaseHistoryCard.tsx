@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import type { CaseHistoryEntry } from "../types/guessme";
 import DossierIcon from "./DossierIcon";
 
@@ -20,7 +20,12 @@ function formatDate(ts: number): string {
 
 function CaseHistoryCard({ entry, onReplay, onDelete }: Props) {
   const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const confirmDeleteRef = useRef<HTMLButtonElement>(null);
   const { confirmed, refuted, inconclusive } = entry.evidence;
+
+  useEffect(() => {
+    if (confirmingDelete) confirmDeleteRef.current?.focus();
+  }, [confirmingDelete]);
 
   return (
     <article className="historyCard" data-testid="history-card">
@@ -75,7 +80,7 @@ function CaseHistoryCard({ entry, onReplay, onDelete }: Props) {
         {confirmingDelete ? (
           <div className="historyDeleteConfirm" role="group" aria-label={`Confirmar exclusão de ${entry.characterName}`}>
             <span className="historyDeletePrompt" role="status">Excluir este registro?</span>
-            <button className="btn historyActionBtn historyDeleteBtn" onClick={() => onDelete(entry.id)} data-testid="history-delete-confirm-btn">
+            <button ref={confirmDeleteRef} className="btn historyActionBtn historyDeleteBtn" onClick={() => onDelete(entry.id)} data-testid="history-delete-confirm-btn">
               Confirmar
             </button>
             <button className="btn historyActionBtn" onClick={() => setConfirmingDelete(false)}>

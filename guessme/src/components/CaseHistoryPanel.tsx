@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CaseHistoryEntry } from "../types/guessme";
 import CaseHistoryCard from "./CaseHistoryCard";
 import CaseReplayModal from "./CaseReplayModal";
@@ -29,7 +29,12 @@ export default function CaseHistoryPanel({
   const [confirmingClear, setConfirmingClear] = useState(false);
   const [importStatus, setImportStatus] = useState<ImportStatus>({ kind: "idle" });
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const clearConfirmRef = useRef<HTMLButtonElement>(null);
   const statusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (confirmingClear) clearConfirmRef.current?.focus();
+  }, [confirmingClear]);
 
   function resetStatus() {
     if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
@@ -117,6 +122,7 @@ export default function CaseHistoryPanel({
             <div className="historyClearConfirm" role="group" aria-label="Confirmar limpeza do histórico">
               <span className="historyDeletePrompt" role="status">Apagar todos?</span>
               <button
+                ref={clearConfirmRef}
                 className="btn historyActionBtn historyDeleteBtn"
                 onClick={() => {
                   onClearAll();
