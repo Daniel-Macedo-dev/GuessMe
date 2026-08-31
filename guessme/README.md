@@ -20,8 +20,8 @@ Built as a portfolio project demonstrating: AI-powered game mechanics, handcraft
 | **Hint system** | Request clues from the AI; collected as Inteligência in the evidence file |
 | **Category select** | Anime, Games, Filmes, Séries — changes what character domain the AI plays |
 | **Victory modal** | Closed-case report showing the identified character with the decisive question |
-| **Case archive** | Every solved case saved locally; replay full question/answer timeline with verdicts |
-| **Case export** | Export as JSON (reimportable) or SVG share card; import between browsers |
+| **Case archive** | Dedicated `/archive` with URL-backed search, category/period/hint filters, deterministic sorting, replay, and retention status |
+| **Case portability** | Export one case as JSON/SVG or the complete versioned archive; validated merge import with duplicate and capacity reporting |
 | **Statistics dashboard** | Verdict distribution, evidence totals, category breakdown, best/longest case ranking |
 | **Agent rank** | Six-tier progression ladder (Recruta → Mestre do Dossiê) derived from solved cases |
 | **Achievements** | 11 badges across 5 categories (Casos, Eficiência, Evidências, Categorias, Arquivo) |
@@ -370,6 +370,22 @@ The `/stats` page shows a dashboard derived entirely from local case history. No
 
 Solved cases can be exported, shared, and imported between browsers — all locally, no server required.
 
+The dedicated **Arquivo** route is the management surface. The Game page keeps only a compact recent-case summary so active interrogation and historical administration remain separate.
+
+### Complete archive bundle
+
+**Exportar arquivo completo** downloads every retained case in a deterministic `case-archive` schema. **Importar JSON** accepts either this bundle or an existing individual-case export. Bundle imports are validated entry by entry, merged without overwriting existing IDs, and report imported, duplicate, renamed, rejected, and capacity-evicted counts. A failed `localStorage` write is reported as an error rather than success.
+
+```json
+{
+  "schemaVersion": 1,
+  "app": "GuessMe",
+  "kind": "case-archive",
+  "exportedAt": "<ISO 8601 timestamp>",
+  "cases": []
+}
+```
+
 ### Copy summary
 
 Open a solved case with **Rever caso** → **Copiar resumo**. A Markdown-formatted summary is copied to clipboard (character, work, category, question/hint counts, verdict stats, winning question, all evidence entries).
@@ -411,11 +427,11 @@ Open a solved case with **Rever caso** → **Copiar resumo**. A Markdown-formatt
 
 ---
 
-## Case History
+## Case Archive
 
-The `/game` page shows a **Histórico de Casos** panel below the investigation interface. Solved cases are automatically archived locally.
+The `/archive` page manages solved cases. Search covers character, work, category, and decisive question; filters cover category, recent period, and hint use; sorting supports chronology, question count, and character name. Query state is stored in the URL for refresh, direct links, and browser navigation. Solved cases are automatically archived locally.
 
-Each saved case contains: character name, work, category, full message sequence, evidence snapshot (confirmed/refuted/inconclusive/hints), verdict stats, winning question, question/hint counts, and timestamp. Storage is capped at 25 most recent entries.
+Each saved case contains: character name, work, category, full message sequence, evidence snapshot (confirmed/refuted/inconclusive/hints), verdict stats, winning question, question/hint counts, and timestamp. Storage is capped at 25 most recent entries. The archive always displays this limit and the Game summary warns at 24 cases; after capacity is reached, saving a new victory replaces the oldest retained record. Export a complete bundle before that point for permanent retention.
 
 The replay modal is keyboard-dismissible (Escape). It does not call the backend or modify the current game session.
 
