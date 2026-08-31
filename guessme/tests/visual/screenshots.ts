@@ -189,6 +189,12 @@ const SEED_8 = JSON.stringify([
 
 /** Three cases seeded into game localStorage to show populated case history below game UI */
 const SEED_GAME_HISTORY = SEED_3;
+const SEED_25 = JSON.stringify(Array.from({ length: 25 }, (_, index) => ({
+  ...JSON.parse(SEED_3)[index % 3],
+  id: `capacity-${index + 1}`,
+  createdAt: Date.now() - index * 3600000,
+  characterName: `Caso Arquivado ${String(index + 1).padStart(2, "0")}`,
+})));
 
 /**
  * Active investigation transcript seeded into guessme:state:v5 — renders the full
@@ -235,7 +241,7 @@ type Route = {
   gameSeed?: string;
   waitUntil?: "networkidle" | "load";
   /** Post-load interaction to reach modal/system states */
-  action?: "open-replay" | "fire-install";
+  action?: "open-replay" | "fire-install" | "confirm-clear";
   /** Force a deterministic API failure for recovery-state captures. */
   apiState?: "unavailable";
   /** Fixed-position overlays repaint badly in fullPage captures — use viewport */
@@ -248,6 +254,16 @@ const ROUTES: OfflineRoute[] = [
   // Static pages
   { name: "home",         path: "/" },
   { name: "how-it-works", path: "/how-it-works" },
+
+  // Archive — core product states
+  { name: "archive-empty", path: "/archive" },
+  { name: "archive-few", path: "/archive", seed: SEED_3 },
+  { name: "archive-capacity", path: "/archive", seed: SEED_25 },
+  { name: "archive-search", path: "/archive?q=Naruto", seed: SEED_8 },
+  { name: "archive-filtered", path: "/archive?category=Games&hints=with&sort=fewest", seed: SEED_8 },
+  { name: "archive-no-results", path: "/archive?q=SemResultado", seed: SEED_8 },
+  { name: "archive-clear-confirm", path: "/archive", seed: SEED_3, action: "confirm-clear", viewportOnly: true },
+  { name: "archive-replay", path: "/archive?category=Anime", seed: SEED_3, action: "open-replay", viewportOnly: true },
 
   // Game — initial state (shows investigation interface before any API call)
   { name: "game-empty",   path: "/game" },
@@ -358,6 +374,10 @@ async function capture(): Promise<number> {
           });
           await page.getByTestId("install-prompt").waitFor({ state: "visible", timeout: 5000 });
           await page.waitForTimeout(300);
+        }
+        if (route.action === "confirm-clear") {
+          await page.getByRole("button", { name: "Limpar arquivo" }).click();
+          await page.getByText("Apagar todos?").waitFor({ state: "visible", timeout: 5000 });
         }
 
         // Chromium's full-page stitching can repaint sticky headers halfway
