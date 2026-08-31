@@ -290,7 +290,7 @@ const ROUTES: OfflineRoute[] = [
   { name: "victory-report", path: "/game", gameSeed: SEED_GAME_VICTORY, viewportOnly: true },
 
   // Game — archived case replay modal opened from seeded history
-  { name: "replay-report", path: "/game", seed: SEED_3, action: "open-replay", viewportOnly: true },
+  { name: "replay-report", path: "/archive", seed: SEED_3, action: "open-replay", viewportOnly: true },
 
   // Install prompt — synthetic beforeinstallprompt (same technique as pwa.spec.ts)
   { name: "install-prompt", path: "/", action: "fire-install", viewportOnly: true },

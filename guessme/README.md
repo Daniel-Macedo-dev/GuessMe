@@ -486,7 +486,7 @@ Classification priority: `message.verdict` (structured backend field) → text p
 
 ## E2E test coverage
 
-Playwright 1.61 — **284 tests** across eleven spec files. All API calls are intercepted via `page.route()`. History, stats, and progression tests use `localStorage` seeding via `addInitScript`. No backend or Gemini key required.
+Playwright 1.61 — **249 tests** across twelve spec files. All API calls are intercepted via `page.route()`. Archive, history, stats, and progression tests use `localStorage` seeding via `addInitScript`. No backend or Gemini key required.
 
 ```bash
 npx playwright install --with-deps chromium   # one-time setup
@@ -498,6 +498,7 @@ npm run e2e:report    # open HTML report
 | Spec | Coverage |
 |------|----------|
 | `routes.spec.ts` | Route rendering, navigation links, SPA deep links, unknown route redirect |
+| `archive.spec.ts` | Archive search/filter/sort/URL state, bundle portability, duplicate integrity, schema rejection, and mobile layout |
 | `game-flow.spec.ts` | Boot, category select, question input (empty/overlong/Enter), answer bubbles, hint flow, victory modal, case status badge, transcript dividers, hint counter, mobile overflow |
 | `error-states.spec.ts` | Backend unavailable, cooldown, max questions/hints, stale session, Gemini error |
 | `mobile.spec.ts` | Overflow-free layout at 390 px and 360 px |
