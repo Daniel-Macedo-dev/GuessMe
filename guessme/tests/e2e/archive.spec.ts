@@ -1,4 +1,7 @@
 import { expect, test } from "@playwright/test";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 
 const STORAGE_KEY = "guessme.caseHistory.v1";
 
@@ -70,4 +73,36 @@ test("archive controls fit at 360px", async ({ page }) => {
   await page.goto("/archive");
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(361);
   await expect(page.getByTestId("archive-export-btn")).toBeVisible();
+});
+
+test("exports a deterministic versioned archive bundle", async ({ page }) => {
+  await page.goto("/archive");
+  const [download] = await Promise.all([page.waitForEvent("download"), page.getByTestId("archive-export-btn").click()]);
+  const payload = JSON.parse(fs.readFileSync((await download.path())!, "utf8"));
+  expect(payload).toMatchObject({ schemaVersion: 1, app: "GuessMe", kind: "case-archive" });
+  expect(payload.cases.map((item: { id: string }) => item.id)).toEqual(["c", "a", "b"]);
+});
+
+test("merges a full archive and reports duplicates, renamed IDs, and rejected entries", async ({ page }) => {
+  const payload = {
+    schemaVersion: 1, app: "GuessMe", kind: "case-archive", exportedAt: new Date().toISOString(),
+    cases: [CASES[0], { ...CASES[0], characterName: "Outro Álvaro" }, { invalid: true }],
+  };
+  const file = path.join(os.tmpdir(), `guessme-archive-${Date.now()}.json`);
+  fs.writeFileSync(file, JSON.stringify(payload));
+  await page.goto("/archive");
+  await page.locator('input[type="file"]').setInputFiles(file);
+  await expect(page.getByTestId("archive-status")).toContainText("1 importado; 1 duplicado ignorado; 1 ID renomeado");
+  await expect(page.getByTestId("archive-status")).toContainText("1 inválido rejeitado");
+  fs.unlinkSync(file);
+});
+
+test("rejects unsupported archive schema without changing storage", async ({ page }) => {
+  const file = path.join(os.tmpdir(), `guessme-schema-${Date.now()}.json`);
+  fs.writeFileSync(file, JSON.stringify({ schemaVersion: 99, app: "GuessMe", kind: "case-archive", cases: [] }));
+  await page.goto("/archive");
+  await page.locator('input[type="file"]').setInputFiles(file);
+  await expect(page.getByTestId("archive-status")).toContainText("não suportada");
+  await expect(page.getByTestId("history-card")).toHaveCount(3);
+  fs.unlinkSync(file);
 });

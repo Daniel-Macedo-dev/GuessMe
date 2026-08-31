@@ -2073,6 +2073,7 @@ b{ font-weight: 800; }
 .gameArchiveRecent strong,.gameArchiveRecent small{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .gameArchiveRecent a{ color:var(--accent); font-size:12px; }
 .gameArchiveCta{ justify-content:center; }
+.gameArchiveWarning{ margin:0 0 10px; color:var(--accent-evidence); font-size:12px; }
 .archiveMain{ display:flex; flex-direction:column; gap:14px; }
 .archiveHero{
   display:grid;
