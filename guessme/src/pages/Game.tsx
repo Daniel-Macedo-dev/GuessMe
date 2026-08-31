@@ -40,7 +40,7 @@ export default function Game() {
     restart,
   } = useGame();
 
-  const { history, saveOnVictory } = useCaseHistory();
+  const { history, saveStatus, saveOnVictory } = useCaseHistory();
 
   const savedWinnerRef = useRef(winner);
   useEffect(() => {
@@ -181,7 +181,7 @@ export default function Game() {
 
         <VictoryModal winner={winner} onRestart={restart} />
 
-        <GameArchiveSummary history={history} />
+        <GameArchiveSummary history={history} saveStatus={saveStatus} />
       </main>
 
       <Footer />

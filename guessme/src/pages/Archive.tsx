@@ -29,13 +29,14 @@ export default function Archive() {
   const [status, setStatus] = useState<Status>(null);
   const [confirmingClear, setConfirmingClear] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const clearTriggerRef = useRef<HTMLButtonElement>(null);
   const query = archiveQueryFromParams(params);
   const results = queryArchive(history, query);
   const categories = useMemo(() => [...new Set(history.map((entry) => entry.category))].sort((a, b) => a.localeCompare(b, "pt-BR")), [history]);
   const hasFilters = archiveQueryToParams(query).toString() !== "";
 
-  function update(next: Partial<ArchiveQuery>) {
-    setParams(archiveQueryToParams({ ...query, ...next }), { replace: true });
+  function update(next: Partial<ArchiveQuery>, replace = false) {
+    setParams(archiveQueryToParams({ ...query, ...next }), { replace });
   }
 
   function exportArchive() {
@@ -103,9 +104,9 @@ export default function Archive() {
             <div className="historyClearConfirm" role="group" aria-label="Confirmar limpeza do arquivo">
               <span role="status">Apagar todos?</span>
               <button className="btn historyDeleteBtn" autoFocus onClick={() => { clearAll(); setConfirmingClear(false); setReplayEntry(null); }}>Confirmar</button>
-              <button className="btn" onClick={() => setConfirmingClear(false)}>Cancelar</button>
+              <button className="btn" onClick={() => { setConfirmingClear(false); requestAnimationFrame(() => clearTriggerRef.current?.focus()); }}>Cancelar</button>
             </div>
-          ) : <button className="btn historyDeleteBtn" onClick={() => setConfirmingClear(true)}>Limpar arquivo</button>)}
+          ) : <button ref={clearTriggerRef} className="btn historyDeleteBtn" onClick={() => setConfirmingClear(true)}>Limpar arquivo</button>)}
         </section>
 
         {status && <div className={`archiveStatus archiveStatus--${status.kind}`} role="status" aria-live="polite" data-testid="archive-status">{status.message}</div>}
@@ -113,7 +114,7 @@ export default function Archive() {
         {history.length > 0 ? (
           <>
             <form className="archiveFilters panel" role="search" onSubmit={(event) => event.preventDefault()}>
-              <label className="archiveSearch">Pesquisar casos<input type="search" value={query.search} onChange={(event) => update({ search: event.target.value })} placeholder="Personagem, obra ou pergunta decisiva" /></label>
+              <label className="archiveSearch">Pesquisar casos<input type="search" value={query.search} onChange={(event) => update({ search: event.target.value }, true)} placeholder="Personagem, obra ou pergunta decisiva" /></label>
               <label>Categoria<select value={query.category} onChange={(event) => update({ category: event.target.value })}><option value="all">Todas</option>{categories.map((category) => <option key={category}>{category}</option>)}</select></label>
               <label>Pistas<select value={query.hints} onChange={(event) => update({ hints: event.target.value as ArchiveQuery["hints"] })}><option value="all">Todas</option><option value="with">Com pistas</option><option value="without">Sem pistas</option></select></label>
               <label>Período<select value={query.period} onChange={(event) => update({ period: event.target.value as ArchiveQuery["period"] })}><option value="all">Todo o período</option><option value="30">Últimos 30 dias</option><option value="365">Último ano</option></select></label>

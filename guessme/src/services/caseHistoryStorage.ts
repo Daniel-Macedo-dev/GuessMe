@@ -12,6 +12,8 @@ export type ArchiveMergeResult = {
   evicted: number;
 };
 
+export type CaseSaveResult = { saved: boolean; evicted: boolean };
+
 function safeRead(): CaseHistoryEntry[] {
   try {
     const raw = localStorage.getItem(KEY);
@@ -41,11 +43,15 @@ export function getCaseHistory(): CaseHistoryEntry[] {
 }
 
 export function saveCaseHistoryEntry(entry: CaseHistoryEntry): boolean {
+  return saveCaseHistoryEntryWithResult(entry).saved;
+}
+
+export function saveCaseHistoryEntryWithResult(entry: CaseHistoryEntry): CaseSaveResult {
   const current = safeRead();
   const isDuplicate = current.some((e) => e.id === entry.id);
-  if (isDuplicate) return true;
+  if (isDuplicate) return { saved: true, evicted: false };
   const updated = [entry, ...current].slice(0, CASE_HISTORY_CAPACITY);
-  return safeWrite(updated);
+  return { saved: safeWrite(updated), evicted: current.length >= CASE_HISTORY_CAPACITY };
 }
 
 export function mergeCaseHistory(entries: CaseHistoryEntry[]): ArchiveMergeResult {
@@ -56,10 +62,11 @@ export function mergeCaseHistory(entries: CaseHistoryEntry[]): ArchiveMergeResul
   let skipped = 0;
   let renamed = 0;
   for (const candidate of entries) {
-    const exact = merged.some((entry) =>
-      entry.id === candidate.id && entry.createdAt === candidate.createdAt && entry.characterName === candidate.characterName,
+    const duplicate = merged.some((entry) =>
+      (entry.id === candidate.id && entry.createdAt === candidate.createdAt && entry.characterName === candidate.characterName) ||
+      (entry.createdAt === candidate.createdAt && entry.characterName === candidate.characterName && entry.work === candidate.work && entry.questionCount === candidate.questionCount),
     );
-    if (exact) {
+    if (duplicate) {
       skipped++;
       continue;
     }

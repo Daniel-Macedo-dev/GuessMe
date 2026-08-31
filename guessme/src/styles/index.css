@@ -2074,6 +2074,7 @@ b{ font-weight: 800; }
 .gameArchiveRecent a{ color:var(--accent); font-size:12px; }
 .gameArchiveCta{ justify-content:center; }
 .gameArchiveWarning{ margin:0 0 10px; color:var(--accent-evidence); font-size:12px; }
+.gameArchiveError{ margin:0 0 10px; color:var(--danger); font-size:12px; }
 .archiveMain{ display:flex; flex-direction:column; gap:14px; }
 .archiveHero{
   display:grid;

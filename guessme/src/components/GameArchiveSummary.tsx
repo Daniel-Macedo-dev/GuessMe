@@ -3,7 +3,7 @@ import type { CaseHistoryEntry } from "../types/guessme";
 import PanelSectionHeader from "./PanelSectionHeader";
 import { CASE_HISTORY_CAPACITY } from "../services/caseHistoryStorage";
 
-export default function GameArchiveSummary({ history }: { history: CaseHistoryEntry[] }) {
+export default function GameArchiveSummary({ history, saveStatus }: { history: CaseHistoryEntry[]; saveStatus: "idle" | "saved" | "evicted" | "error" }) {
   const recent = [...history].sort((a, b) => b.createdAt - a.createdAt).slice(0, 2);
   return (
     <section className="gameArchiveSummary panel" aria-labelledby="game-archive-title" data-testid="game-archive-summary">
@@ -17,6 +17,8 @@ export default function GameArchiveSummary({ history }: { history: CaseHistoryEn
         </ul>
       ) : <p className="muted small">Casos resolvidos aparecerão no arquivo deste navegador.</p>}
       {history.length >= CASE_HISTORY_CAPACITY - 1 && <p className="gameArchiveWarning" role="status">O arquivo está próximo do limite. Exporte uma cópia antes de encerrar novos casos.</p>}
+      {saveStatus === "evicted" && <p className="gameArchiveWarning" role="status">Caso salvo. O registro mais antigo saiu do limite local; exporte o arquivo para evitar novas perdas.</p>}
+      {saveStatus === "error" && <p className="gameArchiveError" role="alert">O caso foi encerrado, mas o navegador recusou o arquivamento. Libere espaço e tente exportar seus casos atuais.</p>}
       <Link className="btn btn-primary gameArchiveCta" to="/archive">Abrir Arquivo de Casos</Link>
     </section>
   );

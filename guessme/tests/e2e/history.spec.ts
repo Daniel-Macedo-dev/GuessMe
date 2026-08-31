@@ -27,6 +27,18 @@ test("victory persists exactly one case and updates the summary", async ({ page 
   await expect(page.getByRole("dialog")).toBeVisible(); await expect(page.getByTestId("game-archive-summary")).toContainText("1 caso");
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("guessme.caseHistory.v1") ?? "[]"))).toHaveLength(1);
 });
+test("victory reports a browser storage failure", async ({ page }) => {
+  await page.addInitScript(() => {
+    const original = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (key: string, value: string) {
+      if (key === "guessme.caseHistory.v1") throw new DOMException("Quota", "QuotaExceededError");
+      return original.call(this, key, value);
+    };
+  });
+  await mockAskWin(page); await page.goto("/game");
+  await page.getByRole("textbox", { name: "Pergunta para a investigação" }).fill("É o Naruto?"); await page.getByRole("button", { name: "Enviar" }).click();
+  await expect(page.getByRole("alert")).toContainText("recusou o arquivamento");
+});
 test("archive replay opens and restores focus after Escape", async ({ page }) => {
   await seed(page); await page.goto("/archive"); const button = page.getByTestId("history-replay-btn"); await button.click();
   await expect(page.getByTestId("replay-modal")).toBeVisible(); await page.keyboard.press("Escape"); await expect(button).toBeFocused();

@@ -51,6 +51,14 @@ test("unknown query values fall back safely", async ({ page }) => {
   await expect(page.getByLabel("Pistas")).toHaveValue("all");
 });
 
+test("discrete filters participate in browser back navigation", async ({ page }) => {
+  await page.goto("/archive");
+  await page.getByLabel("Categoria").selectOption("Games");
+  await expect(page).toHaveURL(/category=Games/);
+  await page.goBack();
+  await expect(page.getByLabel("Categoria")).toHaveValue("all");
+});
+
 test("shows and resets the no-results state", async ({ page }) => {
   await page.goto("/archive?q=inexistente");
   await expect(page.getByRole("heading", { name: "Nenhum dossiê encontrado" })).toBeVisible();
@@ -103,6 +111,16 @@ test("rejects unsupported archive schema without changing storage", async ({ pag
   await page.goto("/archive");
   await page.locator('input[type="file"]').setInputFiles(file);
   await expect(page.getByTestId("archive-status")).toContainText("não suportada");
+  await expect(page.getByTestId("history-card")).toHaveCount(3);
+  fs.unlinkSync(file);
+});
+
+test("semantic duplicates with different IDs are skipped", async ({ page }) => {
+  const file = path.join(os.tmpdir(), `guessme-semantic-${Date.now()}.json`);
+  fs.writeFileSync(file, JSON.stringify({ schemaVersion: 1, app: "GuessMe", kind: "case-archive", cases: [{ ...CASES[0], id: "different-id" }] }));
+  await page.goto("/archive");
+  await page.locator('input[type="file"]').setInputFiles(file);
+  await expect(page.getByTestId("archive-status")).toContainText("1 duplicado ignorado");
   await expect(page.getByTestId("history-card")).toHaveCount(3);
   fs.unlinkSync(file);
 });

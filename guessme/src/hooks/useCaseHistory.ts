@@ -5,6 +5,7 @@ import {
   deleteCaseHistoryEntry,
   getCaseHistory,
   saveCaseHistoryEntry,
+  saveCaseHistoryEntryWithResult,
   mergeCaseHistory,
 } from "../services/caseHistoryStorage";
 import { deriveEvidence } from "../helpers/deriveEvidence";
@@ -53,6 +54,7 @@ function countHints(messages: Message[]): number {
 
 export function useCaseHistory() {
   const [history, setHistory] = useState<CaseHistoryEntry[]>(() => getCaseHistory());
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saved" | "evicted" | "error">("idle");
 
   function refresh() {
     setHistory(getCaseHistory());
@@ -85,7 +87,8 @@ export function useCaseHistory() {
         verdictStats,
       };
 
-      saveCaseHistoryEntry(entry);
+      const result = saveCaseHistoryEntryWithResult(entry);
+      setSaveStatus(result.saved ? (result.evicted ? "evicted" : "saved") : "error");
       refresh();
     },
     [],
@@ -119,5 +122,5 @@ export function useCaseHistory() {
     return result;
   }, []);
 
-  return { history, saveOnVictory, deleteEntry, clearAll, importEntry, importArchive };
+  return { history, saveStatus, saveOnVictory, deleteEntry, clearAll, importEntry, importArchive };
 }
