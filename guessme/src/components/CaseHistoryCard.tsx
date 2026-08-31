@@ -58,7 +58,17 @@ function CaseHistoryCard({ entry, onReplay, onDelete }: Props) {
           <span className="historyStatValue">{inconclusive.length}</span>
           <span className="historyStatLabel muted small">inconclusivas</span>
         </span>
+        <span className="historyStat">
+          <span className="historyStatValue">{entry.hintCount}</span>
+          <span className="historyStatLabel muted small">pistas</span>
+        </span>
       </div>
+
+      {entry.winningQuestion && (
+        <p className="historyCardWinning" title={entry.winningQuestion}>
+          <span>PERGUNTA DECISIVA</span> “{entry.winningQuestion}”
+        </p>
+      )}
 
       <div className="historyCardFiling muted small">
         <span className="historyCardRef" aria-hidden="true">

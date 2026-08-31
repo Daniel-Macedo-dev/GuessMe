@@ -1741,6 +1741,25 @@ b{ font-weight: 800; }
   gap: 8px;
   flex-wrap: wrap;
 }
+.historyCardWinning{
+  margin:0 0 10px;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45;
+}
+.historyCardWinning span{
+  display:block;
+  margin-bottom:2px;
+  font-family:var(--font-mono);
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.12em;
+  color:var(--muted-dim);
+}
 
 .historyDeleteConfirm,
 .historyClearConfirm{
