@@ -29,6 +29,7 @@ test.describe("Home page", () => {
     await expect(page.getByRole("link", { name: "Home" })).toBeVisible();
     await expect(page.getByRole("link", { name: "Como funciona" })).toBeVisible();
     await expect(page.getByRole("link", { name: "Jogo" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Arquivo" })).toBeVisible();
   });
 });
 
@@ -135,6 +136,15 @@ test.describe("Navigation", () => {
     await expect(page).toHaveURL("/game");
   });
 
+  test("Navbar Arquivo link opens the dedicated archive", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("link", { name: "Arquivo" }).click();
+    await expect(page).toHaveURL("/archive");
+    await expect(page).toHaveTitle("Arquivo de Casos — GuessMe");
+    await expect(page.getByRole("heading", { level: 1, name: "Arquivo de Casos" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Arquivo" })).toHaveAttribute("aria-current", "page");
+  });
+
   test("HowItWorks Abrir caso link goes to /game", async ({ page }) => {
     await page.addInitScript(() => localStorage.clear());
     await mockBoot(page);
@@ -166,5 +176,11 @@ test.describe("SPA direct URL access", () => {
       page.getByRole("textbox", { name: "Pergunta para a investigação" }),
     ).toBeVisible();
     await expect(page.getByRole("heading", { level: 1, name: /Investigação/ })).toBeVisible();
+  });
+
+  test("opening /archive directly renders the local archive", async ({ page }) => {
+    await page.goto("/archive");
+    await expect(page.getByTestId("archive-page")).toBeVisible();
+    await expect(page.getByTestId("archive-capacity")).toContainText("0/25");
   });
 });

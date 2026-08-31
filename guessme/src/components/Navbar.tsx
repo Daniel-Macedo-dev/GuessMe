@@ -13,6 +13,7 @@ export default function Navbar({ onRestart, disabled = false }: Props) {
     { to: "/", label: "Home" },
     { to: "/how-it-works", label: "Como funciona" },
     { to: "/game", label: "Jogo" },
+    { to: "/archive", label: "Arquivo" },
     { to: "/stats", label: "Estatísticas" },
   ];
 
