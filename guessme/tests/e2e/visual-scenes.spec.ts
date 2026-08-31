@@ -89,7 +89,7 @@ test.describe("History archival visual language", () => {
       HISTORY_SEED,
     );
     await mockBoot(page);
-    await page.goto("/game");
+    await page.goto("/archive");
     const card = page.getByTestId("history-card").first();
     await expect(card).toBeVisible();
     await expect(card.getByText("REF A3F2C1")).toBeVisible();
@@ -97,11 +97,11 @@ test.describe("History archival visual language", () => {
 
   test("empty archive shows the drawer scene and status text", async ({ page }) => {
     await mockBoot(page);
-    await page.goto("/game");
-    const empty = page.getByTestId("history-empty");
+    await page.goto("/archive");
+    const empty = page.locator(".archiveEmpty");
     await expect(empty).toBeVisible();
     await expect(empty.locator("svg")).toHaveAttribute("aria-hidden", "true");
-    await expect(empty.getByText("Nenhum caso arquivado ainda.")).toBeVisible();
+    await expect(empty.getByText("O arquivo está vazio")).toBeVisible();
   });
 });
 
@@ -130,7 +130,7 @@ test.describe("Replay archive watermark", () => {
       HISTORY_SEED,
     );
     await mockBoot(page);
-    await page.goto("/game");
+    await page.goto("/archive");
     await page.getByTestId("history-replay-btn").first().click();
     const modal = page.getByTestId("replay-modal");
     await expect(modal).toBeVisible();
