@@ -163,3 +163,24 @@ export function parseCaseExportJson(raw: string): CaseHistoryEntry {
   }
   return entry;
 }
+
+export function parseArchiveExportJson(raw: string): { entries: CaseHistoryEntry[]; rejected: number } {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    throw new CaseImportError("JSON inválido — o arquivo não pôde ser lido.");
+  }
+  if (!isObject(parsed) || parsed.app !== "GuessMe" || parsed.kind !== "case-archive") {
+    throw new CaseImportError("Formato desconhecido — selecione um arquivo de arquivo completo do GuessMe.");
+  }
+  if (parsed.schemaVersion !== 1) {
+    throw new CaseImportError("Versão de arquivo não suportada.");
+  }
+  if (!isArray(parsed.cases)) throw new CaseImportError("Arquivo incompleto — a lista de casos está ausente.");
+  const entries = parsed.cases.flatMap((candidate) => {
+    const entry = validateCaseHistoryEntry(candidate);
+    return entry ? [entry] : [];
+  });
+  return { entries, rejected: parsed.cases.length - entries.length };
+}

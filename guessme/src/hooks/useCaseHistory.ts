@@ -5,6 +5,7 @@ import {
   deleteCaseHistoryEntry,
   getCaseHistory,
   saveCaseHistoryEntry,
+  mergeCaseHistory,
 } from "../services/caseHistoryStorage";
 import { deriveEvidence } from "../helpers/deriveEvidence";
 import { normalizeImportedCase } from "../helpers/caseImport";
@@ -112,5 +113,11 @@ export function useCaseHistory() {
     [],
   );
 
-  return { history, saveOnVictory, deleteEntry, clearAll, importEntry };
+  const importArchive = useCallback((entries: CaseHistoryEntry[]) => {
+    const result = mergeCaseHistory(entries);
+    refresh();
+    return result;
+  }, []);
+
+  return { history, saveOnVictory, deleteEntry, clearAll, importEntry, importArchive };
 }

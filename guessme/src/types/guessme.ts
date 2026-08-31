@@ -78,3 +78,11 @@ export type CaseExportPayload = {
   exportedAt: string;
   case: CaseHistoryEntry;
 };
+
+export type CaseArchiveExportPayload = {
+  schemaVersion: 1;
+  app: "GuessMe";
+  kind: "case-archive";
+  exportedAt: string;
+  cases: CaseHistoryEntry[];
+};

@@ -1,4 +1,4 @@
-import type { CaseExportPayload, CaseHistoryEntry } from "../types/guessme";
+import type { CaseArchiveExportPayload, CaseExportPayload, CaseHistoryEntry } from "../types/guessme";
 
 function fmtDate(ts: number): string {
   return new Date(ts).toLocaleDateString("pt-BR", {
@@ -118,4 +118,18 @@ export function buildCaseExportFilename(entry: CaseHistoryEntry, extension: stri
     .slice(0, 40);
   const date = new Date(entry.createdAt).toISOString().slice(0, 10);
   return `guessme-${safe}-${date}.${extension}`;
+}
+
+export function createArchiveExportPayload(entries: CaseHistoryEntry[]): CaseArchiveExportPayload {
+  return {
+    schemaVersion: 1,
+    app: "GuessMe",
+    kind: "case-archive",
+    exportedAt: new Date().toISOString(),
+    cases: [...entries].sort((a, b) => b.createdAt - a.createdAt || a.id.localeCompare(b.id)),
+  };
+}
+
+export function buildArchiveExportFilename(): string {
+  return `guessme-arquivo-${new Date().toISOString().slice(0, 10)}.json`;
 }
