@@ -1,5 +1,6 @@
 import type { CaseHistoryEntry } from "../types/guessme";
 import PanelSectionHeader from "./PanelSectionHeader";
+import { Link } from "react-router-dom";
 
 type Props = {
   cases: CaseHistoryEntry[];
@@ -23,7 +24,7 @@ export default function StatsRecentActivity({ cases }: Props) {
         {cases.map((entry) => (
           <li key={entry.id} className="statsRecentItem" data-testid="stats-recent-item">
             <div className="statsRecentMeta">
-              <span className="statsRecentName" data-testid="stats-recent-name">{entry.characterName}</span>
+              <Link className="statsRecentName" data-testid="stats-recent-name" to={`/archive?q=${encodeURIComponent(entry.characterName)}`}>{entry.characterName}</Link>
               <span className="statsRecentWork muted small">{entry.work}</span>
             </div>
             <div className="statsRecentInfo">

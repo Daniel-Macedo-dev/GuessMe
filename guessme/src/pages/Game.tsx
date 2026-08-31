@@ -10,7 +10,7 @@ import QuestionInput from "../components/QuestionInput";
 import VictoryModal from "../components/VictoryModal";
 import LoadingSpinner from "../components/LoadingSpinner";
 import EvidenceNotebook from "../components/EvidenceNotebook";
-import CaseHistoryPanel from "../components/CaseHistoryPanel";
+import GameArchiveSummary from "../components/GameArchiveSummary";
 import DossierIcon from "../components/DossierIcon";
 import { useGame } from "../hooks/useGame";
 import { useCaseHistory } from "../hooks/useCaseHistory";
@@ -40,7 +40,7 @@ export default function Game() {
     restart,
   } = useGame();
 
-  const { history, saveOnVictory, deleteEntry, clearAll, importEntry } = useCaseHistory();
+  const { history, saveOnVictory } = useCaseHistory();
 
   const savedWinnerRef = useRef(winner);
   useEffect(() => {
@@ -181,12 +181,7 @@ export default function Game() {
 
         <VictoryModal winner={winner} onRestart={restart} />
 
-        <CaseHistoryPanel
-          history={history}
-          onDelete={deleteEntry}
-          onClearAll={clearAll}
-          onImport={importEntry}
-        />
+        <GameArchiveSummary history={history} />
       </main>
 
       <Footer />

@@ -2065,6 +2065,14 @@ b{ font-weight: 800; }
 }
 
 /* ── First-class case archive ── */
+.gameArchiveSummary{ margin-top:18px; padding:16px 20px; }
+.gameArchiveSummaryHeader{ display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px; }
+.gameArchiveRecent{ list-style:none; margin:0 0 12px; padding:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.gameArchiveRecent li{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 11px; border:1px solid var(--border); border-radius:var(--radius-sm); }
+.gameArchiveRecent span{ min-width:0; display:flex; flex-direction:column; }
+.gameArchiveRecent strong,.gameArchiveRecent small{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.gameArchiveRecent a{ color:var(--accent); font-size:12px; }
+.gameArchiveCta{ justify-content:center; }
 .archiveMain{ display:flex; flex-direction:column; gap:14px; }
 .archiveHero{
   display:grid;
@@ -2141,6 +2149,7 @@ b{ font-weight: 800; }
   .archiveFilters{ grid-template-columns:repeat(2,minmax(0,1fr)); }
   .archiveSearch{ grid-column:1/-1; }
   .archiveGrid{ grid-template-columns:1fr; }
+  .gameArchiveRecent{ grid-template-columns:1fr; }
 }
 @media (max-width:430px){
   .archiveFilters{ grid-template-columns:1fr; }
@@ -2164,6 +2173,7 @@ b{ font-weight: 800; }
   font-weight: 900;
   letter-spacing: -0.3px;
 }
+.statsArchiveLink{ margin-top:8px; }
 
 /* ── Report metadata band ── */
 .statsReportBand{

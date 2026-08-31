@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import StatsEmptyState from "../components/StatsEmptyState";
@@ -68,6 +69,7 @@ export default function Stats() {
           </div>
           <div className="caseStamp caseStamp--active caseStamp--sm">Painel de investigação</div>
           <h1 className="statsPageTitle">Estatísticas pessoais</h1>
+          <Link className="btn statsArchiveLink" to="/archive">Ver Arquivo de Casos</Link>
           {history.length > 0 && (
             <p className="muted small">
               {data.uniqueCharacters} personagem{data.uniqueCharacters !== 1 ? "s" : ""} identificado{data.uniqueCharacters !== 1 ? "s" : ""} em {data.totalCases} caso{data.totalCases !== 1 ? "s" : ""}
